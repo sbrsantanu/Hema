@@ -1,1 +1,2 @@
 # Hema Vendor Bidding Site and Android & Iphone Apps Project
+Hema is the first Conventions and Visitors Bureau (CVB) exchange in sub saharan Africa. Our mission is to push the visibility of our region and attract conventions and hospitality groups. The East African region is a hotbed of convention activity, but the greater regions suffer poor visibility and yet have all the facilities to attract visitors. At Hema, we change that.
