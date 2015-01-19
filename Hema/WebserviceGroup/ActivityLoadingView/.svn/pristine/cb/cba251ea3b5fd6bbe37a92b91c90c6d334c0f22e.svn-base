@@ -1,0 +1,32 @@
+//
+//  WGAnnotationView.m
+//  WhatGym
+//
+//  Created by Devesh Kumar on 20/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import "WGAnnotationView.h"
+
+@implementation WGAnnotationView
+
+-(id)initWithCoordinate:(CLLocationCoordinate2D)coordinate withTitle:(NSString*)title1;
+{
+    if (self = [super init]) {
+        _mtitle= title1;
+        _coordinate = coordinate;
+    }
+    return self;
+}
+
+-(NSString*)title
+{
+    return _mtitle;
+}
+
+-(CLLocationCoordinate2D)coordinate {
+    return _coordinate;
+}
+
+
+@end

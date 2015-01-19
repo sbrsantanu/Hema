@@ -1,0 +1,17 @@
+//
+//  WGWorkOutsCustomCell.h
+//  WhatGym
+//
+//  Created by Devesh Kumar on 07/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface WGWorkOutsCustomCell : UITableViewCell
+- (IBAction)checkButtonAction:(UIButton *)sender;
+@property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
+@property (weak, nonatomic) IBOutlet UILabel *cellTitleLabel;
+@property (assign ,nonatomic) BOOL isSelected;
+
+@end

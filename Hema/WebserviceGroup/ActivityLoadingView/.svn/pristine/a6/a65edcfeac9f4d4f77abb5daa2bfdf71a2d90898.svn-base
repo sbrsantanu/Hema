@@ -1,0 +1,31 @@
+//
+//  WGHomeTopView.m
+//  WhatGym
+//
+//  Created by Devesh Kumar on 26/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import "WGHomeTopView.h"
+
+@implementation WGHomeTopView
+
+- (id)initWithFrame:(CGRect)frame andUIScrollView: (UIScrollView *)scroll;
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        scrollView = scroll;
+    }
+    return self;
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if ([self pointInside:point withEvent:event])
+    {
+		return scrollView;
+	}
+	return nil;
+}
+
+@end

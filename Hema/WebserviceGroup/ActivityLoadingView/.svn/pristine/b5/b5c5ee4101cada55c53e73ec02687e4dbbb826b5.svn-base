@@ -1,0 +1,17 @@
+//
+//  WGNearByCustomeCell.h
+//  WhatGym
+//
+//  Created by Devesh Kumar on 07/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface WGNearByCustomeCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
+@property (weak, nonatomic) IBOutlet UILabel *cellTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *cellDescriptionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *cellSubDescriptionLabel;
+
+@end

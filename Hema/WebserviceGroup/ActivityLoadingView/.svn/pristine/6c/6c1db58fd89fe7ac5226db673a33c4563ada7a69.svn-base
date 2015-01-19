@@ -1,0 +1,16 @@
+//
+//  WGDealCustomCell.h
+//  WhatGym
+//
+//  Created by Devesh Kumar on 08/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface WGDealCustomCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+
+@end

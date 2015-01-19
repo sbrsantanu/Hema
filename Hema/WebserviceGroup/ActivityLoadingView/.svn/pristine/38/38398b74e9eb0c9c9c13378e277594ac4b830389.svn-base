@@ -1,0 +1,22 @@
+//
+//  WGAnnotationView.h
+//  WhatGym
+//
+//  Created by Devesh Kumar on 20/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
+
+@interface WGAnnotationView : NSObject<MKAnnotation>
+
+@property (nonatomic,copy) NSString *mtitle;
+@property (nonatomic,copy) NSString *subTitle;
+@property (nonatomic,assign) CLLocationCoordinate2D coordinate;
+
+-(id)initWithCoordinate:(CLLocationCoordinate2D)coordinate withTitle:(NSString*)title;
+
+
+
+@end

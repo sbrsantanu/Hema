@@ -1,0 +1,18 @@
+//
+//  WGHomeTopView.h
+//  WhatGym
+//
+//  Created by Devesh Kumar on 26/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface WGHomeTopView : UIView
+{
+    UIScrollView *scrollView;
+
+}
+- (id)initWithFrame:(CGRect)frame andUIScrollView: (UIScrollView *)scroll;
+
+@end

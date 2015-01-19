@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>302FBAD7-610F-4964-BA8B-BDD54E9B7263</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++4017</key>
+		<string>https://repo.a1technology.in/svn/Whatgym/trunk/IOS/WhatGymLatest/WhatGym/WhatGym/View</string>
+		<key>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++6350</key>
+		<string>https://repo.a1technology.in/svn/Whatgym/trunk/IOS/WhatGymLatest/WhatGym/WhatGym/Networking/AFNetworking</string>
+	</dict>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++4017</key>
+		<string>ActivityLoadingView/</string>
+		<key>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++6350</key>
+		<string>AFNetworking/</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++4017</key>
+		<string>https://repo.a1technology.in/svn/Whatgym</string>
+		<key>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++6350</key>
+		<string>https://repo.a1technology.in/svn/Whatgym</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://repo.a1technology.in/svn/Whatgym/trunk/IOS/WhatGymLatest/WhatGym/WhatGym/Networking/AFNetworking</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++6350</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++4017</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ActivityLoadingView</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>dfb3ad74-ab8b-574d-a7bd-441eac9243d3++6350</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AFNetworking</string>
+		</dict>
+	</array>
+</dict>
+</plist>

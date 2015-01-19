@@ -1,0 +1,46 @@
+
+We create a demo for using REST(Representational State Transfer) and SOAP(Simply object aceess protocol) web services in a simplest way.
+
+Step-1 Firstly you have to add WebServiceGroup folder to your project.
+
+ In this group we add the following classes.
+
+ 1. MPApplicationGlobalConstants.(This file is used to declare all the constants used for web service call).
+ 2. SoapEnvelope class.(This is used to create a soap envelope for you.Before need you to to update your header according to your WSDL return value).
+ 3. ANDProgressHUD class.(This class is used to create loading indicator.When we hit web service that time we animate the indicator with the help of this class.you can create custom indicator as per your requirement to do changes in this class).
+ 4. AFNetWorking Classes
+    - This is third party networking library.
+    - AFNetworking using latest feature like blocks & serialization.
+    - We can get a lot of extra cool features – like serialization, reachability support, UIKit integration (such as a handy category on asynchronously loading images in a UIImageView), and more.
+    - AFNetworking handles JSON and plist and XML parsing for you.
+    - You first create a string representing the full url from the base URL string. This is then used to create an NSURL object, which is used to make an NSURLRequest.
+    - AFHTTPRequestOperation is an all-in-one class for handling HTTP transfers across the network. You tell it that the response should be read as JSON by setting the responseSerializer property to the default JSON serializer. AFNetworking will then take care of parsing the JSON for you.
+    - The success block runs when (surprise!) the request succeeds. The JSON serializer parses the received data and returns a dictionary in the responseObject variable.
+    - The failure block runs if something goes wrong – such as if networking isn’t available. If this happens, you simply display an alert with the error message.
+    - You must explicitly tell the operation to “start” (or else nothing will happen).
+    - AFNetworking adds a category to UIImageView that lets you load images asynchronously, meaning the UI will remain responsive while images are downloaded in the background.
+    
+    Some Main Classes use in AFNetworking :-
+    - AFHTTPOperation with AFJSONResponseSerializer, AFPropertyListResponseSerializer, or AFXMLParserResponseSerializer response serializers for parsing structured data
+    - UIImageView+AFNetworking for quickly filling in image views
+    - Custom AFHTTPSessionManager subclasses to access live web services
+    - AFNetworkActivityIndicatorManager to keep the user informed
+    - AFHTTPOperation with a AFImageResponseSerializer response serializer for loading images
+    
+5.  WebserviceHelper Class (This is the most important class for us.In this class we create a class methods for using SOAP & REST based web services).
+6. Categories :- We are using some categories to improve the functioality of classes.Like we creates category for NSDate,NSError,NSException(to handle exception on web service call),UIAlertView(to show alerts if anything go wrong)
+
+Step-2 Using web Services in your project
+
+How to use Soap(Simply object aceess protocol) web services :
+1.Firstly you have to call SOAPEnvelope class method for making soap string.
+2.Remember firstly you have to change the soap envople header path according to your wsdl in SOAPEnvelope class "soapEnvelop" method which return us a string value.
+3.You have responsibility to create a key pair dictionary from your side on the basis of parameter using on particular web service.It can be any level and pass this to SOAPEnvelope class "soapNodesForDictionary" method.Which return us soap string.
+4. Next we call a method "callSoapWebserviceWithInputParameter" method name in WebServerHelper class with to hit web service.In the parameter we have to send soap envolpe,parameter dictionary which contain URL value and acess method.This method simply rerun us the web service response.
+
+
+How to use REST(Representational State Transfer) web services :
+1. Firstly create WebserviceInputParameter class  parameter dictionary.
+2. Pass this dictionary to "allWebserviceWithInputParameter" methods contain in WebServerHelper class for web service call.
+3. If sucess then it call suceess block and on error it call error block.
+

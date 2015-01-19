@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  Created by Vishal Lohia on 3/7/14.
+  Copyright (c) 2014 a1. All rights reserved.
+*/
+
+"Alert.OK" = "OK";
+"Alert.Cancel" = "Cancel";
+"Alert.WeekInfo.NoWeekAvailable" = "No data available.";
+"Alert.Title.Default" = "Alert";
+
+"Alert.NoNetwork.Title" = "No Network Available.";
+"Alert.NoNetwork.Message" = "Please try again!";
+
+"Alert.Error.Title" = "Error";
+"Alert.Exception.Title" = "Exception";
+
+"Webservice.ParamCount.Title" = "Parameter and Value is not same";
+"Webservice.ParamCount.Message" = "Please check parameter and value!";

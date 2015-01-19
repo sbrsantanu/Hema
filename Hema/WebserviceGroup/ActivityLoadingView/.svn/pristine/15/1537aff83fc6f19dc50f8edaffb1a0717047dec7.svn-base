@@ -1,0 +1,18 @@
+//
+//  WGItemCustomCell.h
+//  WhatGym
+//
+//  Created by Devesh Kumar on 04/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface WGItemCustomCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
+@property (weak, nonatomic) IBOutlet UILabel *itemDescriptionLabel1;
+@property (weak, nonatomic) IBOutlet UILabel *itemDescriptionLabel2;
+@property (weak, nonatomic) IBOutlet UIImageView *flagImage;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+
+@end

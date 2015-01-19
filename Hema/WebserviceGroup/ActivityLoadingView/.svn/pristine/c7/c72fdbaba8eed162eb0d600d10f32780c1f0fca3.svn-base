@@ -1,0 +1,40 @@
+//
+//  WGWorkOutsCustomCell.m
+//  WhatGym
+//
+//  Created by Devesh Kumar on 07/02/14.
+//  Copyright (c) 2014 Devesh Kumar. All rights reserved.
+//
+
+#import "WGWorkOutsCustomCell.h"
+
+@implementation WGWorkOutsCustomCell
+@synthesize isSelected;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        // Initialization code
+        self.isSelected = NO;
+    }
+    return self;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+- (IBAction)checkButtonAction:(UIButton *)sender {
+    
+    if (self.isSelected == NO) {
+        sender.selected = YES;
+    }else{
+        sender.selected = NO;
+    }
+    self.isSelected = !self.isSelected;
+}
+@end
