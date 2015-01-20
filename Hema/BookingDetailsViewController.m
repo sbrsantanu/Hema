@@ -145,7 +145,7 @@ typedef enum {
     }
     return self;
 }
-
+// santanu das adhikary
 - (void)viewDidLoad {
     
     [super viewDidLoad];
