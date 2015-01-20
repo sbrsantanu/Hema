@@ -78,7 +78,7 @@ int BookingListWebAlertTag = 9658;
      *  TableView Decleration
      */
     
-    _BookingTable = [[UITableView alloc] initWithFrame:CGRectMake(10, 120,mainFrame.size.width-20, mainFrame.size.height-190)];
+    _BookingTable = [[UITableView alloc] initWithFrame:CGRectMake(10, 120,mainFrame.size.width-20, mainFrame.size.height-180)];
     [_BookingTable setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:_BookingTable];
     [_BookingTable setDataSource:self];
@@ -224,6 +224,7 @@ int BookingListWebAlertTag = 9658;
     UIButton *ApplyButton = [[UIButton alloc] initWithFrame:CGRectMake(115, 5, 100, 35)];
     [ApplyButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
     [ApplyButton setTitle:@"Apply" forState:UIControlStateNormal];
+    [ApplyButton addTarget:self action:@selector(Applybookings:) forControlEvents:UIControlEventTouchUpInside];
     [ApplyButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
     [ApplyButton.layer setCornerRadius:2.0f];
     [ApplyButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
@@ -286,32 +287,15 @@ int BookingListWebAlertTag = 9658;
 
 -(IBAction)Readmorebookings:(UIButton *)sender
 {
-    BookingDetailsViewController *BookingDetails = [[BookingDetailsViewController alloc] init];
+    BookingListObjects *LocalObject = [self.BookingDataArray objectAtIndex:(sender.tag - 220)];
+    BookingDetailsViewController *BookingDetails = [[BookingDetailsViewController alloc] initWithBookingId:[LocalObject BookingListId] WithBookingOption:NO];
     [self GotoDifferentViewWithAnimation:BookingDetails];
 }
-
--(void)GotoHome
+-(IBAction)Applybookings:(UIButton *)sender
 {
-    HomeViewController *HomeView = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HomeView];
-}
-
--(void)GotoLogin
-{
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:LoginView];
-}
-
--(void)GotoRegister
-{
-    RegisterViewController *Register = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:Register];
-}
-
--(void)GotoHelp
-{
-    HelpViewController *HelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HelpView];
+    BookingListObjects *LocalObject = [self.BookingDataArray objectAtIndex:(sender.tag - 440)];
+    BookingDetailsViewController *BookingDetails = [[BookingDetailsViewController alloc] initWithBookingId:[LocalObject BookingListId] WithBookingOption:YES];
+    [self GotoDifferentViewWithAnimation:BookingDetails];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -321,10 +305,14 @@ int BookingListWebAlertTag = 9658;
 
 -(void)viewDidDisappear:(BOOL)animated
 {
-    self.BookingTable = nil;
-    self.BookingDataArray = nil;
-    self.BookingType = SelectedBookingTypeNone;
+   // self.BookingTable = nil;
+   // self.BookingDataArray = nil;
+   // self.BookingType = SelectedBookingTypeNone;
     
 }
-
+-(IBAction)Goback:(id)sender
+{
+    HomeViewController *HomeView = [[HomeViewController alloc] init];
+    [self GotoDifferentViewWithAnimation:HomeView];
+}
 @end

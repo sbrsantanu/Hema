@@ -37,6 +37,3 @@
              EventLocation:(NSString *)ParamEventLocation;
 
 @end
-
-
-{"errorcode":1,"message":"Booking found!","Booking":{"id":"18","name":"Test conference on 18.11.2014","event_place":"Jersey City","start_date":"2014-11-16","end_date":"2014-11-30","long_description":"Test conference on 18.11.2014Test conference on 18.11.2014Test conference on 18.11.2014Test conference on 18.11.2014Test conference on 18.11.2014Test conference on 18.11.2014","event_location":"New Jersey"}}

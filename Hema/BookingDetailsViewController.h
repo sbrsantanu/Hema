@@ -19,4 +19,6 @@ typedef enum {
 @interface BookingDetailsViewController : GlobalObjects
 @property (assign) SelectedBookingDetailsType BookingDetailsType;
 @property (nonatomic,retain) NSString *BookingID;
+@property BOOL BookingOption;
+- (id)initWithBookingId:(NSString *)aBookingId WithBookingOption:(BOOL)BookingOption;
 @end

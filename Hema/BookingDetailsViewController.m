@@ -17,10 +17,13 @@
 #import "WebserviceProtocol.h"
 #import "UrlParameterString.h"
 #import "GlobalModelObjects.h"
+#import "UITextField+Attribute.h"
+#import "UITextView+Extentation.h"
+#import "NSString+PJR.h"
 
 #pragma Booking Webservice param
 
-#define BDBookingWSSeperater       @"bookings"
+#define BDBookingWSSeperater       @"Booking"
 #define BDBookingWSMessage         @"message"
 #define BDBookingWSErrorCode       @"errorcode"
 #define BDBookingId                @"id"
@@ -28,7 +31,7 @@
 #define BDBookingenddate           @"end_date"
 #define BDBookingeventplace        @"event_place"
 #define BDBookingname              @"name"
-#define BDBookingshortdescription  @"short_description"
+#define BDBookingshortdescription  @"long_description"
 #define BDBookingstartdate         @"start_date"
 #define BDBookingeventLocation     @"event_location"
 #define BDBookingWSErrorTitle      @"Sorry"
@@ -37,9 +40,44 @@
 #define BDBookingWScancel          @"Cancel"
 #define BDBookingWSOk              @"Ok"
 
+#pragma Form Validation String
+
+#define BDFVnameblank              @"Name Can't Be Blank"
+#define BDFVemailblank             @"Email Can't Be Blank"
+#define BDFVEmailValied            @"Email is not valied"
+#define BDFVTitleblankn            @"Title can't be blank"
+#define BDFVDescblank              @"Description can't be blank"
+
+#pragma labelText
+
+#define BookingTitleText           @"Title"
+#define BookingStartDateText       @"Start Date"
+#define BookingEndDateText         @"End Date"
+#define BookingPlaceOneText        @"Event Location"
+#define BookingPlaceTwoText        @"Event Place"
+#define BookingDetailsText         @"Description"
+#define BDHemaAdminContactText     @"Contact With HEMA Admin"
+#define CTUserNameText             @"Contact Name"
+#define CTUserEmailText            @"Email"
+#define CTMessageTitleText         @"Message Title"
+#define CTMDetailsText             @"Description"
+
+#define ApplyButtonText            @"Apply"
+#define SubmitButtonText           @"Submit"
+
+#define BDNewlineText              @"\n"
+#define BDFontName                 @"Helvetica"
+
+typedef enum {
+    ContactSectionDisplaynone,
+    ContactSectionDisplayBlock
+} ContactSectionDisplay;
+
 @interface BookingDetailsViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate,WebserviceProtocolDelegate,UIAlertViewDelegate>
 {
     CGRect mainFrame;
+    float NextTextFiled,NextlabelFiled,Difference,TextfieldWidth,TextfieldHeight,TextfieldXposition,SubmitButtonWidth,SubmitButtonHeight,SubmitButtonxposition;
+    int nextdatatag;
 }
 @property (nonatomic,retain) UIScrollView *mainScrollView;
 
@@ -66,16 +104,43 @@
 @property (nonatomic,retain) NSString *BookingDetails;
 @property (nonatomic,retain) UILabel *BookingDetailsLabel;
 @property (nonatomic,retain) UITextView *BookingDetailsTextView;
+
+@property (nonatomic,retain) UITextField * CTUserName;
+@property (nonatomic,retain) UITextField * CTUserEmail;
+@property (nonatomic,retain) UITextField * CTMessageTitle;
+@property (nonatomic,retain) SDAPlaceholderTextView *CTMDetails;
+@property (nonatomic,retain) UIButton * SubmitButton;
+
+@property (nonatomic,retain) UIButton * ApplyButton;
+@property (nonatomic,retain) UILabel *HemaAdminContactlabel;
+@property (nonatomic,retain) NSMutableArray *ObjectArray;
+
+@property (assign) ContactSectionDisplay ContactSectionDisplayStatus;
+
 @end
 
 @implementation BookingDetailsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithBookingId:(NSString *)aBookingId WithBookingOption:(BOOL)BookingOption
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
-        mainFrame = [[UIScreen mainScreen] bounds];
-        self.view.layer.frame = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
+        mainFrame                   = [[UIScreen mainScreen] bounds];
+        self.view.layer.frame       = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
+        self.BookingID              = aBookingId;
+        self.BookingOption          = BookingOption;
+
+        NextTextFiled               = 50.0f;
+        NextlabelFiled              = 20.0f;
+        Difference                  = 50.0f;
+        nextdatatag                 = 2001;
+        TextfieldHeight             = 40;
+        TextfieldXposition          = 20;
+        SubmitButtonWidth           = 140.0f;
+        SubmitButtonHeight          = 40.0f;
+        TextfieldWidth              = mainFrame.size.width-40;
+        SubmitButtonxposition       = (mainFrame.size.width-SubmitButtonWidth)/2;
+        [self CallWebserviceForData];
         [self.view setBackgroundColor:[UIColor whiteColor]];
     }
     return self;
@@ -93,12 +158,9 @@
      *  Scrollview Decleration
      */
     
-    float NextTextFiled = 50.0f;
-    float NextlabelFiled = 20.0f;
-    
-    _mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 130, mainFrame.size.width, mainFrame.size.height-210)];
+    _mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 130, mainFrame.size.width, mainFrame.size.height-190)];
     [_mainScrollView setBackgroundColor:[UIColor colorFromHex:0xededf2]];
-    [_mainScrollView setBounces:NO];
+    [_mainScrollView setBounces:YES];
     [_mainScrollView setUserInteractionEnabled:YES];
     [self.view addSubview:_mainScrollView];
     
@@ -107,7 +169,7 @@
      */
     
     UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, 100, mainFrame.size.width-21, 21)];
-    [TitleLabel setFont:[UIFont fontWithName:@"Arial-Bold" size:14.0]];
+    [TitleLabel setFont:[UIFont fontWithName:BDFontName size:16.0]];
     [TitleLabel setTextColor:[UIColor colorFromHex:0xe66a4c]];
     [TitleLabel setText:@"Booking"];
     [self.view addSubview:TitleLabel];
@@ -117,14 +179,12 @@
     [self.view addSubview:SeperaterLabel];
     
     _BookingTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, NextlabelFiled, mainFrame.size.width-20, 20)];
-    [_BookingTitleLabel setText:@"Title"];
+    [_BookingTitleLabel setText:BookingTitleText];
     [_mainScrollView addSubview:_BookingTitleLabel];
     
     NextlabelFiled = NextlabelFiled + 100;
     
     _BookingTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, NextTextFiled, mainFrame.size.width+2, 40)];
-    [_BookingTitleTextField setTag:52145];
-    [_BookingTitleTextField setText:@"HeaderNavigationViewBackgroundView"];
     [_BookingTitleTextField setDelegate:self];
     [_mainScrollView addSubview:_BookingTitleTextField];
     
@@ -135,14 +195,12 @@
      */
     
     _BookingStartDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, NextlabelFiled, mainFrame.size.width-20, 20)];
-    [_BookingStartDateLabel setText:@"Start Date"];
+    [_BookingStartDateLabel setText:BookingStartDateText];
     [_mainScrollView addSubview:_BookingStartDateLabel];
     
     NextlabelFiled = NextlabelFiled + 100;
     
     _BookingStartDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, NextTextFiled, mainFrame.size.width+2, 40)];
-    [_BookingStartDateTextField setTag:52145];
-    [_BookingStartDateTextField setText:@"10/12/2014"];
     [_BookingStartDateTextField setDelegate:self];
     [_mainScrollView addSubview:_BookingStartDateTextField];
     
@@ -153,14 +211,12 @@
      */
     
     _BookingEndDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, NextlabelFiled, mainFrame.size.width, 20)];
-    [_BookingEndDateLabel setText:@"End Date"];
+    [_BookingEndDateLabel setText:BookingEndDateText];
     [_mainScrollView addSubview:_BookingEndDateLabel];
     
     NextlabelFiled = NextlabelFiled + 100;
     
     _BookingEndDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, NextTextFiled, mainFrame.size.width+2, 40)];
-    [_BookingEndDateTextField setTag:52145];
-    [_BookingEndDateTextField setText:@"10/12/2015"];
     [_BookingEndDateTextField setDelegate:self];
     [_mainScrollView addSubview:_BookingEndDateTextField];
     
@@ -171,14 +227,12 @@
      */
     
     _BookingPlaceOneLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, NextlabelFiled, mainFrame.size.width, 20)];
-    [_BookingPlaceOneLabel setText:@"Location One"];
+    [_BookingPlaceOneLabel setText:BookingPlaceOneText];
     [_mainScrollView addSubview:_BookingPlaceOneLabel];
     
     NextlabelFiled = NextlabelFiled + 100;
     
     _BookingPlaceOneTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, NextTextFiled, mainFrame.size.width+2, 40)];
-    [_BookingPlaceOneTextField setTag:52145];
-    [_BookingPlaceOneTextField setText:@"Kolkata"];
     [_BookingPlaceOneTextField setDelegate:self];
     [_mainScrollView addSubview:_BookingPlaceOneTextField];
     
@@ -189,14 +243,12 @@
      */
     
     _BookingPlaceTwoLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, NextlabelFiled, mainFrame.size.width, 20)];
-    [_BookingPlaceTwoLabel setText:@"Location Two"];
+    [_BookingPlaceTwoLabel setText:BookingPlaceTwoText];
     [_mainScrollView addSubview:_BookingPlaceTwoLabel];
     
     NextlabelFiled = NextlabelFiled + 100;
     
     _BookingPlaceTwoTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, NextTextFiled, mainFrame.size.width+2, 40)];
-    [_BookingPlaceTwoTextField setTag:52145];
-    [_BookingPlaceTwoTextField setText:@"India"];
     [_BookingPlaceTwoTextField setDelegate:self];
     [_mainScrollView addSubview:_BookingPlaceTwoTextField];
     
@@ -207,32 +259,105 @@
      */
     
     _BookingDetailsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, NextlabelFiled, mainFrame.size.width, 20)];
-    [_BookingDetailsLabel setText:@"Description"];
+    [_BookingDetailsLabel setText:BookingDetailsText];
     [_mainScrollView addSubview:_BookingDetailsLabel];
     
     NextlabelFiled = NextlabelFiled + 100;
     
     _BookingDetailsTextView = [[UITextView alloc] initWithFrame:CGRectMake(-1, NextTextFiled, mainFrame.size.width+2, 300)];
-    [_BookingDetailsTextView setTag:52145];
-    [_BookingDetailsTextView setText:@"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent lacinia erat in arcu viverra venenatis sed sit amet ex. Donec posuere leo urna, ac laoreet urna fermentum a. Nulla nunc mi, hendrerit nec scelerisque vel, auctor et odio. Proin purus velit, semper eget quam ac, lacinia viverra est. Morbi id elit sit amet enim mollis mattis nec ac massa. Sed vitae lectus massa. Duis odio quam, luctus at justo eu, consequat faucibus magna. Sed laoreet maximus velit. Morbi ut metus sit amet risus malesuada dignissim nec pretium sapien. Sed tristique neque tortor, in aliquam lacus volutpat volutpat. "];
     [_BookingDetailsTextView setDelegate:self];
     [_mainScrollView addSubview:_BookingDetailsTextView];
     
+    NextTextFiled = NextTextFiled + 270;
+    
+    _ApplyButton = [[UIButton alloc] initWithFrame:CGRectMake(20 ,NextTextFiled+50, SubmitButtonWidth, SubmitButtonHeight)];
+    [_ApplyButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
+    [_ApplyButton setTitle:ApplyButtonText forState:UIControlStateNormal];
+    [_ApplyButton.titleLabel setFont:[UIFont fontWithName:BDFontName size:12.0f]];
+    [_ApplyButton.layer setCornerRadius:3.0f];
+    [_ApplyButton addTarget:self action:@selector(ShowContactSection:) forControlEvents:UIControlEventTouchUpInside];
+    [_ApplyButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+    [_ApplyButton setTag:104];
+    [_mainScrollView addSubview:_ApplyButton];
+    
+    NextTextFiled = NextTextFiled + 120;
+    
+    /**
+     *  Booking Title Section
+     */
+    
+    self.HemaAdminContactlabel = [[UILabel alloc] initWithFrame:CGRectMake(21, NextTextFiled, mainFrame.size.width-21, 21)];
+    [self.HemaAdminContactlabel setFont:[UIFont fontWithName:BDFontName size:14.0]];
+    [self.HemaAdminContactlabel setTextColor:[UIColor colorFromHex:0xe66a4c]];
+    [self.HemaAdminContactlabel setText:BDHemaAdminContactText];
+    [_mainScrollView addSubview:self.HemaAdminContactlabel];
+    
+    NextTextFiled = NextTextFiled +40.0f;
+    
+    self.CTUserName = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, NextTextFiled, TextfieldWidth, TextfieldHeight)];
+    [self.CTUserName customizeWithPlaceholderText:CTUserNameText andImageOnRightView:nil andLeftBarText:@"*"];
+    [self.CTUserName setTag:nextdatatag];
+    [_mainScrollView addSubview:self.CTUserName];
+    
+    NextTextFiled = NextTextFiled + Difference;
+    nextdatatag  = nextdatatag +1;
+    
+    self.CTUserEmail = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, NextTextFiled, TextfieldWidth, TextfieldHeight)];
+    [self.CTUserEmail customizeWithPlaceholderText:CTUserEmailText andImageOnRightView:nil andLeftBarText:@"*"];
+    [self.CTUserEmail setTag:nextdatatag];
+    [_mainScrollView addSubview:self.CTUserEmail];
+    
+    NextTextFiled = NextTextFiled + Difference;
+    nextdatatag  = nextdatatag +1;
+    
+    // Password *
+    
+    self.CTMessageTitle = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, NextTextFiled, TextfieldWidth, TextfieldHeight)];
+    [self.CTMessageTitle customizeWithPlaceholderText:CTMessageTitleText andImageOnRightView:nil andLeftBarText:@"*"];
+    [self.CTMessageTitle setTag:nextdatatag];
+    [_mainScrollView addSubview:self.CTMessageTitle];
+    
+    NextTextFiled = NextTextFiled + Difference;
+    nextdatatag  = nextdatatag +1;
+    // Confirm Password *
+    
+    self.CTMDetails = [[SDAPlaceholderTextView alloc] initWithFrame:CGRectMake(TextfieldXposition, NextTextFiled, TextfieldWidth, 100)];
+    [self.CTMDetails setPlaceholder:CTMDetailsText];
+    [self.CTMDetails setPlaceholderColor:[UIColor colorFromHex:0x755049]];
+    [self.CTMDetails setTag:nextdatatag];
+    [_mainScrollView addSubview:self.CTMDetails];
+    
+    NextTextFiled = NextTextFiled + 70;
+    nextdatatag  = nextdatatag +1;
+    
+    _SubmitButton = [[UIButton alloc] initWithFrame:CGRectMake(SubmitButtonxposition ,NextTextFiled+50, SubmitButtonWidth, SubmitButtonHeight)];
+    [_SubmitButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
+    [_SubmitButton setTitle:SubmitButtonText forState:UIControlStateNormal];
+    [_SubmitButton.titleLabel setFont:[UIFont fontWithName:BDFontName size:12.0f]];
+    [_SubmitButton.layer setCornerRadius:3.0f];
+    [_SubmitButton addTarget:self action:@selector(ContactWithHemaAdmin:) forControlEvents:UIControlEventTouchUpInside];
+    [_SubmitButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+    [_SubmitButton setTag:104];
+    [_mainScrollView addSubview:_SubmitButton];
+    
     NextTextFiled = NextTextFiled + 300;
     
-    [_mainScrollView setContentSize:CGSizeMake(300, NextTextFiled)];
+    [_mainScrollView setContentSize:CGSizeMake(mainFrame.size.width, NextTextFiled)];
     
     for (id DataSubView in _mainScrollView.subviews) {
         if ([DataSubView isKindOfClass:[UITextField class]]) {
             UITextField *textField=(UITextField*)DataSubView;
             [textField setDelegate:self];
             [textField setBackgroundColor:[UIColor whiteColor]];
-            [textField setEnabled:NO];
+            if (textField.tag == 2001 || textField.tag == 2002 || textField.tag == 2003) {
+                [textField setEnabled:YES];
+            } else {
+                [textField setEnabled:NO];
+            }
             [textField.layer setBorderWidth:1.0f];
             [textField.layer setBorderColor:[UIColor colorFromHex:0xc9c8cc].CGColor];
             [textField setTextColor:[UIColor darkGrayColor]];
-            [textField setFont:[UIFont fontWithName:@"Helvetica" size:13.0f]];
-            [textField setDelegate:self];
+            [textField setFont:[UIFont fontWithName:BDFontName size:13.0f]];
             UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 40)];
             [textField setLeftView:paddingView];
             [textField setLeftViewMode:UITextFieldViewModeAlways];
@@ -243,7 +368,7 @@
         if ([Globallabel isKindOfClass:[UILabel class]]) {
             [Globallabel setBackgroundColor:[UIColor clearColor]];
             [Globallabel setTextColor:[UIColor colorFromHex:0x5e5e5e]];
-            [Globallabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [Globallabel setFont:[UIFont fontWithName:BDFontName size:12.0f]];
             [Globallabel setTextAlignment:NSTextAlignmentLeft];
         }
     }
@@ -254,12 +379,101 @@
             [textField setDelegate:self];
             [textField setBackgroundColor:[UIColor whiteColor]];
             [textField setEditable:NO];
+            if (textField.tag == 2004) {
+                [textField setEditable:YES];
+            } else {
+                [textField setEditable:NO];
+            }
             [textField.layer setBorderWidth:1.0f];
             [textField.layer setBorderColor:[UIColor colorFromHex:0xc9c8cc].CGColor];
             [textField setTextColor:[UIColor darkGrayColor]];
-            [textField setFont:[UIFont fontWithName:@"Helvetica" size:13.0f]];
-            [textField setDelegate:self];
+            [textField setFont:[UIFont fontWithName:BDFontName size:13.0f]];
         }
+    }
+    [_mainScrollView setHidden:YES];
+}
+
+-(IBAction)ContactWithHemaAdmin:(id)sender
+{
+    if ([_CTUserName.text CleanTextField].length == 0) {
+        [self ShowAlertWithTitle:BDBookingWSErrorTitle Description:BDFVnameblank Tag:121 cancelButtonTitle:BDBookingWSOk];
+    } else if([_CTUserEmail.text CleanTextField].length == 0) {
+        [self ShowAlertWithTitle:BDBookingWSErrorTitle Description:BDFVemailblank Tag:122 cancelButtonTitle:BDBookingWSOk];
+    } else if (![[_CTUserEmail.text CleanTextField] isEmail]) {
+        [self ShowAlertWithTitle:BDBookingWSErrorTitle Description:BDFVEmailValied Tag:123 cancelButtonTitle:BDBookingWSOk];
+    } else if ([_CTMessageTitle.text CleanTextField].length == 0) {
+        [self ShowAlertWithTitle:BDBookingWSErrorTitle Description:BDFVTitleblankn Tag:124 cancelButtonTitle:BDBookingWSOk];
+    } else if ([_CTMDetails.text CleanTextField].length == 0) {
+        [self ShowAlertWithTitle:BDBookingWSErrorTitle Description:BDFVDescblank Tag:125 cancelButtonTitle:BDBookingWSOk];
+    } else {
+        NSLog(@"validation complete");
+    }
+}
+
+-(void)ShowAlertWithTitle:(NSString *)ParamTitle Description:(NSString *)ParamDescription Tag:(int)ParamTag cancelButtonTitle:(NSString *)ParamcancelButtonTitle
+{
+    UIAlertView *ShowAlert = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamDescription delegate:self cancelButtonTitle:ParamcancelButtonTitle otherButtonTitles:nil, nil];
+    [ShowAlert setTag:ParamTag];
+    [ShowAlert show];
+}
+
+#pragma AlertView Delegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+}
+
+-(IBAction)ShowContactSection:(id)sender
+{
+    if (self.ContactSectionDisplayStatus == ContactSectionDisplaynone) {
+        [self ShowHideContactSection:YES];
+        self.ContactSectionDisplayStatus = ContactSectionDisplayBlock;
+    } else {
+        [self ShowHideContactSection:NO];
+        self.ContactSectionDisplayStatus = ContactSectionDisplaynone;
+    }
+}
+
+-(void)ShowHideContactSection:(BOOL)SetHidden
+{
+    if (SetHidden) {
+        [self.HemaAdminContactlabel setHidden:NO];
+        [self.CTUserName setHidden:NO];
+        [self.CTUserEmail setHidden:NO];
+        [self.CTMessageTitle setHidden:NO];
+        [self.CTMDetails setHidden:NO];
+        [self.SubmitButton setHidden:NO];
+    } else {
+        [self.HemaAdminContactlabel setHidden:YES];
+        [self.CTUserName setHidden:YES];
+        [self.CTUserEmail setHidden:YES];
+        [self.CTMessageTitle setHidden:YES];
+        [self.CTMDetails setHidden:YES];
+        [self.SubmitButton setHidden:YES];
+    }
+}
+
+-(void)ShowBookingDetails
+{
+    BookingListObjects *LocalObject = [self.ObjectArray objectAtIndex:0];
+    [_BookingTitleTextField setText:[LocalObject Name]];
+    [_BookingStartDateTextField setText:[LocalObject StartDate]];
+    [_BookingEndDateTextField setText:[LocalObject EndDate]];
+    [_BookingPlaceOneTextField setText:[LocalObject EventLocation]];
+    [_BookingPlaceTwoTextField setText:[LocalObject EventPlace]];
+    [_BookingDetailsTextView setText:[LocalObject ShortDescription]];
+    [_mainScrollView setHidden:NO];
+    
+    if (self.BookingOption) {
+        [UIView animateWithDuration:2.0f animations:^(void){
+            [self ShowHideContactSection:YES];
+            [_mainScrollView setContentOffset:CGPointMake(0, 930) animated:YES];
+        } completion:nil];
+        self.ContactSectionDisplayStatus = ContactSectionDisplayBlock;
+    } else {
+        [self ShowHideContactSection:NO];
+        self.ContactSectionDisplayStatus = ContactSectionDisplaynone;
     }
 }
 
@@ -278,58 +492,120 @@
         
         @try {
             
-            for (id DataDicrtionary in [ParamObjectCarrier objectForKey:BDBookingWSSeperater]) {
-                
-                BookingListObjects *Object = [[BookingListObjects alloc]
-                                              initWithBookingListId:[DataDicrtionary objectForKey:BDBookingId]
-                                              Category:[DataDicrtionary objectForKey:BDBookingcategory]
-                                              Name:[DataDicrtionary objectForKey:BDBookingname]
-                                              StartDate:[DataDicrtionary objectForKey:BDBookingstartdate]
-                                              EndDate:[DataDicrtionary objectForKey:BDBookingenddate]
-                                              EventPlace:[DataDicrtionary objectForKey:BDBookingeventplace]
-                                              ShortDescription:[DataDicrtionary objectForKey:BDBookingshortdescription] EventLocation:BDBookingeventLocation];
-                Object = nil;
-            }
+            self.ObjectArray = [[NSMutableArray alloc] init];
+            
+            BookingListObjects *Object = [[BookingListObjects alloc]
+                                          initWithBookingListId:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingId]
+                                          Category:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingcategory]
+                                          Name:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingname]
+                                          StartDate:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingstartdate]
+                                          EndDate:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingenddate]
+                                          EventPlace:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingeventplace]
+                                          ShortDescription:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingshortdescription]EventLocation:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingeventLocation]];
+            [self.ObjectArray addObject:Object];
+            Object = nil;
+            [self ShowBookingDetails];
         }
         @catch (NSException *exception) {
-            
+            UIAlertView *ErrorAlert = [[UIAlertView alloc] initWithTitle:BDBookingWSErrorTitle message:[NSString stringWithFormat:@"%@",exception] delegate:self cancelButtonTitle:BDBookingWSOk otherButtonTitles:BDBookingWSTryAgain, nil];
+            [ErrorAlert show];
         }
-    } else {
+   } else {
         UIAlertView *ErrorAlert = [[UIAlertView alloc] initWithTitle:BDBookingWSErrorTitle message:[ParamObjectCarrier objectForKey:BDBookingWSMessage] delegate:self cancelButtonTitle:BDBookingWSOk otherButtonTitles:BDBookingWSTryAgain, nil];
         [ErrorAlert show];
     }
 }
 -(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
 {
-    
-}
-
--(void)GotoHome
-{
-    HomeViewController *HomeView = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HomeView];
-}
-
--(void)GotoLogin
-{
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:LoginView];
-}
-
--(void)GotoRegister
-{
-    RegisterViewController *Register = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:Register];
-}
-
--(void)GotoHelp
-{
-    HelpViewController *HelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HelpView];
+    NSLog(@"error");
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+#pragma UITextfiled Delegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField.tag == 2001) {
+        [UIView animateWithDuration:1.0f animations:^(void){
+            [_mainScrollView setContentOffset:CGPointMake(0, 950) animated:YES];
+        }];
+    } else if (textField.tag == 2002) {
+        [UIView animateWithDuration:1.0f animations:^(void){
+            [_mainScrollView setContentOffset:CGPointMake(0, 1000) animated:YES];
+        }];
+    } else if (textField.tag == 2003) {
+        [UIView animateWithDuration:1.0f animations:^(void){
+            [_mainScrollView setContentOffset:CGPointMake(0, 1050) animated:YES];
+        }];
+    }
+    return YES;
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    for(id aSubView in [_mainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextField class]])
+        {
+            UITextField *textField=(UITextField*)aSubView;
+            [textField resignFirstResponder];
+        }
+    }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [UIView animateWithDuration:1.0f animations:^(void){
+        //[_MainScrollView setContentOffset:CGPointMake(0, -20) animated:YES];
+    }];
+    [textField resignFirstResponder];
+}
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    
+}
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    return YES;
+}
+
+#pragma UITextview Delegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:BDNewlineText]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+
+#pragma mark textview begin editing
+
+-(void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if (textView.tag == 2004) {
+        [UIView animateWithDuration:1.0f animations:^(void){
+            [_mainScrollView setContentOffset:CGPointMake(0, 1100) animated:YES];
+        }];
+    }
+}
+
+-(BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    return YES;
 }
 
 @end

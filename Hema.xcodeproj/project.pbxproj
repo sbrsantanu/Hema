@@ -52,6 +52,10 @@
 		0438E6451A3EC95600CD157C /* HelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0438E6431A3EC95600CD157C /* HelpViewController.xib */; };
 		0438E6471A3EC96C00CD157C /* HelpViewController4s.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0438E6461A3EC96C00CD157C /* HelpViewController4s.xib */; };
 		0438E6491A3ECA0500CD157C /* ViewController4s.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0438E6481A3ECA0500CD157C /* ViewController4s.xib */; };
+		045B6C991A6E6A0B00312751 /* AFDropdownNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 045B6C981A6E6A0B00312751 /* AFDropdownNotification.m */; };
+		045B6C9D1A6E6CAE00312751 /* 4412_Alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 045B6C9A1A6E6CAE00312751 /* 4412_Alert.png */; };
+		045B6C9E1A6E6CAE00312751 /* 4412_Error.png in Resources */ = {isa = PBXBuildFile; fileRef = 045B6C9B1A6E6CAE00312751 /* 4412_Error.png */; };
+		045B6C9F1A6E6CAE00312751 /* 4412_Tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 045B6C9C1A6E6CAE00312751 /* 4412_Tick.png */; };
 		048B9D2A1A5E693E00BDDAD4 /* SocialAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B9D291A5E693E00BDDAD4 /* SocialAccount.m */; };
 		048B9D2C1A5E749C00BDDAD4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 048B9D2B1A5E749C00BDDAD4 /* WebKit.framework */; };
 		049F9EC71A31CFE6002145C3 /* RMDateSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F9EC61A31CFE6002145C3 /* RMDateSelectionViewController.m */; };
@@ -244,6 +248,11 @@
 		0438E6431A3EC95600CD157C /* HelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpViewController.xib; sourceTree = "<group>"; };
 		0438E6461A3EC96C00CD157C /* HelpViewController4s.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpViewController4s.xib; sourceTree = "<group>"; };
 		0438E6481A3ECA0500CD157C /* ViewController4s.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController4s.xib; sourceTree = "<group>"; };
+		045B6C971A6E6A0B00312751 /* AFDropdownNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFDropdownNotification.h; sourceTree = "<group>"; };
+		045B6C981A6E6A0B00312751 /* AFDropdownNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFDropdownNotification.m; sourceTree = "<group>"; };
+		045B6C9A1A6E6CAE00312751 /* 4412_Alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4412_Alert.png; sourceTree = "<group>"; };
+		045B6C9B1A6E6CAE00312751 /* 4412_Error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4412_Error.png; sourceTree = "<group>"; };
+		045B6C9C1A6E6CAE00312751 /* 4412_Tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4412_Tick.png; sourceTree = "<group>"; };
 		048B9D281A5E693E00BDDAD4 /* SocialAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialAccount.h; sourceTree = "<group>"; };
 		048B9D291A5E693E00BDDAD4 /* SocialAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialAccount.m; sourceTree = "<group>"; };
 		048B9D2B1A5E749C00BDDAD4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -884,6 +893,8 @@
 		04C1EFD81A318BA2008E6AE1 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				045B6C971A6E6A0B00312751 /* AFDropdownNotification.h */,
+				045B6C981A6E6A0B00312751 /* AFDropdownNotification.m */,
 				04C8A7DF1A39D338002F986F /* Images */,
 				04C8A7D11A39C9F4002F986F /* Fonts */,
 				049F9ED01A31D8F3002145C3 /* FlatButton */,
@@ -1333,6 +1344,9 @@
 		04D539691A51670F00E183D2 /* Booking List */ = {
 			isa = PBXGroup;
 			children = (
+				045B6C9A1A6E6CAE00312751 /* 4412_Alert.png */,
+				045B6C9B1A6E6CAE00312751 /* 4412_Error.png */,
+				045B6C9C1A6E6CAE00312751 /* 4412_Tick.png */,
 				04D539641A5166FE00E183D2 /* BookingListViewController.h */,
 				04D539651A5166FE00E183D2 /* BookingListViewController.m */,
 				04D539661A5166FE00E183D2 /* BookingListViewController.xib */,
@@ -1491,6 +1505,7 @@
 				042748961A5D566000F48877 /* dbimg8.png in Resources */,
 				04C9A3591A2EFD4E0003C4D3 /* Images.xcassets in Resources */,
 				04BC9C321A31987400FCDA40 /* SoapEnvelop in Resources */,
+				045B6C9F1A6E6CAE00312751 /* 4412_Tick.png in Resources */,
 				0438E6451A3EC95600CD157C /* HelpViewController.xib in Resources */,
 				042748941A5D566000F48877 /* dbimg6.png in Resources */,
 				043553251A42C29D002FB1CE /* BookingViewController4s.xib in Resources */,
@@ -1500,6 +1515,8 @@
 				0438E6321A3EC8BF00CD157C /* HomeViewController4s.xib in Resources */,
 				04D539681A5166FE00E183D2 /* BookingListViewController.xib in Resources */,
 				04C8A7E91A39D349002F986F /* user_icon.png in Resources */,
+				045B6C9E1A6E6CAE00312751 /* 4412_Error.png in Resources */,
+				045B6C9D1A6E6CAE00312751 /* 4412_Alert.png in Resources */,
 				04CAC4F51A56ED2A007527D2 /* Providerdashboard.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1591,6 +1608,7 @@
 				04BC9C241A31987400FCDA40 /* AFJSONUtilities.m in Sources */,
 				04C2E6751A65028300079E7F /* CCompletedEvent.m in Sources */,
 				04C1EFDC1A318BCC008E6AE1 /* UICKeyChainStore.m in Sources */,
+				045B6C991A6E6A0B00312751 /* AFDropdownNotification.m in Sources */,
 				04C99A641A654CDB00DC5BAC /* PHistoryOfConversion.m in Sources */,
 				04C1EFFC1A318E91008E6AE1 /* JRErr.m in Sources */,
 				04C1F0041A319086008E6AE1 /* NSString+FontAwesome.m in Sources */,
