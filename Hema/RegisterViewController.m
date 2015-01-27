@@ -14,6 +14,7 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "NSString+PJR.h"
 
 typedef enum
 {
@@ -442,30 +443,6 @@ typedef enum {
     }
 }
 
--(void)GotoHome
-{
-    HomeViewController *HomeView = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HomeView];
-}
-
--(void)GotoLogin
-{
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:LoginView];
-}
-
--(void)GotoRegister
-{
-    RegisterViewController *Register = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:Register];
-}
-
--(void)GotoHelp
-{
-    HelpViewController *HelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HelpView];
-}
-
 - (void)didReceiveMemoryWarning {
     
     [super didReceiveMemoryWarning];
@@ -738,7 +715,7 @@ typedef enum {
     return YES;
 }
 
-#pragma match register clicekd
+#pragma match register clicked
 
 -(IBAction)RegistrationProcess:(id)sender
 {
@@ -759,6 +736,104 @@ typedef enum {
             [textView resignFirstResponder];
         }
     }
+    
+    BOOL ValidationSuccess = YES;
+    
+    if ([self.TFSelectAgroup.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Select Group" Tag:121 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFName.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Name can't be blank" Tag:122 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFMobile.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"MObile number can't be blank" Tag:123 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFofficephone.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Office phone can't be blank" Tag:124 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFAddress.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Address can't be blank" Tag:125 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFcity.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"City can't be blank" Tag:126 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFstate.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"State can't be blank" Tag:127 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFzip.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Zipcode can't be blank" Tag:128 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFemail.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Email can't be blank" Tag:129 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFPassword.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Password can't be blank" Tag:130 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([self.TFCPassword.text CleanTextField].length == 0) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Provide password again" Tag:131 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if (![[self.TFCPassword.text CleanTextField] isEmail]) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Provide password again" Tag:132 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if (![[self.TFPassword.text CleanTextField] isMinLength:6 andMaxLength:12]) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Password length must be 6-12 character long" Tag:133 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if (![[self.TFemail.text CleanTextField] isEqualToString:[self.TFCPassword.text CleanTextField]]){
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"password didn't match" Tag:134 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    } else if ([[self.TFMobile.text CleanTextField] isPhoneNumber]) {
+        
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Provide proper phone number" Tag:135 cancelButtonTitle:@"Ok"];
+        ValidationSuccess = NO;
+        
+    }
+    
+    if (ValidationSuccess) {
+        
+        NSLog(@"Everything is ok, validation successfull");
+    }
 }
 
+
+#pragma UIAlertview Delegate Methods
+
+-(void)ShowAlertWithTitle:(NSString *)ParamTitle Description:(NSString *)ParamDescription Tag:(int)ParamTag cancelButtonTitle:(NSString *)ParamcancelButtonTitle
+{
+    UIAlertView *ShowAlert = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamDescription delegate:self cancelButtonTitle:ParamcancelButtonTitle otherButtonTitles:nil, nil];
+    [ShowAlert setTag:ParamTag];
+    [ShowAlert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+}
 @end

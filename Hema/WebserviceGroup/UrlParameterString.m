@@ -25,6 +25,8 @@
 
 +(NSString *)URLParamCustomerBookingDetails { return kNWEBCustomerBookingDetailsParamURL; }
 
++(NSString *)URLParamCustomerBookingApply { return kNWEBCustomerBookingApplyParamURL; }
+
 +(NSString *)URLParamCustomerRegistration  { return kNWEBCustomerRegistrationParamURL; }
 
 +(NSString *)URLParamCustomerLogin  { return kNWEBCustomerLoginParamURL; }
@@ -63,7 +65,7 @@
 
 +(NSString *)URLParamProviderConversionHistory  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderLogin  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderLogin  { return kNWEBProviderLoginParamURL; }
 
 +(NSString *)URLParamProviderDashboard  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -118,6 +120,8 @@
 +(NSArray *)WebParamCustomerBookingSearch { return [self ReturnWebArrayFromString:kNWEBParamCustomerBookingSearch]; }
 
 +(NSArray *)WebParamCustomerBookingDetails { return [self ReturnWebArrayFromString:kNWEBParamCustomerBookingDetails]; }
+
++(NSArray *)WebParamCustomerBookingApply { return [self ReturnWebArrayFromString:kNWEBParamCustomerBookingApply]; }
 
 /* ************************ Customer *************************** */
 

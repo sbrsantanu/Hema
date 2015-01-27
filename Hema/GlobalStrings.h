@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+#define isLogedin                   @"isLogedin"
+#define SetUserName                 @"SetUserName"
+#define SetUserPassword             @"SetUserPassword"
+#define SetUserRemember             @"SetUserRemember"
+#define userType                    @"userType"
+#define logedinuserid               @"logedinuserid"
+#define logedinuseremail            @"logedinuseremail"
+#define logedinusername             @"logedinusername"
+
 @interface GlobalStrings : NSObject
 
 
@@ -45,4 +54,16 @@
 +(NSString *)FooterWidth;
 +(NSString *)FooterHeight;
 
+/**
+ *      Keychain data access string
+ */
+
++(NSString *)KCisLogedinString;
++(NSString *)KCSetUserNameString;
++(NSString *)KCSetUserPasswordString;
++(NSString *)KCSetUserRememberString;
++(NSString *)KCuserTypeString;
++(NSString *)KClogedinuseridString;
++(NSString *)KClogedinuseremailString;
++(NSString *)KClogedinusernameString;
 @end

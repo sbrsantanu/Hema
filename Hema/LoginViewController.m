@@ -16,6 +16,14 @@
 #import "ForgetpasswordViewController.h"
 #import "Customerdashboard.h"
 #import "Providerdashboard.h"
+#import "NSString+PJR.h"
+#import "MPApplicationGlobalConstants.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "KeychainItemWrapper.h"
+#import <Security/Security.h>
+#import "GlobalStrings.h"
 
 typedef enum {
     UserLoginTypeNone,
@@ -28,9 +36,10 @@ typedef enum {
     RememberMeTypeyes
 } RememberMeType;
 
-@interface LoginViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
+@interface LoginViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
+    NSMutableArray *LoginparamObject;
 }
 @property (nonatomic,retain) UIScrollView *MainScrollView;
 @property (nonatomic,retain) UITextField *UsernameTextField;
@@ -49,6 +58,7 @@ typedef enum {
 @property (nonatomic,retain) UIView *CustomerLoginFooter;
 @property (nonatomic,retain) UIView *ProviderLoginFooter;
 
+@property (nonatomic, retain) KeychainItemWrapper *keychainItemWrapper;
 @end
 
 @implementation LoginViewController
@@ -57,9 +67,11 @@ typedef enum {
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
         mainFrame = [[UIScreen mainScreen] bounds];
         self.view.layer.frame = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
+        
+        self.keychainItemWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+        [self.keychainItemWrapper resetKeychainItem];
     }
     return self;
 }
@@ -103,12 +115,31 @@ typedef enum {
     
     _UserId = [[UITextField alloc] initWithFrame:CGRectMake(20, 90, mainFrame.size.width-40, 40)];
     [_UserId customizeWithplaceholderText:@"Username" andImage:@" "];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"rememberpass"] intValue] == 1) {
+        if (_UserloginMode == UserLoginTypeCustomer) {
+            [_UserId setText:[[NSUserDefaults standardUserDefaults] objectForKey:@"setusernamecus"]];
+        } else {
+            [_UserId setText:[[NSUserDefaults standardUserDefaults] objectForKey:@"setusernamepro"]];
+        }
+    }
+    [_UserId setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [_UserId setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [_UserId setTag:443];
     [_MainScrollView addSubview:_UserId];
 
     _UserPassword = [[UITextField alloc] initWithFrame:CGRectMake(20, 160, mainFrame.size.width-40, 40)];
     [_UserPassword customizeWithplaceholderText:@"Passowrd" andImage:@" "];
+    [_UserPassword setSecureTextEntry:YES];
+    [_UserPassword setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [_UserPassword setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [_UserPassword setTag:444];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"rememberpass"] intValue] == 1) {
+        if (_UserloginMode == UserLoginTypeCustomer) {
+            [_UserPassword setText:[[NSUserDefaults standardUserDefaults] objectForKey:@"setuserpasscus"]];
+        } else {
+            [_UserPassword setText:[[NSUserDefaults standardUserDefaults] objectForKey:@"setuserpasspro"]];
+        }
+    }
     [_MainScrollView addSubview:_UserPassword];
     
     UIImageView *UsernameImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 71, 12, 12)];
@@ -135,10 +166,14 @@ typedef enum {
     
     _RemembermeButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 210, 22, 22)];
     [_RemembermeButton setBackgroundColor:[UIColor clearColor]];
-    [_RemembermeButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"rememberpass"] intValue] == 1) {
+        [_RemembermeButton setImage:[UIImage imageNamed:@"tick.png"] forState:UIControlStateNormal];
+        _UserRememberMeMode = RememberMeTypeyes;
+    } else {
+        [_RemembermeButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    }
     [_RemembermeButton addTarget:self action:@selector(Rememberme) forControlEvents:UIControlEventTouchUpInside];
     [_MainScrollView addSubview:_RemembermeButton];
-    
     
     UILabel *RemembermeLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 210, 200, 22)];
     [RemembermeLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
@@ -207,21 +242,53 @@ typedef enum {
     
     [_MainScrollView setContentSize:CGSizeMake(mainFrame.size.width, mainFrame.size.height)];
 }
+
 -(void)LoginProcess
 {
-    if (_UserloginMode == UserLoginTypeprovider) {
-        Providerdashboard *Pdashboard = [[Providerdashboard alloc] init];
-        [self.navigationController pushViewController:Pdashboard animated:YES];
-    } else {
-        Customerdashboard *CdashBoard = [[Customerdashboard alloc] init];
-        [self.navigationController pushViewController:CdashBoard animated:YES];
+    BOOL validate = YES;
+    
+    if ([_UserId.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Username please"];
+        validate = NO;
+    } else if ([_UserPassword.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Password please"];
+        validate = NO;
+    }
+    
+    if (_UserRememberMeMode == RememberMeTypeyes) {
+        
+        if (_UserloginMode == UserLoginTypeCustomer) {
+            [[NSUserDefaults standardUserDefaults] setObject:[_UserId.text CleanTextField] forKey:@"setusernamecus"];
+            [[NSUserDefaults standardUserDefaults] setObject:[_UserPassword.text CleanTextField] forKey:@"setuserpasscus"];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setObject:[_UserId.text CleanTextField] forKey:@"setusernamepro"];
+            [[NSUserDefaults standardUserDefaults] setObject:[_UserPassword.text CleanTextField] forKey:@"setuserpasspro"];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"rememberpass"];
+        
+    }
+    
+    if (validate) {
+        
+        LoginparamObject = [[NSMutableArray alloc] initWithObjects:[_UserId.text CleanTextField],[_UserPassword.text CleanTextField], nil];
+        for (id AlltextField in _MainScrollView.subviews) {
+            if ([AlltextField isKindOfClass:[UITextField class]]) {
+                UITextField *DatatextField = (UITextField *)AlltextField;
+                [DatatextField resignFirstResponder];
+            }
+        }
+        [self CallWebserviceForData];
     }
 }
--(void)Forgetpassword
+
+-(void)ShowAletviewWIthTitle:(NSString *)ParamTitle Tag:(int)ParamTag Message:(NSString *)ParamMessage
 {
-    ForgetpasswordViewController *forgetpassword = [[ForgetpasswordViewController alloc] init];
-    [self GotoDifferentViewWithAnimation:forgetpassword];
+    UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [AlertView setTag:ParamTag];
+    [AlertView show];
+    
 }
+
 -(void)Rememberme
 {
     if (_UserRememberMeMode == RememberMeTypenone) {
@@ -232,6 +299,7 @@ typedef enum {
         _UserRememberMeMode = RememberMeTypenone;
     }
 }
+
 -(void)LoginTypeAccess
 {
     if (_UserloginMode == UserLoginTypeCustomer) {
@@ -319,6 +387,111 @@ typedef enum {
 - (void)didReceiveMemoryWarning {
     
     [super didReceiveMemoryWarning];
+}
+
+#pragma Webservice protocol returned object
+
+-(void)CallWebserviceForData
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:(_UserloginMode == UserLoginTypeprovider)?[UrlParameterString WebParamProviderLogin]:[UrlParameterString WebParamCustomerLogin] ValueObject:LoginparamObject UrlParameter:(_UserloginMode == UserLoginTypeprovider)?[UrlParameterString URLParamProviderLogin]:[UrlParameterString URLParamCustomerLogin]];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    
+    if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 2) {
+        
+        UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:@"Sorry" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [AlertView show];
+        
+    } else {
+        
+        NSMutableDictionary *DataDictionary = [[NSMutableDictionary alloc] init];
+        
+        [DataDictionary setObject:@"Y" forKey:GlobalStrings.KCisLogedinString];
+        [DataDictionary setObject:[_UserId.text CleanTextField] forKey:GlobalStrings.KCSetUserNameString];
+        [DataDictionary setObject:[_UserPassword.text CleanTextField] forKey:GlobalStrings.KCSetUserPasswordString];
+        [DataDictionary setObject:(_UserRememberMeMode == RememberMeTypeyes)?@"Y":@"N" forKey:GlobalStrings.KCSetUserRememberString];
+        [DataDictionary setObject:(_UserloginMode == UserLoginTypeprovider)?@"P":@"C" forKey:GlobalStrings.KCuserTypeString];
+        [DataDictionary setObject:[ParamObjectCarrier objectForKey:@"id"] forKey:GlobalStrings.KClogedinuseridString];
+        [DataDictionary setObject:[ParamObjectCarrier objectForKey:@"email"] forKey:GlobalStrings.KClogedinuseremailString];
+        [DataDictionary setObject:[ParamObjectCarrier objectForKey:@"name"] forKey:GlobalStrings.KClogedinusernameString];
+        
+        [self SetUserPrivateDtainKeyChain:DataDictionary];
+        
+        for (id AlltextField in _MainScrollView.subviews) {
+            if ([AlltextField isKindOfClass:[UITextField class]]) {
+                UITextField *DatatextField = (UITextField *)AlltextField;
+                [DatatextField resignFirstResponder];
+                [DatatextField setText:nil];
+            }
+        }
+        
+        if ([[self GetuserType] isEqualToString:@"P"]) {
+            Providerdashboard *Pdashboard = [[Providerdashboard alloc] init];
+            [self GotoDifferentViewWithAnimation:Pdashboard];
+        } else {
+            Customerdashboard *CdashBoard = [[Customerdashboard alloc] init];
+            [self GotoDifferentViewWithAnimation:CdashBoard];
+        }
+    }
+}
+
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"data Object Error %@",ParamObjectCarrier);
+}
+
+-(void)SetUserPrivateDtainKeyChain:(NSMutableDictionary *)ParamDictionary
+{
+    
+    @try {
+        
+        [self.keychainItemWrapper setObject:(__bridge id)(kSecAttrAccessibleWhenUnlocked) forKey:(__bridge id)(kSecAttrAccessible)];
+        [self.keychainItemWrapper resetKeychainItem];
+        
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KCisLogedinString]
+         forKey:(__bridge id)(kSecAttrIsInvisible)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KCSetUserNameString]
+         forKey:(__bridge id)(kSecAttrAccount)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KCSetUserPasswordString]
+         forKey:(__bridge id)(kSecAttrComment)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KCSetUserRememberString]
+         forKey:(__bridge id)(kSecAttrIsNegative)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KCuserTypeString]
+         forKey:(__bridge id)(kSecAttrService)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KClogedinuseridString]
+         forKey:(__bridge id)(kSecAttrAccessGroup)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KClogedinuseremailString]
+         forKey:(__bridge id)(kSecAttrLabel)];
+        [self.keychainItemWrapper
+         setObject:[ParamDictionary objectForKey:GlobalStrings.KClogedinusernameString]
+         forKey:(__bridge id)(kSecAttrDescription)];
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"data exception value -- %@",[NSString stringWithFormat:@"%@",exception.description]);
+    }
+}
+
+-(void)RemoveAllObjectFromKeychain
+{
+    [self.keychainItemWrapper resetKeychainItem];
 }
 
 @end

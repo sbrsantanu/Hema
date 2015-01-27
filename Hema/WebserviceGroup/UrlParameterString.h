@@ -18,6 +18,8 @@
 
 +(NSString *)URLParamCustomerBookingDetails;
 
++(NSString *)URLParamCustomerBookingApply;
+
 +(NSString *)URLParamCustomerRegistration;
 
 +(NSString *)URLParamCustomerLogin;
@@ -109,6 +111,8 @@
 +(NSArray *)WebParamCustomerBookingSearch;
 
 +(NSArray *)WebParamCustomerBookingDetails;
+
++(NSArray *)WebParamCustomerBookingApply;
 
 +(NSArray *)WebParamCustomerRegistration;
 

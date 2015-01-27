@@ -15,6 +15,10 @@
 #import "HelpViewController.h"
 #import "SocialAccount.h"
 #import "AppDelegate.h"
+#import "KeychainItemWrapper.h"
+#import <Security/Security.h>
+#import "Customerdashboard.h"
+#import "Providerdashboard.h"
 
 @interface GlobalObjects()
 {
@@ -105,33 +109,66 @@
     
     // Login Button
     
-    UIButton *LoginButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *1 )+1, 0, mainFrame.size.width/4, 35)];
-    [LoginButton setTitle:@"Login" forState:UIControlStateNormal];
-    [LoginButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
-    [LoginButton addTarget:self action:@selector(GotoLogin) forControlEvents:UIControlEventTouchUpInside];
-    if ([Selectedtab isEqualToString:@"Login"]) {
-        [LoginButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
-        [LoginButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+    if ([[self ISUserLogedin] isEqualToString:@"Y"]) {
+        
+        UIButton *LoginButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *1 )+1, 0, mainFrame.size.width/4, 35)];
+        [LoginButton setTitle:@"Logout" forState:UIControlStateNormal];
+        [LoginButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+        [LoginButton addTarget:self action:@selector(DoLogout) forControlEvents:UIControlEventTouchUpInside];
+        if ([Selectedtab isEqualToString:@"Logout"]) {
+            [LoginButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [LoginButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+        } else {
+            [LoginButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [LoginButton setBackgroundColor:[UIColor clearColor]];
+        }
+        [HeaderNavigationViewBackgroundView addSubview:LoginButton];
+        
+        // Register Button
+        
+        UIButton *RegisterButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *2 ), 0, mainFrame.size.width/4, 35)];
+        [RegisterButton setTitle:@"Dashboard" forState:UIControlStateNormal];
+        [RegisterButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+        [RegisterButton addTarget:self action:@selector(GotoDashboard) forControlEvents:UIControlEventTouchUpInside];
+        if ([Selectedtab isEqualToString:@"Dashboard"]) {
+            [RegisterButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [RegisterButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+        } else {
+            [RegisterButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [RegisterButton setBackgroundColor:[UIColor clearColor]];
+        }
+        [HeaderNavigationViewBackgroundView addSubview:RegisterButton];
+        
     } else {
-        [LoginButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
-        [LoginButton setBackgroundColor:[UIColor clearColor]];
+        
+        UIButton *LoginButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *1 )+1, 0, mainFrame.size.width/4, 35)];
+        [LoginButton setTitle:@"Login" forState:UIControlStateNormal];
+        [LoginButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+        [LoginButton addTarget:self action:@selector(GotoLogin) forControlEvents:UIControlEventTouchUpInside];
+        if ([Selectedtab isEqualToString:@"Login"]) {
+            [LoginButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [LoginButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+        } else {
+            [LoginButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [LoginButton setBackgroundColor:[UIColor clearColor]];
+        }
+        [HeaderNavigationViewBackgroundView addSubview:LoginButton];
+        
+        // Register Button
+        
+        UIButton *RegisterButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *2 ), 0, mainFrame.size.width/4, 35)];
+        [RegisterButton setTitle:@"Register" forState:UIControlStateNormal];
+        [RegisterButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+        [RegisterButton addTarget:self action:@selector(GotoRegister) forControlEvents:UIControlEventTouchUpInside];
+        if ([Selectedtab isEqualToString:@"Register"]) {
+            [RegisterButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [RegisterButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+        } else {
+            [RegisterButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [RegisterButton setBackgroundColor:[UIColor clearColor]];
+        }
+        [HeaderNavigationViewBackgroundView addSubview:RegisterButton];
     }
-    [HeaderNavigationViewBackgroundView addSubview:LoginButton];
-    
-    // Register Button
-    
-    UIButton *RegisterButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *2 ), 0, mainFrame.size.width/4, 35)];
-    [RegisterButton setTitle:@"Register" forState:UIControlStateNormal];
-    [RegisterButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
-    [RegisterButton addTarget:self action:@selector(GotoRegister) forControlEvents:UIControlEventTouchUpInside];
-    if ([Selectedtab isEqualToString:@"Register"]) {
-        [RegisterButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
-        [RegisterButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
-    } else {
-        [RegisterButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
-        [RegisterButton setBackgroundColor:[UIColor clearColor]];
-    }
-    [HeaderNavigationViewBackgroundView addSubview:RegisterButton];
     
     // Help Button
     
@@ -151,6 +188,48 @@
     return HeaderNavigationViewBackgroundView;
 }
 
+-(NSString *)ISUserLogedin
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrIsInvisible)];
+}
+-(NSString *)GetUserName
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+}
+-(NSString *)GetUserPassword
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrComment)];
+}
+-(NSString *)ISUserRemember
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrIsNegative)];
+}
+-(NSString *)GetuserType
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrService)];
+}
+-(NSString *)Getlogedinuserid
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrAccessGroup)];
+}
+-(NSString *)Getlogedinuseremail
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrLabel)];
+}
+-(NSString *)Getlogedinusername
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrDescription)];
+}
+
+/**
 -(UIView *)UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:(NSString *)Selectedtab
 {
     mainFrame = [[UIScreen mainScreen] bounds];
@@ -179,7 +258,7 @@
     UIButton *LoginButton = [[UIButton alloc] initWithFrame:CGRectMake((mainFrame.size.width/4 *1 )+1, 0, mainFrame.size.width/4, 35)];
     [LoginButton setTitle:@"Logout" forState:UIControlStateNormal];
     [LoginButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
-    [LoginButton addTarget:self action:@selector(GotoLogin) forControlEvents:UIControlEventTouchUpInside];
+    [LoginButton addTarget:self action:@selector(DoLogout) forControlEvents:UIControlEventTouchUpInside];
     if ([Selectedtab isEqualToString:@"Logout"]) {
         [LoginButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
         [LoginButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
@@ -221,7 +300,7 @@
     
     return HeaderNavigationViewBackgroundView;
 }
-
+*/
 -(UIView *)UIViewSetFooterView
 {
     UIView *FooterBackgroundView = [[UIView alloc] init];
@@ -350,6 +429,43 @@
 {
     HelpViewController *HelpView = [[HelpViewController alloc] init];
     [self GotoDifferentViewWithAnimation:HelpView];
+}
+-(void)DoLogout
+{
+    KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
+    
+    NSArray *secItemClasses = @[(__bridge id)kSecAttrAccessGroup,
+                                (__bridge id)kSecAttrCreationDate,
+                                (__bridge id)kSecAttrModificationDate,
+                                (__bridge id)kSecAttrDescription,
+                                (__bridge id)kSecAttrComment,
+                                (__bridge id)kSecAttrCreator,
+                                (__bridge id)kSecAttrType,
+                                (__bridge id)kSecAttrLabel,
+                                (__bridge id)kSecAttrIsInvisible,
+                                (__bridge id)kSecAttrIsNegative,
+                                (__bridge id)kSecAttrAccount,
+                                (__bridge id)kSecAttrService,
+                                (__bridge id)kSecAttrGeneric];
+    for (id secItemClass in secItemClasses) {
+        NSDictionary *spec = @{(__bridge id)kSecClass: secItemClass};
+        SecItemDelete((__bridge CFDictionaryRef)spec);
+    }
+    
+    [MykeychainWrapper resetKeychainItem];
+    
+    LoginViewController *LoginView = [[LoginViewController alloc] init];
+    [self GotoDifferentViewWithAnimation:LoginView];
+}
+-(void)GotoDashboard
+{
+    if ([[self GetuserType] isEqualToString:@"P"]) {
+        Providerdashboard *ProvDashboard = [[Providerdashboard alloc] init];
+        [self GotoDifferentViewWithAnimation:ProvDashboard];
+    } else {
+        Customerdashboard *CustmerDashBoard = [[Customerdashboard alloc] init];
+        [self GotoDifferentViewWithAnimation:CustmerDashBoard];
+    }
 }
 
 -(IBAction)Goback:(id)sender

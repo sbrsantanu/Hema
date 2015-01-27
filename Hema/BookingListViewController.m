@@ -18,6 +18,7 @@
 #import "WebserviceProtocol.h"
 #import "UrlParameterString.h"
 #import "GlobalModelObjects.h"
+#import "MPApplicationGlobalConstants.h"
 
 #pragma Booking Webservice param
 
@@ -37,6 +38,12 @@
 #define BLBookingWScancel          @"Cancel"
 #define BLBookingWSOk              @"Ok"
 
+#pragma Define BookingType
+
+#define BookingTypeconference      @"conference"
+#define BookingTypeevent           @"event"
+#define BookingTypedestination     @"destination"
+
 @interface BookingListViewController ()<UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate,UIAlertViewDelegate>{
     CGRect mainFrame;
     NSArray *SearchparamObject;
@@ -44,12 +51,14 @@
 
 @property (nonatomic,retain) UITableView *BookingTable;
 @property (nonatomic,retain) NSMutableArray *BookingDataArray;
-
+@property (assign) SelectedBookingType BookingType;
 @end
 
 @implementation BookingListViewController
 
 int BookingListWebAlertTag = 9658;
+
+/**
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,13 +70,40 @@ int BookingListWebAlertTag = 9658;
     }
     return self;
 }
+ */
+
+-(id)initWithBookingCategory:(SelectedBookingType)ParamBookingCategory CityorHotelname:(NSString *)ParamCityorHotelname StartDate:(NSString *)ParamStartDate EndDate:(NSString *)ParamEndDate
+{
+    self = [super init];
+    if(self)
+    {
+        mainFrame = [[UIScreen mainScreen] bounds];
+        self.view.layer.frame = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
+        [self.view setBackgroundColor:[UIColor whiteColor]];
+        
+        self.BookingType = ParamBookingCategory;
+        
+        NSString *BookingType = nil;
+        if(ParamBookingCategory == SelectedBookingTypeConference)
+            BookingType = BookingTypeconference;
+        else if(ParamBookingCategory == SelectedBookingTypeEvent)
+            BookingType = BookingTypeevent;
+        else if(ParamBookingCategory == SelectedBookingTypeDestination)
+            BookingType = BookingTypedestination;
+        
+        SearchparamObject = [[NSArray alloc] initWithObjects:BookingType,ParamCityorHotelname,ParamEndDate,ParamStartDate, nil];
+        [self CallWebserviceForData];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     [self.view addSubview:[self UIViewSetHeaderViewWithbackButton:YES]];
     [self.view addSubview:[self UIViewSetFooterView]];
-    [self.view addSubview:[self UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:@"Dashboard"]];
+    [self.view addSubview:[self UIViewSetHeaderNavigationViewWithSelectedTab:@"Dashboard"]];
     
     UILabel *TitleLabel = (UILabel *)[self.view viewWithTag:11];
     [TitleLabel setFont:[UIFont fontWithName:@"Arial-Bold" size:14.0]];
@@ -78,7 +114,7 @@ int BookingListWebAlertTag = 9658;
      *  TableView Decleration
      */
     
-    _BookingTable = [[UITableView alloc] initWithFrame:CGRectMake(10, 120,mainFrame.size.width-20, mainFrame.size.height-180)];
+    _BookingTable = [[UITableView alloc] initWithFrame:CGRectMake(10, 120, mainFrame.size.width-20, mainFrame.size.height-180)];
     [_BookingTable setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:_BookingTable];
     [_BookingTable setDataSource:self];
@@ -87,8 +123,6 @@ int BookingListWebAlertTag = 9658;
     [_BookingTable setBounces:YES];
     [_BookingTable setHidden:YES];
     
-    SearchparamObject = [[NSArray alloc] initWithObjects:@"destination",@"",@"2014-10-31",@"2014-02-01", nil];
-    [self CallWebserviceForData];
 }
 
 #pragma Webservice protocol returned object
@@ -109,7 +143,7 @@ int BookingListWebAlertTag = 9658;
             
             for (id DataDicrtionary in [ParamObjectCarrier objectForKey:BLBookingWSSeperater]) {
                 
-                BookingListObjects *Object = [[BookingListObjects alloc]
+                BookingListObjects *LocalObject = [[BookingListObjects alloc]
                                               initWithBookingListId:[DataDicrtionary objectForKey:BLBookingId]
                                               Category:[DataDicrtionary objectForKey:BLBookingcategory]
                                               Name:[DataDicrtionary objectForKey:BLBookingname]
@@ -117,8 +151,8 @@ int BookingListWebAlertTag = 9658;
                                               EndDate:[DataDicrtionary objectForKey:BLBookingenddate]
                                               EventPlace:[DataDicrtionary objectForKey:BLBookingeventplace]
                                               ShortDescription:[DataDicrtionary objectForKey:BLBookingshortdescription]];
-                [self.BookingDataArray addObject:Object];
-                Object = nil;
+                [self.BookingDataArray addObject:LocalObject];
+                LocalObject = nil;
             }
             [_BookingTable setHidden:NO];
             [_BookingTable reloadData];
@@ -308,8 +342,10 @@ int BookingListWebAlertTag = 9658;
    // self.BookingTable = nil;
    // self.BookingDataArray = nil;
    // self.BookingType = SelectedBookingTypeNone;
-    
 }
+
+#pragma Overwrite the Goback method
+
 -(IBAction)Goback:(id)sender
 {
     HomeViewController *HomeView = [[HomeViewController alloc] init];

@@ -73,6 +73,12 @@ typedef enum {
     ContactSectionDisplayBlock
 } ContactSectionDisplay;
 
+typedef enum {
+    WebserviceTypeNone,
+    WebserviceTypeBookingDetails,
+    WebserviceTypeBookingApply
+} WebserviceType;
+
 @interface BookingDetailsViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate,WebserviceProtocolDelegate,UIAlertViewDelegate>
 {
     CGRect mainFrame;
@@ -115,6 +121,8 @@ typedef enum {
 @property (nonatomic,retain) UILabel *HemaAdminContactlabel;
 @property (nonatomic,retain) NSMutableArray *ObjectArray;
 
+@property (assign) WebserviceType WebserviceMethod;
+
 @property (assign) ContactSectionDisplay ContactSectionDisplayStatus;
 
 @end
@@ -129,34 +137,35 @@ typedef enum {
         self.view.layer.frame       = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
         self.BookingID              = aBookingId;
         self.BookingOption          = BookingOption;
-
-        NextTextFiled               = 50.0f;
-        NextlabelFiled              = 20.0f;
-        Difference                  = 50.0f;
-        nextdatatag                 = 2001;
-        TextfieldHeight             = 40;
-        TextfieldXposition          = 20;
-        SubmitButtonWidth           = 140.0f;
-        SubmitButtonHeight          = 40.0f;
-        TextfieldWidth              = mainFrame.size.width-40;
-        SubmitButtonxposition       = (mainFrame.size.width-SubmitButtonWidth)/2;
+        self.WebserviceMethod       = WebserviceTypeNone;
         [self CallWebserviceForData];
         [self.view setBackgroundColor:[UIColor whiteColor]];
     }
     return self;
 }
-// santanu das adhikary
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
     [self.view addSubview:[self UIViewSetHeaderViewWithbackButton:YES]];
     [self.view addSubview:[self UIViewSetFooterView]];
-    [self.view addSubview:[self UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:@"Dashboard"]];
+    [self.view addSubview:[self UIViewSetHeaderNavigationViewWithSelectedTab:@"Dashboard"]];
     
     /**
      *  Scrollview Decleration
      */
+    
+    NextTextFiled               = 50.0f;
+    NextlabelFiled              = 20.0f;
+    Difference                  = 50.0f;
+    nextdatatag                 = 2001;
+    TextfieldHeight             = 40;
+    TextfieldXposition          = 20;
+    SubmitButtonWidth           = 140.0f;
+    SubmitButtonHeight          = 40.0f;
+    TextfieldWidth              = mainFrame.size.width-40;
+    SubmitButtonxposition       = (mainFrame.size.width-SubmitButtonWidth)/2;
     
     _mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 130, mainFrame.size.width, mainFrame.size.height-190)];
     [_mainScrollView setBackgroundColor:[UIColor colorFromHex:0xededf2]];
@@ -406,7 +415,10 @@ typedef enum {
     } else if ([_CTMDetails.text CleanTextField].length == 0) {
         [self ShowAlertWithTitle:BDBookingWSErrorTitle Description:BDFVDescblank Tag:125 cancelButtonTitle:BDBookingWSOk];
     } else {
-        NSLog(@"validation complete");
+        NSArray *BookingData = [[NSArray alloc] initWithObjects:[_CTUserName.text CleanTextField],[_CTUserEmail.text CleanTextField],[_CTMessageTitle.text CleanTextField],[_CTMDetails.text CleanTextField],self.BookingID, nil];
+        
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:[UrlParameterString WebParamCustomerBookingApply] ValueObject:BookingData UrlParameter:[UrlParameterString URLParamCustomerBookingApply]];
+        [Datadelegate setDelegate:self];
     }
 }
 
@@ -421,7 +433,18 @@ typedef enum {
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
+    [self CleanAllTextFieldValue];
+    if (alertView.tag == 12456) {
+        [_mainScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }
+}
+
+-(void)CleanAllTextFieldValue
+{
+    self.CTUserName.text    = nil;
+    self.CTUserEmail.text   = nil;
+    self.CTMessageTitle.text= nil;
+    self.CTMDetails.text    = nil;
 }
 
 -(IBAction)ShowContactSection:(id)sender
@@ -437,6 +460,8 @@ typedef enum {
 
 -(void)ShowHideContactSection:(BOOL)SetHidden
 {
+    [self CleanAllTextFieldValue];
+    
     if (SetHidden) {
         [self.HemaAdminContactlabel setHidden:NO];
         [self.CTUserName setHidden:NO];
@@ -456,6 +481,7 @@ typedef enum {
 
 -(void)ShowBookingDetails
 {
+    self.WebserviceMethod               = WebserviceTypeNone;
     BookingListObjects *LocalObject = [self.ObjectArray objectAtIndex:0];
     [_BookingTitleTextField setText:[LocalObject Name]];
     [_BookingStartDateTextField setText:[LocalObject StartDate]];
@@ -481,8 +507,9 @@ typedef enum {
 
 -(void)CallWebserviceForData
 {
-    NSArray *DataArray = [[NSArray alloc] initWithObjects:self.BookingID, nil];
-    WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:[UrlParameterString WebParamCustomerBookingDetails] ValueObject:DataArray UrlParameter:[UrlParameterString URLParamCustomerBookingDetails]];
+    NSArray *DataArray                  = [[NSArray alloc] initWithObjects:self.BookingID, nil];
+    WebserviceProtocol *Datadelegate    = [[WebserviceProtocol alloc] initWithParamObject:[UrlParameterString WebParamCustomerBookingDetails] ValueObject:DataArray UrlParameter:[UrlParameterString URLParamCustomerBookingDetails]];
+    self.WebserviceMethod               = WebserviceTypeBookingDetails;
     [Datadelegate setDelegate:self];
 }
 
@@ -492,19 +519,26 @@ typedef enum {
         
         @try {
             
-            self.ObjectArray = [[NSMutableArray alloc] init];
-            
-            BookingListObjects *Object = [[BookingListObjects alloc]
-                                          initWithBookingListId:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingId]
-                                          Category:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingcategory]
-                                          Name:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingname]
-                                          StartDate:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingstartdate]
-                                          EndDate:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingenddate]
-                                          EventPlace:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingeventplace]
-                                          ShortDescription:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingshortdescription]EventLocation:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingeventLocation]];
-            [self.ObjectArray addObject:Object];
-            Object = nil;
-            [self ShowBookingDetails];
+            if (self.WebserviceMethod == WebserviceTypeBookingDetails) {
+                
+                self.ObjectArray = [[NSMutableArray alloc] init];
+                
+                BookingListObjects *Object = [[BookingListObjects alloc]
+                                              initWithBookingListId:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingId]
+                                              Category:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingcategory]
+                                              Name:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingname]
+                                              StartDate:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingstartdate]
+                                              EndDate:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingenddate]
+                                              EventPlace:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingeventplace]
+                                              ShortDescription:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingshortdescription]EventLocation:[[ParamObjectCarrier objectForKey:BDBookingWSSeperater] objectForKey:BDBookingeventLocation]];
+                [self.ObjectArray addObject:Object];
+                Object = nil;
+                [self ShowBookingDetails];
+            } else {
+                UIAlertView *ErrorAlert = [[UIAlertView alloc] initWithTitle:@"Success" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:BDBookingWSOk otherButtonTitles:nil, nil];
+                [ErrorAlert setTag:12456];
+                [ErrorAlert show];
+            }
         }
         @catch (NSException *exception) {
             UIAlertView *ErrorAlert = [[UIAlertView alloc] initWithTitle:BDBookingWSErrorTitle message:[NSString stringWithFormat:@"%@",exception] delegate:self cancelButtonTitle:BDBookingWSOk otherButtonTitles:BDBookingWSTryAgain, nil];
@@ -607,5 +641,6 @@ typedef enum {
 {
     return YES;
 }
+
 
 @end

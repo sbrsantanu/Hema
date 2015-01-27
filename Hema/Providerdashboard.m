@@ -20,9 +20,12 @@
 #import "PContactWithHemaAdmin.h"
 #import "PHistoryOfConversion.h"
 #import "PIssues.h"
+#import "KeychainItemWrapper.h"
+#import <Security/Security.h>
 
 @interface Providerdashboard ()<UIScrollViewDelegate>
 @property (nonatomic,retain) UIScrollView *BGScrollView;
+@property (nonatomic,retain) KeychainItemWrapper *keychainItemWrapper;
 @end
 
 @implementation Providerdashboard
@@ -43,7 +46,8 @@
     
     [self.view addSubview:[self UIViewSetHeaderViewWithbackButton:NO]];
     [self.view addSubview:[self UIViewSetFooterView]];
-    [self.view addSubview:[self UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:@"Dashboard"]];
+    
+    [self.view addSubview:[self UIViewSetHeaderNavigationViewWithSelectedTab:@"Dashboard"]];
     
     /**
      *  Welcome Message
@@ -55,7 +59,7 @@
     [WelcomeMessage setTextColor:[UIColor colorFromHex:0xe66a4c]];
     [WelcomeMessage setBackgroundColor:[UIColor clearColor]];
     [WelcomeMessage setTextAlignment:NSTextAlignmentRight];
-    [WelcomeMessage setText:@"Welcome, Santanu Das Adhikary"];
+    [WelcomeMessage setText:[NSString stringWithFormat:@"Welcome, %@",[self Getlogedinusername]]];
     [self.view addSubview:WelcomeMessage];
     
     float DashboardButtonXPosition = 5.0f;

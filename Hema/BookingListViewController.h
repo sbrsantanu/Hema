@@ -18,6 +18,5 @@ typedef enum {
 
 @interface BookingListViewController : GlobalObjects
 
-@property (assign) SelectedBookingType BookingType;
-
+-(id)initWithBookingCategory:(SelectedBookingType)ParamBookingCategory CityorHotelname:(NSString *)ParamCityorHotelname StartDate:(NSString *)ParamStartDate EndDate:(NSString *)ParamEndDate;
 @end

@@ -179,6 +179,7 @@
 		04E585EA1A6393D800269690 /* CViewProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E585E91A6393D800269690 /* CViewProfile.m */; };
 		04E585ED1A63B87E00269690 /* CEditProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E585EC1A63B87E00269690 /* CEditProfile.m */; };
 		04EF4E371A68F9650089966D /* UIDeviceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4E361A68F9650089966D /* UIDeviceUtil.m */; };
+		04FED6BD1A77B6AA008719D8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FED6BC1A77B6AA008719D8 /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -468,6 +469,7 @@
 		04E585EC1A63B87E00269690 /* CEditProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CEditProfile.m; sourceTree = "<group>"; };
 		04EF4E351A68F9650089966D /* UIDeviceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDeviceUtil.h; sourceTree = "<group>"; };
 		04EF4E361A68F9650089966D /* UIDeviceUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDeviceUtil.m; sourceTree = "<group>"; };
+		04FED6BC1A77B6AA008719D8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,6 +477,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04FED6BD1A77B6AA008719D8 /* Security.framework in Frameworks */,
 				048B9D2C1A5E749C00BDDAD4 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1095,6 +1098,7 @@
 		04C9A33C1A2EFD4E0003C4D3 = {
 			isa = PBXGroup;
 			children = (
+				04FED6BC1A77B6AA008719D8 /* Security.framework */,
 				048B9D2B1A5E749C00BDDAD4 /* WebKit.framework */,
 				04C9A3471A2EFD4E0003C4D3 /* Hema */,
 				04C9A3641A2EFD4E0003C4D3 /* HemaTests */,

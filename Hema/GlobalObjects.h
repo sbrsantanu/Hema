@@ -29,7 +29,22 @@ typedef enum {
 -(UIView *)UIViewSetHeaderViewWithbackButton:(BOOL)backButton;
 -(UIView *)UIViewSetFooterView;
 -(UIView *)UIViewSetHeaderNavigationViewWithSelectedTab:(NSString *)Selectedtab;
--(UIView *)UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:(NSString *)Selectedtab;
 
+/**
+-(UIView *)UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:(NSString *)Selectedtab;
+**/
 -(void)GotoDifferentViewWithAnimation:(UIViewController *)ViewControllerName;
+
+/**
+ *  Get user Data
+ */
+
+-(NSString *)ISUserLogedin;
+-(NSString *)GetUserName;
+-(NSString *)GetUserPassword;
+-(NSString *)ISUserRemember;
+-(NSString *)GetuserType;
+-(NSString *)Getlogedinuserid;
+-(NSString *)Getlogedinuseremail;
+-(NSString *)Getlogedinusername;
 @end

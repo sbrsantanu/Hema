@@ -47,7 +47,8 @@
                                                forKey:[self.ParamArray objectAtIndex:I]];
         }
         
-        NSLog(@"inputParam.dict_postParameters === %@",inputParam.dict_postParameters);
+        
+        NSLog(@"inputParam.dict_postParameters === %@ ++++++++++++ url is +++++++++ %@",inputParam.dict_postParameters,self.ParamUrl);
         typedef void (^successBlock)(id response);
         
       [WebserviceHelper callWebserviceWithInputParameter:inputParam

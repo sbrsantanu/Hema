@@ -20,6 +20,7 @@ static NSString * const kNWEBParamSeperater                     = @"&&";
 
 static NSString * const kNWEBCustomerBookingSearchParamURL      = @"search_booking.php";
 static NSString * const kNWEBCustomerBookingDetailsParamURL     = @"view_booking.php";
+static NSString * const kNWEBCustomerBookingApplyParamURL       = @"booking_apply.php";
 
 static NSString * const kNWEBCustomerRegistrationParamURL       = @"registration.php";
 static NSString * const kNWEBCustomerLoginParamURL              = @"customer_login.php";
@@ -85,6 +86,7 @@ static NSString * const kNWEBProviderAddReplyforanissueParamURL = @"provider_add
 
 static NSString * const kNWEBParamCustomerBookingSearch         = @"RadioGroup1&&city&&end_date&&start_date";
 static NSString * const kNWEBParamCustomerBookingDetails        = @"booking_id";
+static NSString * const kNWEBParamCustomerBookingApply          = @"name&&email&&title&&body&&booking_id";
 
 /* ************************ Customer *************************** */
 

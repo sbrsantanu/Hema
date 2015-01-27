@@ -79,7 +79,7 @@ typedef enum {
     
     [self.view addSubview:[self UIViewSetHeaderViewWithbackButton:YES]];
     [self.view addSubview:[self UIViewSetFooterView]];
-    [self.view addSubview:[self UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:@"Dashboard"]];
+    [self.view addSubview:[self UIViewSetHeaderNavigationViewWithSelectedTab:@"Dashboard"]];
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 90, self.view.frame.size.width, self.view.frame.size.height-150)];
     [_MainScrollView setUserInteractionEnabled:YES];

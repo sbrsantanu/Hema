@@ -42,7 +42,7 @@
     
     [self.view addSubview:[self UIViewSetHeaderViewWithbackButton:YES]];
     [self.view addSubview:[self UIViewSetFooterView]];
-    [self.view addSubview:[self UIViewSetHeaderAfterLoginNavigationViewWithSelectedTab:@"Dashboard"]];
+    [self.view addSubview:[self UIViewSetHeaderNavigationViewWithSelectedTab:@"Dashboard"]];
     
     UILabel *WelcomeMessage = [[UILabel alloc] initWithFrame:CGRectMake(10, 90, mainFrame.size.width-10, 20)];
     [WelcomeMessage setFont:[UIFont fontWithName:@"Arial" size:12.0f]];

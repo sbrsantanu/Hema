@@ -47,4 +47,17 @@
 }
 +(NSString *)FooterHeight {return knFooterHeight; }
 
+/**
+ *  Keycahin Access data
+ */
+
++(NSString *)KCisLogedinString              { return isLogedin; }
++(NSString *)KCSetUserNameString            { return SetUserName; }
++(NSString *)KCSetUserPasswordString        { return SetUserPassword; }
++(NSString *)KCSetUserRememberString        { return SetUserRemember; }
++(NSString *)KCuserTypeString               { return userType; }
++(NSString *)KClogedinuseridString          { return logedinuserid; }
++(NSString *)KClogedinuseremailString       { return logedinuseremail; }
++(NSString *)KClogedinusernameString        { return logedinusername; }
+
 @end

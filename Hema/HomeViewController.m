@@ -15,6 +15,10 @@
 #import "HelpViewController.h"
 #import "RegisterViewController.h"
 #import "BookingListViewController.h"
+#import "NSString+PJR.h"
+#import <Security/Security.h>
+#import "KeychainItemWrapper.h"
+#import "GlobalStrings.h"
 
 typedef enum {
     DateSelectedNone,
@@ -252,41 +256,17 @@ typedef enum {
     [super didReceiveMemoryWarning];
 }
 
--(void)GotoHome
-{
-    HomeViewController *HomeView = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HomeView];
-}
-
--(void)GotoLogin
-{
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:LoginView];
-}
-
--(void)GotoRegister
-{
-    RegisterViewController *Register = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:Register];
-}
-
--(void)GotoHelp
-{
-    HelpViewController *HelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HelpView];
-}
-
 -(void)FindNow
 {
-    BookingListViewController *BookingList = [[BookingListViewController alloc] init];
+    BookingListViewController *BookingList = nil;
     if (_CategorySelectedMode == CategorySelectedNone) {
-        [BookingList setBookingType:SelectedBookingTypeNone];
+        NSLog(@"Need to select category first");
     } else if (_CategorySelectedMode == CategorySelectedConference) {
-        [BookingList setBookingType:SelectedBookingTypeConference];
+        BookingList = [[BookingListViewController alloc] initWithBookingCategory:SelectedBookingTypeConference CityorHotelname:[_BookEvent.text CleanTextField] StartDate:[_BookEventStartDate.text CleanTextField] EndDate:[_BookEventEnddate.text CleanTextField]];
     } else if (_CategorySelectedMode == CategorySelectedEvent) {
-        [BookingList setBookingType:SelectedBookingTypeEvent];
+        BookingList = [[BookingListViewController alloc] initWithBookingCategory:SelectedBookingTypeEvent CityorHotelname:[_BookEvent.text CleanTextField] StartDate:[_BookEventStartDate.text CleanTextField] EndDate:[_BookEventEnddate.text CleanTextField]];
     } else if (_CategorySelectedMode == CategorySelectedDestination) {
-        [BookingList setBookingType:SelectedBookingTypeDestination];
+        BookingList = [[BookingListViewController alloc] initWithBookingCategory:SelectedBookingTypeDestination CityorHotelname:[_BookEvent.text CleanTextField] StartDate:[_BookEventStartDate.text CleanTextField] EndDate:[_BookEventEnddate.text CleanTextField]];
     }
     [self GotoDifferentViewWithAnimation:BookingList];
 }
