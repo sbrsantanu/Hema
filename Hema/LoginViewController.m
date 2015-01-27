@@ -485,7 +485,7 @@ typedef enum {
         
     }
     @catch (NSException *exception) {
-        NSLog(@"data exception value -- %@",[NSString stringWithFormat:@"%@",exception.description]);
+        NSLog(@"data exception value for exception -- %@",[NSString stringWithFormat:@"%@",exception.description]);
     }
 }
 
