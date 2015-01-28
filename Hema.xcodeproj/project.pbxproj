@@ -128,6 +128,7 @@
 		04C2E67B1A65045A00079E7F /* CHistoryofConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C2E67A1A65045A00079E7F /* CHistoryofConversion.m */; };
 		04C6F0571A401CC200E6AA23 /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C6F0561A401CC200E6AA23 /* UIViewController+Utils.m */; };
 		04C6F05A1A4024D900E6AA23 /* GlobalObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C6F0591A4024D900E6AA23 /* GlobalObjects.m */; };
+		04C7EBBB1A7934A1007FFBCE /* MDIncrementalImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C7EBBA1A7934A1007FFBCE /* MDIncrementalImageView.m */; };
 		04C82F701A5419840038D562 /* BookingDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C82F6E1A5419840038D562 /* BookingDetailsViewController.m */; };
 		04C82F711A5419840038D562 /* BookingDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04C82F6F1A5419840038D562 /* BookingDetailsViewController.xib */; };
 		04C82F751A5419D40038D562 /* ApplyBookingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C82F731A5419D40038D562 /* ApplyBookingViewController.m */; };
@@ -384,6 +385,8 @@
 		04C6F0561A401CC200E6AA23 /* UIViewController+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utils.m"; sourceTree = "<group>"; };
 		04C6F0581A4024D900E6AA23 /* GlobalObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalObjects.h; sourceTree = "<group>"; };
 		04C6F0591A4024D900E6AA23 /* GlobalObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalObjects.m; sourceTree = "<group>"; };
+		04C7EBB91A7934A1007FFBCE /* MDIncrementalImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDIncrementalImageView.h; sourceTree = "<group>"; };
+		04C7EBBA1A7934A1007FFBCE /* MDIncrementalImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDIncrementalImageView.m; sourceTree = "<group>"; };
 		04C82F6D1A5419840038D562 /* BookingDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookingDetailsViewController.h; sourceTree = "<group>"; };
 		04C82F6E1A5419840038D562 /* BookingDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookingDetailsViewController.m; sourceTree = "<group>"; };
 		04C82F6F1A5419840038D562 /* BookingDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BookingDetailsViewController.xib; sourceTree = "<group>"; };
@@ -896,6 +899,8 @@
 		04C1EFD81A318BA2008E6AE1 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				04C7EBB91A7934A1007FFBCE /* MDIncrementalImageView.h */,
+				04C7EBBA1A7934A1007FFBCE /* MDIncrementalImageView.m */,
 				045B6C971A6E6A0B00312751 /* AFDropdownNotification.h */,
 				045B6C981A6E6A0B00312751 /* AFDropdownNotification.m */,
 				04C8A7DF1A39D338002F986F /* Images */,
@@ -1571,6 +1576,7 @@
 				04C99A7D1A654D9500DC5BAC /* PViewProfile.m in Sources */,
 				04DBE5EB1A63D186002B0EF8 /* CChangePassword.m in Sources */,
 				049F9EDF1A31D93E002145C3 /* PECropViewController.m in Sources */,
+				04C7EBBB1A7934A1007FFBCE /* MDIncrementalImageView.m in Sources */,
 				04BC9C201A31987400FCDA40 /* AFHTTPClient.m in Sources */,
 				04BC9C331A31987400FCDA40 /* SOAPEnvelope.m in Sources */,
 				04E585EA1A6393D800269690 /* CViewProfile.m in Sources */,

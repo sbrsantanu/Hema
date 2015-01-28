@@ -13,10 +13,12 @@
 #import "GlobalModelObjects.h"
 #import "GlobalStrings.h"
 #import "MPApplicationGlobalConstants.h"
+#import "MDIncrementalImageView.h"
 
 @interface PViewProfile ()<UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
+    NSRecursiveLock *Lock;
 }
 
 @property (nonatomic,retain) UITableView *DataContainTable;
@@ -24,6 +26,7 @@
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *TableSectionHeaderTextArray;
 @property (nonatomic,retain) NSArray *DataStringArray;
+@property (nonatomic,retain) NSMutableArray *TableviewDataArray;
 
 @end
 
@@ -81,19 +84,15 @@
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
     
+    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
+    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        sleep(5);
+        [self GetProviderAccountDetails];
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [_DataContainActivity stopAnimating];
             [_DataContainTable setHidden:NO];
         });
     });
-    
-    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
-    
-    // Call webservice
-    
-    [self GetProviderAccountDetails];
 }
 
 #pragma Webservice Process
@@ -117,7 +116,33 @@
 
 -(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
 {
-    NSLog(@"Success ParamObjectCarrier ---- %@",ParamObjectCarrier);
+    if ([[ParamObjectCarrier objectForKey:@"errorcode"]intValue] == 1) {
+        
+        self.TableviewDataArray = [[NSMutableArray alloc] init];
+        
+        NSLock* arrayLock = [[NSLock alloc] init];
+        [arrayLock lock];
+        
+        for (id LocalObject in [ParamObjectCarrier objectForKey:@"provider"]) {
+            
+             self.TableviewDataArray = [[NSMutableArray alloc] initWithObjects:[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"name"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"phone"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"description"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"website"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"logo"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"sales_tax"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"service_tax"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"vat"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"currency_id"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"delivery_mode"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"questions"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"min_delivery_time"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"min_billing_value"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"max_billing_value"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"delivery_charge"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"business_days"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"business_days"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"allow_advance_order"], nil];
+            
+        }
+        [arrayLock unlock];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [_DataContainActivity stopAnimating];
+            [_DataContainTable setHidden:NO];
+            [_DataContainTable reloadData];
+        });
+    } else {
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            UIAlertView *dataAccessError = [[UIAlertView alloc] initWithTitle:@"Sorry" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [dataAccessError setTag:120];
+            [dataAccessError show];
+        });
+    }
 }
 
 /**
@@ -134,9 +159,18 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *DataCell = [[UITableViewCell alloc] init];
-    [DataCell.textLabel setText:@"dataSource"];
-    [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
-    [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+    if (indexPath.section == 4) {
+        
+        MDIncrementalImageView *imageView = [[MDIncrementalImageView alloc] initWithFrame:CGRectMake(25, 5, 150, 150)];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.tag = 111;
+        [imageView setImageUrl:[NSURL URLWithString:[self.TableviewDataArray objectAtIndex:indexPath.section]]];
+        [DataCell addSubview:imageView];
+    } else {
+        [DataCell.textLabel setText:[self.TableviewDataArray objectAtIndex:indexPath.section]];
+        [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
+        [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+    }
     return DataCell;
 }
 
