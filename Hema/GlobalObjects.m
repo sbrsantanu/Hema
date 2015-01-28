@@ -216,7 +216,8 @@
 -(NSString *)Getlogedinuserid
 {
     KeychainItemWrapper *MykeychainWrapper = [[KeychainItemWrapper alloc] initWithIdentifier:[NSString stringWithFormat:@"HEMA_APP_CREDENTIALS.%@",[[NSBundle mainBundle] bundleIdentifier]] accessGroup:nil];
-    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrAccessGroup)];
+    
+    return [MykeychainWrapper objectForKey:(__bridge id)(kSecAttrCreator)];
 }
 -(NSString *)Getlogedinuseremail
 {

@@ -452,7 +452,6 @@ typedef enum {
 
 -(void)SetUserPrivateDtainKeyChain:(NSMutableDictionary *)ParamDictionary
 {
-    
     @try {
         
         [self.keychainItemWrapper setObject:(__bridge id)(kSecAttrAccessibleWhenUnlocked) forKey:(__bridge id)(kSecAttrAccessible)];
@@ -475,7 +474,7 @@ typedef enum {
          forKey:(__bridge id)(kSecAttrService)];
         [self.keychainItemWrapper
          setObject:[ParamDictionary objectForKey:GlobalStrings.KClogedinuseridString]
-         forKey:(__bridge id)(kSecAttrAccessGroup)];
+         forKey:(__bridge id)(kSecAttrCreator)];
         [self.keychainItemWrapper
          setObject:[ParamDictionary objectForKey:GlobalStrings.KClogedinuseremailString]
          forKey:(__bridge id)(kSecAttrLabel)];

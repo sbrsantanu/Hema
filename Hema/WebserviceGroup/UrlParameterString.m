@@ -69,7 +69,7 @@
 
 +(NSString *)URLParamProviderDashboard  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderViewProfile  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderViewProfile  { return kNWEBProviderViewProfileParamURL; }
 
 +(NSString *)URLParamProviderEditProfile  { return kNWEBCustomerBookingSearchParamURL; }
 

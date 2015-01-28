@@ -8,8 +8,13 @@
 
 #import "PViewProfile.h"
 #import "UIColor+HexColor.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "GlobalStrings.h"
+#import "MPApplicationGlobalConstants.h"
 
-@interface PViewProfile ()<UITableViewDataSource,UITableViewDelegate>
+@interface PViewProfile ()<UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
 }
@@ -18,6 +23,7 @@
 @property (nonatomic,retain) NSMutableArray *DataContainArray;
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *TableSectionHeaderTextArray;
+@property (nonatomic,retain) NSArray *DataStringArray;
 
 @end
 
@@ -47,7 +53,7 @@
     [WelcomeMessage setTextColor:[UIColor darkGrayColor]];
     [WelcomeMessage setBackgroundColor:[UIColor clearColor]];
     [WelcomeMessage setTextAlignment:NSTextAlignmentLeft];
-    [WelcomeMessage setText:@"View Customer Information"];
+    [WelcomeMessage setText:@"View Provider Information"];
     [self.view addSubview:WelcomeMessage];
     
     UILabel *WelcomeUnderline = [[UILabel alloc] initWithFrame:CGRectMake(10, 115, mainFrame.size.width-20, 1)];
@@ -67,7 +73,7 @@
     [_DataContainActivity startAnimating];
     [_DataContainActivity setHidesWhenStopped:YES];
     
-    _TableSectionHeaderTextArray = [[NSArray alloc] initWithObjects:@"Group",@"Name",@"Phone No",@"Mobile",@"Title",@"Fax",@"Assign To",@"Address",@"City",@"State",@"Zip Code",@"Email Address",@"Lead Source",@"Service Required",@"Description", nil];
+    _TableSectionHeaderTextArray = [[NSArray alloc] initWithObjects:@"Name",@"Phone Number",@"Description",@"Website",@"Logo",@"Sales Tax (%)",@"Service Tax (%)",@"Vat (%)",@"Currency",@"Delivery Mode",@"Questions",@"Minimum Delivery Time",@"Minimum Billing Value",@"Maximum Billing Value",@"Delivery Charge",@"Business Days",@"Business Hours",@"Allow Advance Order", nil];
     
     CGRect frame = _DataContainActivity.frame;
     frame.origin.x = mainFrame.size.width / 2 - frame.size.width / 2;
@@ -82,6 +88,45 @@
             [_DataContainTable setHidden:NO];
         });
     });
+    
+    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
+    
+    // Call webservice
+    
+    [self GetProviderAccountDetails];
+}
+
+#pragma Webservice Process
+
+-(void)GetProviderAccountDetails
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderViewProfile ValueObject:_DataStringArray UrlParameter:UrlParameterString.URLParamProviderViewProfile];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+/**
+ *  Success
+ */
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    NSLog(@"Success ParamObjectCarrier ---- %@",ParamObjectCarrier);
+}
+
+/**
+ *  Error
+ */
+
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Error ParamObjectCarrier ---- %@",ParamObjectCarrier);
 }
 
 #pragma Tableview Datasorce Delegate Methods
@@ -109,7 +154,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50.0f;
+    return (indexPath.section == 4)?150.0f:50.0f;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

@@ -55,3 +55,50 @@
 }
 
 @end
+
+@implementation ProviderAccountDetails
+
+-(id)initWithAllowAdvanceOrder:(NSString *)ParamAllowAdvanceOrder
+                  BusinessDays:(NSString *)ParamBusinessDays
+                 BusinessHours:(NSString *)ParamBusinessHours
+                    CurrencyId:(NSString *)ParamCurrencyId
+                DeliveryCharge:(NSString *)ParamDeliveryCharge
+                  DeliveryMode:(NSString *)ParamDeliveryMode
+                   Description:(NSString *)ParamDescription
+                          Logo:(NSString *)ParamLogo
+               MaxBillingValue:(NSString *)ParamMaxBillingValue
+               MinBillingValue:(NSString *)ParamMinBillingValue
+               MinDeliveryTime:(NSString *)ParamMinDeliveryTime
+                          Name:(NSString *)ParamName
+                         Phone:(NSString *)paramPhone
+                     Questions:(NSString *)ParamQuestions
+                      SalesTax:(NSString *)ParamSalesTax
+                    ServiceTax:(NSString *)paramServiceTax
+                           Vat:(NSString *)ParamVat
+                       Website:(NSString *)paramWebsite
+{
+    self = [super init];
+    if (self) {
+        self.AllowAdvanceOrder          = ParamAllowAdvanceOrder;
+        self.BusinessDays               = ParamBusinessDays;
+        self.BusinessHours              = ParamBusinessHours;
+        self.CurrencyId                 = ParamCurrencyId;
+        self.DeliveryCharge             = ParamDeliveryCharge;
+        self.DeliveryMode               = ParamDeliveryMode;
+        self.Description                = ParamDescription;
+        self.Logo                       = ParamLogo;
+        self.MaxBillingValue            = ParamMaxBillingValue;
+        self.MinBillingValue            = ParamMinBillingValue;
+        self.MinDeliveryTime            = ParamMinDeliveryTime;
+        self.Name                       = ParamName;
+        self.Phone                      = paramPhone;
+        self.Questions                  = ParamQuestions;
+        self.SalesTax                   = ParamSalesTax;
+        self.ServiceTax                 = paramServiceTax;
+        self.Vat                        = ParamVat;
+        self.Website                    = paramWebsite;
+    }
+    return self;
+}
+
+@end
