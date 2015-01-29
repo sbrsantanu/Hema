@@ -155,29 +155,33 @@
             [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
             [DataCell.contentView addSubview:SeperaterLabel];
             
-            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5 ,5, 100, 40)];
-            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
+            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+12 ,5, 100, 40)];
+            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
             [ViewDetailsButton setTitle:@"View" forState:UIControlStateNormal];
             [ViewDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
-            [ViewDetailsButton.layer setCornerRadius:3.0f];
+            [ViewDetailsButton.layer setCornerRadius:2.0f];
             [ViewDetailsButton addTarget:self action:@selector(ViewDetails:) forControlEvents:UIControlEventTouchUpInside];
-            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [ViewDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [ViewDetailsButton.layer setBorderWidth:1.0f];
+            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
             [ViewDetailsButton setTag:104];
             [DataCell addSubview:ViewDetailsButton];
             
-            UIButton *EditDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+110 ,5, 100, 40)];
-            [EditDetailsButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
+            UIButton *EditDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+120 ,5, 100, 40)];
+            [EditDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
             [EditDetailsButton setTitle:@"Edit" forState:UIControlStateNormal];
             [EditDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
-            [EditDetailsButton.layer setCornerRadius:3.0f];
+            [EditDetailsButton.layer setCornerRadius:2.0f];
+            [EditDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [EditDetailsButton.layer setBorderWidth:1.0f];
             [EditDetailsButton addTarget:self action:@selector(EditDetails:) forControlEvents:UIControlEventTouchUpInside];
-            [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
             [EditDetailsButton setTag:104];
             [DataCell addSubview:EditDetailsButton];
             
             
         } else {
-            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 16.5, SeperaterLabelDiff, 15)];
             [TitleLabel setBackgroundColor:[UIColor clearColor]];
             [TitleLabel setTextColor:[UIColor darkTextColor]];
             switch (i) {
@@ -204,7 +208,8 @@
                     break;
             }
             [TitleLabel setTextAlignment:NSTextAlignmentCenter];
-            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [TitleLabel setNumberOfLines:0];
+            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:14.0f]];
             [DataCell.contentView addSubview:TitleLabel];
             
             UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
@@ -231,13 +236,13 @@
 
 #pragma Perform Operation
 
--(IBAction)ViewDetails:(id)sender
+-(IBAction)ViewDetails:(UIButton *)sender
 {
-    
+    NSLog(@"ViewDetails Tag --- %ld",(long)sender.tag);
 }
--(IBAction)EditDetails:(id)sender
+-(IBAction)EditDetails:(UIButton *)sender
 {
-    
+    NSLog(@"EditDetails Tag --- %ld",(long)sender.tag);
 }
 #pragma Tableview Delegate Methods
 
@@ -260,8 +265,8 @@
     [Headerview setBackgroundColor:[UIColor colorFromHex:0xc5c5c5]];
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
-        
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+       // NSLog(@"------- %d",i);
+        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, (i==7)?SeperaterLabelDiff+80:SeperaterLabelDiff, 15)];
         [TitleLabel setBackgroundColor:[UIColor clearColor]];
         [TitleLabel setTextColor:[UIColor darkTextColor]];
         [TitleLabel setText:[_HeaderContainerArray objectAtIndex:i]];
