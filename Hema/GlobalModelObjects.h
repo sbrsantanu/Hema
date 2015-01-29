@@ -102,3 +102,13 @@ ServiceShortDescription:(NSString *)ParamServiceShortDescription
    ServiceShippingCost:(NSString *)ParamServiceShippingCost;
 
 @end
+
+@interface ServiceCategory : NSObject
+
+@property (nonatomic,retain) NSString *CategoryId;
+@property (nonatomic,retain) NSString *CategoryName;
+
+-(id)initWithCategoryId:(NSString *)ParamCategoryId
+           CategoryName:(NSString *)ParamCategoryName;
+
+@end

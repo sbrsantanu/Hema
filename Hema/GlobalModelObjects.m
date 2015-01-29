@@ -131,3 +131,18 @@ ServiceShortDescription:(NSString *)ParamServiceShortDescription
 }
 
 @end
+
+@implementation ServiceCategory
+
+-(id)initWithCategoryId:(NSString *)ParamCategoryId
+CategoryName:(NSString *)ParamCategoryName
+{
+    self = [super init];
+    if (self) {
+        self.CategoryId         = ParamCategoryId;
+        self.CategoryName       = ParamCategoryName;
+    }
+    return self;
+}
+
+@end

@@ -27,6 +27,7 @@
 @property (nonatomic,retain) NSArray *HeaderContainerArray;
 @property (nonatomic,retain) NSArray *DataStringArray;
 @property (nonatomic,retain) NSMutableArray *TableDataArray;
+@property (nonatomic,retain) NSMutableArray *CategoryArray;
 @end
 
 @implementation PViewServices
@@ -120,6 +121,13 @@
                     
                     ProviderViewServicesList *ProviderServices = [[ProviderViewServicesList alloc] initWithServiceId:[WEbdetailsData objectForKey:@"service_id"] ServiceName:[WEbdetailsData objectForKey:@"name"] ServiceShortDescription:[WEbdetailsData objectForKey:@"short_description"] ServiceRate:[WEbdetailsData objectForKey:@"rate"] ServiceCurrencyCode:[WEbdetailsData objectForKey:@"currency_code"] ServiceRateValidTill:[WEbdetailsData objectForKey:@"rate_valid_till"] ServiceTax:[WEbdetailsData objectForKey:@"tax"] ServiceDiscount:[WEbdetailsData objectForKey:@"discount"] ServiceShippingCost:[WEbdetailsData objectForKey:@"shipping_cost"]];
                     [self.TableDataArray addObject:ProviderServices];
+                } else {
+                    self.CategoryArray = [[NSMutableArray alloc] init];
+                    for (id WEbdetailsDataOne in WEbdetailsData) {
+                        
+                        ServiceCategory *DataCategory = [[ServiceCategory alloc] initWithCategoryId:[WEbdetailsDataOne objectForKey:@"category_id"] CategoryName:[WEbdetailsDataOne objectForKey:@"category_name"]];
+                        [self.CategoryArray addObject:DataCategory];
+                    }
                 }
                 i++;
             }
@@ -178,7 +186,6 @@
             [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
             [EditDetailsButton setTag:104];
             [DataCell addSubview:EditDetailsButton];
-            
             
         } else {
             UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 16.5, SeperaterLabelDiff, 15)];
