@@ -73,11 +73,11 @@
 
 +(NSString *)URLParamProviderEditProfile  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderChangePassword  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderChangePassword  { return kNWEBProviderChangePasswordParamURL; }
 
 +(NSString *)URLParamProviderAddService  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderViewServicelist  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderViewServicelist  { return kNWEBProviderViewServicelistParamURL; }
 
 +(NSString *)URLParamProviderViewServiceDetail  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -99,7 +99,7 @@
 
 +(NSString *)URLParamProviderAddReply  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderContactWithHemaAdmin  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderContactWithHemaAdmin  { return kNWEBProviderContactWithHemaAdminParamURL; }
 
 +(NSString *)URLParamProviderHistoryConversationList  { return kNWEBCustomerBookingSearchParamURL; }
 

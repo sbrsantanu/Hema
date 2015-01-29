@@ -10,6 +10,7 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "NSString+PJR.h"
 
 @interface PChangePassword ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 @property (nonatomic,retain) UIScrollView *MainScrollView;
@@ -26,7 +27,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //self=((([[UIScreen mainScreen] bounds].size.height)>500))?[super initWithNibName:@"RegisterViewController" bundle:nil]:[super initWithNibName:@"RegisterViewController4s" bundle:nil];
         [self.view setBackgroundColor:[UIColor whiteColor]];
     }
     return self;
@@ -35,6 +35,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    NSLog(@"Everything is fine");
     
     [self.view addSubview:[self UIViewSetHeaderView]];
     [self.view addSubview:[self UIViewSetFooterView]];
@@ -104,7 +106,6 @@
         {
             UITextField *textField=(UITextField*)aSubView;
             [textField setDelegate:self];
-            NSLog(@"UITextField ---- %ld",(long)textField.tag);
         }
     }
 }
@@ -158,6 +159,26 @@
 
 -(IBAction)ChangePasswordProcess:(id)sender
 {
+    NSLog(@"Everything is fine");
+    BOOL Validate = YES;
+    
+    if ([_TFPassword.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Password Please"];
+        validate = NO;
+    } else if ([_TFCPassword.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Password Again"];
+        validate = NO;
+    } else {
+        NSLog(@"Everything is fine");
+    }
+}
+
+
+-(void)ShowAletviewWIthTitle:(NSString *)ParamTitle Tag:(int)ParamTag Message:(NSString *)ParamMessage
+{
+    UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [AlertView setTag:ParamTag];
+    [AlertView show];
     
 }
 @end

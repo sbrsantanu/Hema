@@ -498,18 +498,9 @@
 		0403513F1A35E4D800C505A8 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				048B9D271A5E690500BDDAD4 /* Footer */,
+				04E44B221A7A101D0042392A /* General */,
 				04CAC4FD1A56ED83007527D2 /* Provider */,
 				04CAC4FC1A56ED77007527D2 /* Customer */,
-				04D539691A51670F00E183D2 /* Booking List */,
-				043553051A42B165002FB1CE /* Forgetpassword */,
-				040351441A35E59200C505A8 /* launchScreen */,
-				040351431A35E57900C505A8 /* AppDelegate */,
-				040351451A35E5A600C505A8 /* ViewController */,
-				0438E6281A3EC82C00CD157C /* Home */,
-				0438E6291A3EC84700CD157C /* Login */,
-				0438E62A1A3EC85100CD157C /* Register */,
-				0438E62B1A3EC85900CD157C /* Help */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -1123,19 +1114,11 @@
 		04C9A3471A2EFD4E0003C4D3 /* Hema */ = {
 			isa = PBXGroup;
 			children = (
+				04E44B231A7A10480042392A /* Objects */,
 				0403513F1A35E4D800C505A8 /* Screens */,
 				04C1EFD81A318BA2008E6AE1 /* Lib */,
 				04C9A3581A2EFD4E0003C4D3 /* Images.xcassets */,
-				04C9A34F1A2EFD4E0003C4D3 /* Hema.xcdatamodeld */,
 				04C9A3481A2EFD4E0003C4D3 /* Supporting Files */,
-				04C6F0581A4024D900E6AA23 /* GlobalObjects.h */,
-				04C6F0591A4024D900E6AA23 /* GlobalObjects.m */,
-				04BEEBEE1A416B4600E44E27 /* GlobalStrings.h */,
-				04BEEBEF1A416B4600E44E27 /* GlobalStrings.m */,
-				04CD3A741A6CF45500A1FD0A /* GlobalModelObjects.h */,
-				04CD3A751A6CF45500A1FD0A /* GlobalModelObjects.m */,
-				04C99A811A655E6300DC5BAC /* backbutt.png */,
-				0403513A1A35C4CB00C505A8 /* Strings.h */,
 			);
 			path = Hema;
 			sourceTree = "<group>";
@@ -1370,6 +1353,39 @@
 				04C82F741A5419D40038D562 /* ApplyBookingViewController.xib */,
 			);
 			name = "Booking List";
+			sourceTree = "<group>";
+		};
+		04E44B221A7A101D0042392A /* General */ = {
+			isa = PBXGroup;
+			children = (
+				048B9D271A5E690500BDDAD4 /* Footer */,
+				04D539691A51670F00E183D2 /* Booking List */,
+				043553051A42B165002FB1CE /* Forgetpassword */,
+				040351441A35E59200C505A8 /* launchScreen */,
+				040351431A35E57900C505A8 /* AppDelegate */,
+				040351451A35E5A600C505A8 /* ViewController */,
+				0438E6281A3EC82C00CD157C /* Home */,
+				0438E6291A3EC84700CD157C /* Login */,
+				0438E62A1A3EC85100CD157C /* Register */,
+				0438E62B1A3EC85900CD157C /* Help */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		04E44B231A7A10480042392A /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				04C9A34F1A2EFD4E0003C4D3 /* Hema.xcdatamodeld */,
+				04C6F0581A4024D900E6AA23 /* GlobalObjects.h */,
+				04C6F0591A4024D900E6AA23 /* GlobalObjects.m */,
+				04BEEBEE1A416B4600E44E27 /* GlobalStrings.h */,
+				04BEEBEF1A416B4600E44E27 /* GlobalStrings.m */,
+				04CD3A741A6CF45500A1FD0A /* GlobalModelObjects.h */,
+				04CD3A751A6CF45500A1FD0A /* GlobalModelObjects.m */,
+				04C99A811A655E6300DC5BAC /* backbutt.png */,
+				0403513A1A35C4CB00C505A8 /* Strings.h */,
+			);
+			name = Objects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

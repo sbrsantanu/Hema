@@ -10,14 +10,20 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "NSString+PJR.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "MPApplicationGlobalConstants.h"
 
-@interface PChangePassword ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
+@interface PChangePassword ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,WebserviceProtocolDelegate>
 @property (nonatomic,retain) UIScrollView *MainScrollView;
 @property (nonatomic,retain) UIView *HeaderNavigationViewBackgroundView;
 
 @property (nonatomic,retain) UITextField * TFPassword;
 @property (nonatomic,retain) UITextField * TFCPassword;
 @property (nonatomic,retain) UIButton * SubmitButton;
+@property (nonatomic,retain) NSArray *DataAccessArray;
 @end
 
 @implementation PChangePassword
@@ -26,7 +32,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //self=((([[UIScreen mainScreen] bounds].size.height)>500))?[super initWithNibName:@"RegisterViewController" bundle:nil]:[super initWithNibName:@"RegisterViewController4s" bundle:nil];
         [self.view setBackgroundColor:[UIColor whiteColor]];
     }
     return self;
@@ -74,6 +79,7 @@
     self.TFPassword = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, LastPosition, TextfieldWidth, TextfieldHeight)];
     [self.TFPassword customizeWithPlaceholderText:@"Password" andImageOnRightView:nil andLeftBarText:@"*"];
     [self.TFPassword setTag:nextdatatag];
+    [self.TFPassword setSecureTextEntry:YES];
     [_MainScrollView addSubview:self.TFPassword];
     
     LastPosition = LastPosition + Difference;
@@ -83,6 +89,7 @@
     self.TFCPassword = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, LastPosition, TextfieldWidth, TextfieldHeight)];
     [self.TFCPassword customizeWithPlaceholderText:@"Confirm Password" andImageOnRightView:nil andLeftBarText:@"*"];
     [self.TFCPassword setTag:nextdatatag];
+    [self.TFCPassword setSecureTextEntry:YES];
     [_MainScrollView addSubview:self.TFCPassword];
     
     LastPosition = LastPosition + Difference;
@@ -104,7 +111,6 @@
         {
             UITextField *textField=(UITextField*)aSubView;
             [textField setDelegate:self];
-            NSLog(@"UITextField ---- %ld",(long)textField.tag);
         }
     }
 }
@@ -158,6 +164,78 @@
 
 -(IBAction)ChangePasswordProcess:(id)sender
 {
+    BOOL Validate = YES;
     
+    if ([_TFPassword.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Password Please"];
+        Validate = NO;
+    } else if ([_TFCPassword.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Password Again"];
+        Validate = NO;
+    } else if (![[_TFCPassword.text CleanTextField] isEqualToString:[_TFPassword.text CleanTextField]]) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Password Didnot Match"];
+        Validate = NO;
+    } else {
+        Validate = YES;
+    }
+    
+    if (Validate) {
+        
+        self.DataAccessArray = [[NSArray alloc] initWithObjects:[_TFPassword.text CleanTextField],[_TFCPassword.text CleanTextField],[self Getlogedinuserid], nil];
+        [self CallWebserviceForData];
+    }
+}
+
+-(void)ShowAletviewWIthTitle:(NSString *)ParamTitle Tag:(int)ParamTag Message:(NSString *)ParamMessage
+{
+    UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [AlertView setTag:ParamTag];
+    [AlertView show];
+}
+
+-(void)CallWebserviceForData
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:[UrlParameterString WebParamProviderChangePassword] ValueObject:self.DataAccessArray UrlParameter:[UrlParameterString URLParamProviderChangePassword]];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+#pragma Webservice delegate
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextField class]])
+        {
+            UITextField *textField=(UITextField*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
+    if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+        [self ShowAletviewWIthTitle:@"Success" Tag:134 Message:[ParamObjectCarrier objectForKey:@"message"]];
+    } else {
+        [self ShowAletviewWIthTitle:@"Error" Tag:135 Message:[ParamObjectCarrier objectForKey:@"message"]];
+    }
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextField class]])
+        {
+            UITextField *textField=(UITextField*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
+     [self ShowAletviewWIthTitle:@"Error" Tag:136 Message:[NSString stringWithFormat:@"%@",ParamObjectCarrier]];
 }
 @end

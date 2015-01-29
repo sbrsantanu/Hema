@@ -78,3 +78,27 @@
                            Vat:(NSString *)ParamVat
                        Website:(NSString *)paramWebsite;
 @end
+
+@interface ProviderViewServicesList : NSObject
+
+@property (nonatomic,retain) NSString *ServiceId;
+@property (nonatomic,retain) NSString *ServiceName;
+@property (nonatomic,retain) NSString *ServiceShortDescription;
+@property (nonatomic,retain) NSString *ServiceRate;
+@property (nonatomic,retain) NSString *ServiceCurrencyCode;
+@property (nonatomic,retain) NSString *ServiceRateValidTill;
+@property (nonatomic,retain) NSString *ServiceTax;
+@property (nonatomic,retain) NSString *ServiceDiscount;
+@property (nonatomic,retain) NSString *ServiceShippingCost;
+
+-(id)initWithServiceId:(NSString *)ParamServiceId
+           ServiceName:(NSString *)ParamServiceName
+ServiceShortDescription:(NSString *)ParamServiceShortDescription
+           ServiceRate:(NSString *)ParamServiceRate
+   ServiceCurrencyCode:(NSString *)ParamServiceCurrencyCode
+  ServiceRateValidTill:(NSString *)ParamServiceRateValidTill
+            ServiceTax:(NSString *)ParamServiceTax
+       ServiceDiscount:(NSString *)ParamServiceDiscount
+   ServiceShippingCost:(NSString *)ParamServiceShippingCost;
+
+@end

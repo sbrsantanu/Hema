@@ -10,8 +10,14 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "NSString+PJR.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "MPApplicationGlobalConstants.h"
 
-@interface PContactWithHemaAdmin () <UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,UITextViewDelegate>
+
+@interface PContactWithHemaAdmin () <UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,UITextViewDelegate,WebserviceProtocolDelegate>
 
 @property (nonatomic,retain) UIScrollView *MainScrollView;
 @property (nonatomic,retain) UIView *HeaderNavigationViewBackgroundView;
@@ -19,6 +25,7 @@
 @property (nonatomic,retain) UITextField * CTMessageTitle;
 @property (nonatomic,retain) SDAPlaceholderTextView *CTMDetails;
 @property (nonatomic,retain) UIButton * SubmitButton;
+@property (nonatomic,retain) NSArray *DataAccessArray;
 @end
 
 @implementation PContactWithHemaAdmin
@@ -27,7 +34,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //self=((([[UIScreen mainScreen] bounds].size.height)>500))?[super initWithNibName:@"RegisterViewController" bundle:nil]:[super initWithNibName:@"RegisterViewController4s" bundle:nil];
         [self.view setBackgroundColor:[UIColor whiteColor]];
     }
     return self;
@@ -95,7 +101,7 @@
     [_SubmitButton setTitle:@"Submit" forState:UIControlStateNormal];
     [_SubmitButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
     [_SubmitButton.layer setCornerRadius:3.0f];
-    [_SubmitButton addTarget:self action:@selector(ChangePasswordProcess:) forControlEvents:UIControlEventTouchUpInside];
+    [_SubmitButton addTarget:self action:@selector(ContactWithAdmin:) forControlEvents:UIControlEventTouchUpInside];
     [_SubmitButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
     [_SubmitButton setTag:104];
     [_MainScrollView addSubview:_SubmitButton];
@@ -139,6 +145,15 @@
             [textField resignFirstResponder];
         }
     }
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextView class]])
+        {
+            UITextView *textField=(UITextView*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
@@ -167,11 +182,98 @@
     return YES;
 }
 
-#pragma Contact to Hema Admin
+#pragma Chage Password Action
 
--(IBAction)ChangePasswordProcess:(id)sender
+-(IBAction)ContactWithAdmin:(id)sender
 {
+    BOOL Validate = YES;
     
+    if ([_CTMessageTitle.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Message Title Please"];
+        Validate = NO;
+    } else if ([_CTMDetails.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Sorry" Tag:777 Message:@"Message Details Again"];
+        Validate = NO;
+    }else {
+        Validate = YES;
+    }
+    
+    if (Validate) {
+        
+        self.DataAccessArray = [[NSArray alloc] initWithObjects:[self Getlogedinuserid],[_CTMessageTitle.text CleanTextField],[_CTMDetails.text CleanTextField], nil];
+        [self CallWebserviceForData];
+    }
+}
+
+-(void)ShowAletviewWIthTitle:(NSString *)ParamTitle Tag:(int)ParamTag Message:(NSString *)ParamMessage
+{
+    UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [AlertView setTag:ParamTag];
+    [AlertView show];
+}
+
+-(void)CallWebserviceForData
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:[UrlParameterString WebParamProviderContactWithHemaAdmin] ValueObject:self.DataAccessArray UrlParameter:[UrlParameterString URLParamProviderContactWithHemaAdmin]];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+#pragma Webservice delegate
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextField class]])
+        {
+            UITextField *textField=(UITextField*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextView class]])
+        {
+            UITextView *textField=(UITextView*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
+    if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+        [self ShowAletviewWIthTitle:@"Success" Tag:134 Message:[ParamObjectCarrier objectForKey:@"message"]];
+    } else {
+        [self ShowAletviewWIthTitle:@"Error" Tag:135 Message:[ParamObjectCarrier objectForKey:@"message"]];
+    }
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextField class]])
+        {
+            UITextField *textField=(UITextField*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextView class]])
+        {
+            UITextView *textField=(UITextView*)aSubView;
+            [textField setText:nil];
+            [textField resignFirstResponder];
+        }
+    }
+    [self ShowAletviewWIthTitle:@"Error" Tag:136 Message:[NSString stringWithFormat:@"%@",ParamObjectCarrier]];
 }
 
 @end

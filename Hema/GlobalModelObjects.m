@@ -102,3 +102,32 @@
 }
 
 @end
+
+@implementation ProviderViewServicesList
+
+-(id)initWithServiceId:(NSString *)ParamServiceId
+           ServiceName:(NSString *)ParamServiceName
+ServiceShortDescription:(NSString *)ParamServiceShortDescription
+           ServiceRate:(NSString *)ParamServiceRate
+   ServiceCurrencyCode:(NSString *)ParamServiceCurrencyCode
+  ServiceRateValidTill:(NSString *)ParamServiceRateValidTill
+            ServiceTax:(NSString *)ParamServiceTax
+       ServiceDiscount:(NSString *)ParamServiceDiscount
+   ServiceShippingCost:(NSString *)ParamServiceShippingCost
+{
+    self = [super init];
+    if (self) {
+        self.ServiceId                      = ParamServiceId;
+        self.ServiceName                    = ParamServiceName;
+        self.ServiceShortDescription        = ParamServiceShortDescription;
+        self.ServiceRate                    = ParamServiceRate;
+        self.ServiceCurrencyCode            = ParamServiceCurrencyCode;
+        self.ServiceRateValidTill           = ParamServiceRateValidTill;
+        self.ServiceTax                     = ParamServiceTax;
+        self.ServiceDiscount                = ParamServiceDiscount;
+        self.ServiceShippingCost            = ParamServiceShippingCost;
+    }
+    return self;
+}
+
+@end

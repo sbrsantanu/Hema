@@ -10,9 +10,13 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "GlobalStrings.h"
+#import "MPApplicationGlobalConstants.h"
 
-
-@interface PViewServices ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface PViewServices ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
 }
@@ -21,7 +25,8 @@
 @property (nonatomic,retain) UITableView  * DataContainerView;
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *HeaderContainerArray;
-
+@property (nonatomic,retain) NSArray *DataStringArray;
+@property (nonatomic,retain) NSMutableArray *TableDataArray;
 @end
 
 @implementation PViewServices
@@ -57,17 +62,16 @@
     [WelcomeUnderline setBackgroundColor:[UIColor lightGrayColor]];
     [self.view addSubview:WelcomeUnderline];
     
-    
     _HeaderContainerArray = [[NSArray alloc] initWithObjects:@"Service Name",@"Short Description",@"Rate",@"Rate Valied Till",@"Tax (%)",@"Discount (%)",@"Shipping Cost",@"Action", nil];
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 120, self.view.frame.size.width, self.view.frame.size.height-181)];
     [_MainScrollView setUserInteractionEnabled:YES];
-    [_MainScrollView setContentSize:CGSizeMake(150*[_HeaderContainerArray count], self.view.frame.size.height-181)];
+    [_MainScrollView setContentSize:CGSizeMake(150*[_HeaderContainerArray count]+80, self.view.frame.size.height-181)];
     [_MainScrollView setDelegate:self];
     [_MainScrollView setBounces:NO];
     [self.view addSubview:_MainScrollView];
     
-    _DataContainerView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [_HeaderContainerArray count]*150, _MainScrollView.layer.frame.size.height) style:UITableViewStylePlain];
+    _DataContainerView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [_HeaderContainerArray count]*150+80, _MainScrollView.layer.frame.size.height) style:UITableViewStylePlain];
     [_DataContainerView setDelegate:self];
     [_DataContainerView setDataSource:self];
     [_DataContainerView setBounces:NO];
@@ -80,14 +84,56 @@
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
     
+    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
+    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        sleep(5);
-        dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self GetProviderServiceListDetails];
+    });
+}
+
+#pragma webservice data delegate
+
+-(void)GetProviderServiceListDetails
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderViewServicelist ValueObject:_DataStringArray UrlParameter:UrlParameterString.URLParamProviderViewServicelist];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        
+        if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+            
+            int i =0;
+            self.TableDataArray = [[NSMutableArray alloc] init];
+            for (id WEbdetailsData in [ParamObjectCarrier objectForKey:@"service"]) {
+                
+                if (i!=0) {
+                    
+                    ProviderViewServicesList *ProviderServices = [[ProviderViewServicesList alloc] initWithServiceId:[WEbdetailsData objectForKey:@"service_id"] ServiceName:[WEbdetailsData objectForKey:@"name"] ServiceShortDescription:[WEbdetailsData objectForKey:@"short_description"] ServiceRate:[WEbdetailsData objectForKey:@"rate"] ServiceCurrencyCode:[WEbdetailsData objectForKey:@"currency_code"] ServiceRateValidTill:[WEbdetailsData objectForKey:@"rate_valid_till"] ServiceTax:[WEbdetailsData objectForKey:@"tax"] ServiceDiscount:[WEbdetailsData objectForKey:@"discount"] ServiceShippingCost:[WEbdetailsData objectForKey:@"shipping_cost"]];
+                    [self.TableDataArray addObject:ProviderServices];
+                }
+                i++;
+            }
             [_DataContainActivity stopAnimating];
             [_DataContainerView setHidden:NO];
-        });
+            [_DataContainerView reloadData];
+        } else {
+            NSLog(@"------------param code arror %@",ParamObjectCarrier);
+        }
     });
-    
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Error data --- %@",ParamObjectCarrier);
 }
 
 #pragma Tableview Datasorce Delegate Methods
@@ -99,20 +145,72 @@
     float SeperaterLabelDiff = 150.0f;
     float NextSeperaterPosition = 0.0f;
     
-    for (int i=0; i< [_HeaderContainerArray count]; i++) {
+    ProviderViewServicesList *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
+    
+    for (int i = 0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
-        [TitleLabel setBackgroundColor:[UIColor clearColor]];
-        [TitleLabel setTextColor:[UIColor darkTextColor]];
-        [TitleLabel setText:@"View"];
-        [TitleLabel setTextAlignment:NSTextAlignmentCenter];
-        [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
-        [DataCell.contentView addSubview:TitleLabel];
-        
-        UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
-        [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
-        [DataCell.contentView addSubview:SeperaterLabel];
-        
+        if (i==7) {
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5 ,5, 100, 40)];
+            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
+            [ViewDetailsButton setTitle:@"View" forState:UIControlStateNormal];
+            [ViewDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [ViewDetailsButton.layer setCornerRadius:3.0f];
+            [ViewDetailsButton addTarget:self action:@selector(ViewDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [ViewDetailsButton setTag:104];
+            [DataCell addSubview:ViewDetailsButton];
+            
+            UIButton *EditDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+110 ,5, 100, 40)];
+            [EditDetailsButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
+            [EditDetailsButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [EditDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [EditDetailsButton.layer setCornerRadius:3.0f];
+            [EditDetailsButton addTarget:self action:@selector(EditDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xffffff] forState:UIControlStateNormal];
+            [EditDetailsButton setTag:104];
+            [DataCell addSubview:EditDetailsButton];
+            
+            
+        } else {
+            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+            [TitleLabel setBackgroundColor:[UIColor clearColor]];
+            [TitleLabel setTextColor:[UIColor darkTextColor]];
+            switch (i) {
+                case 0:
+                    [TitleLabel setText:LocalObject.ServiceName];
+                    break;
+                case 1:
+                    [TitleLabel setText:LocalObject.ServiceShortDescription];
+                    break;
+                case 2:
+                    [TitleLabel setText:LocalObject.ServiceRate];
+                    break;
+                case 3:
+                    [TitleLabel setText:LocalObject.ServiceRateValidTill];
+                    break;
+                case 4:
+                    [TitleLabel setText:LocalObject.ServiceTax];
+                    break;
+                case 5:
+                    [TitleLabel setText:LocalObject.ServiceDiscount];
+                    break;
+                case 6:
+                    [TitleLabel setText:LocalObject.ServiceShippingCost];
+                    break;
+            }
+            [TitleLabel setTextAlignment:NSTextAlignmentCenter];
+            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [DataCell.contentView addSubview:TitleLabel];
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+        }
         NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
     }
     
@@ -128,9 +226,19 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 100;
+    return self.TableDataArray.count;
 }
 
+#pragma Perform Operation
+
+-(IBAction)ViewDetails:(id)sender
+{
+    
+}
+-(IBAction)EditDetails:(id)sender
+{
+    
+}
 #pragma Tableview Delegate Methods
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
