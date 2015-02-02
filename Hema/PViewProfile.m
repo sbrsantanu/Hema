@@ -27,7 +27,7 @@
 @property (nonatomic,retain) NSArray *TableSectionHeaderTextArray;
 @property (nonatomic,retain) NSArray *DataStringArray;
 @property (nonatomic,retain) NSMutableArray *TableviewDataArray;
-
+@property (nonatomic,retain) UIActivityIndicatorView *MainActivity;
 @end
 
 @implementation PViewProfile
@@ -159,17 +159,53 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *DataCell = [[UITableViewCell alloc] init];
+    
     if (indexPath.section == 4) {
         
-        MDIncrementalImageView *imageView = [[MDIncrementalImageView alloc] initWithFrame:CGRectMake(25, 5, 150, 150)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(25, 5, 150, 150)];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.tag = 111;
-        [imageView setImageUrl:[NSURL URLWithString:[self.TableviewDataArray objectAtIndex:indexPath.section]]];
         [DataCell addSubview:imageView];
+        
+        //CGRect mainFrame = [[UIScreen mainScreen] bounds];
+        _MainActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        CGRect frame = _MainActivity.frame;
+        frame.origin.x = imageView.layer.frame.size.width / 2 - frame.size.width / 2;
+        frame.origin.y = imageView.layer.frame.size.height / 2 - frame.size.height / 2;
+        _MainActivity.frame = frame;
+        [_MainActivity setColor:[UIColor colorFromHex:0xe66a4c]];
+        [_MainActivity startAnimating];
+        [_MainActivity hidesWhenStopped];
+        [imageView addSubview:_MainActivity];
+        
+        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"providerprofileimage"] isEqualToString:@"Y"]) {
+            
+            [_MainActivity stopAnimating];
+            [imageView setImage:[UIImage imageWithData:[[NSUserDefaults standardUserDefaults] objectForKey:@"providerprofileimagedata"]]];
+            
+        } else {
+            
+            dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                
+                NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[self.TableviewDataArray objectAtIndex:indexPath.section]]];
+                if ( data == nil )
+                    return;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [imageView setImage:[UIImage imageWithData:data]];
+                    [_MainActivity stopAnimating];
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:@"Y" forKey:@"providerprofileimage"];
+                    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"providerprofileimagedata"];
+                });
+            });
+        }
     } else {
+        
         [DataCell.textLabel setText:[self.TableviewDataArray objectAtIndex:indexPath.section]];
         [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
         [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+        
     }
     return DataCell;
 }

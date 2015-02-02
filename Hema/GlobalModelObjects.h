@@ -112,3 +112,99 @@ ServiceShortDescription:(NSString *)ParamServiceShortDescription
            CategoryName:(NSString *)ParamCategoryName;
 
 @end
+
+@interface ProviderMYQuotationList : NSObject
+
+
+@property (nonatomic,retain) NSString *QuotationId;
+@property (nonatomic,retain) NSString *QuotationModuleId;
+@property (nonatomic,retain) NSString *QuotationModuleName;
+@property (nonatomic,retain) NSString *QuotationBidAmount;
+@property (nonatomic,retain) NSString *QuotationStartDate;
+@property (nonatomic,retain) NSString *QuotationEndDate;
+@property (nonatomic,retain) NSString *QuotationDuration;
+@property (nonatomic,retain) NSString *QuotationNote;
+@property (nonatomic,retain) NSString *QuotationIsBlocked;
+@property (nonatomic,retain) NSString *QuotationIsAwarded;
+@property (nonatomic,retain) NSString *QuotationIsDeclined;
+@property (nonatomic,retain) NSString *QuotationIsRevision;
+@property (nonatomic,retain) NSString *QuotationQuotationTime;
+@property (nonatomic,retain) NSString *QuotationBookingNumber;
+@property (nonatomic,retain) NSString *QuotationBookingIsPaid;
+
+-(id)initWithQuotationId:(NSString *)ParamQuotationId
+       QuotationModuleId:(NSString *)ParamQuotationModuleId
+     QuotationModuleName:(NSString *)ParamQuotationModuleName
+      QuotationBidAmount:(NSString *)ParamQuotationBidAmount
+      QuotationStartDate:(NSString *)ParamQuotationStartDate
+        QuotationEndDate:(NSString *)ParamQuotationEndDate
+       QuotationDuration:(NSString *)ParamQuotationDuration
+           QuotationNote:(NSString *)ParamQuotationNote
+      QuotationIsBlocked:(NSString *)ParamQuotationIsBlocked
+      QuotationIsAwarded:(NSString *)ParamQuotationIsAwarded
+     QuotationIsDeclined:(NSString *)ParamQuotationIsDeclined
+     QuotationIsRevision:(NSString *)ParamQuotationIsRevision
+  QuotationQuotationTime:(NSString *)ParamQuotationQuotationTime
+  QuotationBookingNumber:(NSString *)ParamQuotationBookingNumber
+  QuotationBookingIsPaid:(NSString *)ParamQuotationBookingIsPaid;
+
+@end
+
+
+@interface ProverHistoryOfConversion : NSObject
+
+@property (nonatomic,retain) NSString *ConversionId;
+@property (nonatomic,retain) NSString *ConversionReplyCount;
+@property (nonatomic,retain) NSString *ConversionProviderId;
+@property (nonatomic,retain) NSString *ConversionMessageTitle;
+@property (nonatomic,retain) NSString *ConversionMessageDetails;
+@property (nonatomic,retain) NSString *ConversionMessageTime;
+@property (nonatomic,retain) NSString *ConversionIsBlocked;
+@property (nonatomic,retain) NSString *ConversionIsReplied;
+
+-(id)initWithConversionId:(NSString *)ParamConversionId
+     ConversionReplyCount:(NSString *)ParamConversionReplyCount
+     ConversionProviderId:(NSString *)ParamConversionProviderId
+   ConversionMessageTitle:(NSString *)ParamConversionMessageTitle
+ ConversionMessageDetails:(NSString *)ParamConversionMessageDetails
+    ConversionMessageTime:(NSString *)ParamConversionMessageTime
+      ConversionIsBlocked:(NSString *)ParamConversionIsBlocked
+      ConversionIsReplied:(NSString *)ParamConversionIsReplied;
+@end
+
+@interface ProviderIssueList : NSObject
+
+@property (nonatomic,retain) NSString *IssueListId;
+@property (nonatomic,retain) NSString *IssueListModuleId;
+@property (nonatomic,retain) NSString *IssueListModuleName;
+@property (nonatomic,retain) NSString *IssueListBidAmount;
+@property (nonatomic,retain) NSString *IssueListStartDate;
+@property (nonatomic,retain) NSString *IssueListEndDate;
+@property (nonatomic,retain) NSString *IssueListDuration;
+@property (nonatomic,retain) NSString *IssueListNote;
+@property (nonatomic,retain) NSString *IssueListIsBlocked;
+@property (nonatomic,retain) NSString *IssueListIsAwarded;
+@property (nonatomic,retain) NSString *IssueListIsDeclined;
+@property (nonatomic,retain) NSString *IssueListIsRevision;
+@property (nonatomic,retain) NSString *IssueListQuotationTime;
+@property (nonatomic,retain) NSString *IssueListBookingNumber;
+@property (nonatomic,retain) NSString *IssueListIsPaid;
+
+
+-(id)initWithIssueListId:(NSString *)ParamIssueListId
+       IssueListModuleId:(NSString *)ParamIssueListModuleId
+     IssueListModuleName:(NSString *)ParamIssueListModuleName
+      IssueListBidAmount:(NSString *)ParamIssueListBidAmount
+      IssueListStartDate:(NSString *)ParamIssueListStartDate
+        IssueListEndDate:(NSString *)ParamIssueListEndDate
+       IssueListDuration:(NSString *)ParamIssueListDuration
+           IssueListNote:(NSString *)ParamIssueListNote
+      IssueListIsBlocked:(NSString *)ParamIssueListIsBlocked
+      IssueListIsAwarded:(NSString *)ParamIssueListIsAwarded
+     IssueListIsDeclined:(NSString *)ParamIssueListIsDeclined
+     IssueListIsRevision:(NSString *)ParamIssueListIsRevision
+  IssueListQuotationTime:(NSString *)ParamIssueListQuotationTime
+  IssueListBookingNumber:(NSString *)ParamIssueListBookingNumber
+         IssueListIsPaid:(NSString *)ParamIssueListIsPaid;
+
+@end

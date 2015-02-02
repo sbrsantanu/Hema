@@ -33,11 +33,21 @@
 
 -(void)AccessWebservice
 {
+    
+    NSLog(@"[self.ParamArray count] ---%lu and value array count ----%lu",(unsigned long)[self.ParamArray count],[self.ValueArray count]);
+    
+    NSLog(@"self.ParamArray ==== %@",self.ParamArray);
+    NSLog(@"self.ValueArray ==== %@",self.ValueArray);
+    
     if ([self.ParamArray count] != [self.ValueArray count]) {
         
+        NSLog(@"param and value not matching");
+        
         [self WebaccessCompleteWithRetrnedErrorObject:NSError.ParamCountError];
+        
     } else {
 
+        NSLog(@"param and value matching");
         WebserviceInputParameter *inputParam = [[WebserviceInputParameter alloc] init];
         inputParam.webserviceRelativePath = [self GenerateURLFromString];
         inputParam.serviceMethodType = WEBSERVICE_METHOD_TYPE_POST;

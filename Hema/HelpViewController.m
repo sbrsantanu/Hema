@@ -20,6 +20,7 @@
 @property (nonatomic,retain) UITableView *HelpTableView;
 @property (nonatomic,retain) NSMutableArray * TableViewDataArray;
 @property (nonatomic,retain) NSMutableArray * TableViewDataImage;
+
 @end
 
 @implementation HelpViewController
@@ -94,55 +95,31 @@
     switch (indexPath.row) {
         case 0:
         {
-            HowitWorksViewController *Howitworks = [[HowitWorksViewController alloc] initWithNibName:@"HowitWorksViewController" bundle:nil];
+            HowitWorksViewController *Howitworks = [[HowitWorksViewController alloc] init];
             [self GotoDifferentViewWithAnimation:Howitworks];
         }
         break;
         case 1:
         {
-            PlanningViewController *Planning = [[PlanningViewController alloc] initWithNibName:@"PlanningViewController" bundle:nil];
+            PlanningViewController *Planning = [[PlanningViewController alloc] init];
             [self GotoDifferentViewWithAnimation:Planning];
         }
         break;
         case 2:
         {
-            BookingViewController *Booking = [[BookingViewController alloc] initWithNibName:@"BookingViewController" bundle:nil];
+            BookingViewController *Booking = [[BookingViewController alloc] init];
             [self GotoDifferentViewWithAnimation:Booking];
         }
         break;
         case 3:
         {
-            ContactViewController *ContactView = [[ContactViewController alloc] initWithNibName:@"ContactViewController" bundle:nil];
+            ContactViewController *ContactView = [[ContactViewController alloc] init];
             [self GotoDifferentViewWithAnimation:ContactView];
-            
         }
         break;
     }
 }
 
--(void)GotoHome
-{
-    HomeViewController *HomeView = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HomeView];
-}
-
--(void)GotoLogin
-{
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:LoginView];
-}
-
--(void)GotoRegister
-{
-    RegisterViewController *Register = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:Register];
-}
-
--(void)GotoHelp
-{
-    HelpViewController *HelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HelpView];
-}
 - (void)didReceiveMemoryWarning {
     
     [super didReceiveMemoryWarning];

@@ -14,6 +14,8 @@
 
 /* ************************ Customer *************************** */
 
++(NSString *)URLParamHelppages;
+
 +(NSString *)URLParamCustomerBookingSearch;
 
 +(NSString *)URLParamCustomerBookingDetails;
@@ -82,11 +84,15 @@
 
 +(NSString *)URLParamProviderAddQuotation;
 
++(NSString *)URLParamProviderMyQuotationList;
+
 +(NSString *)URLParamProviderMyQuotationRequestsListAddQuotation;
 
 +(NSString *)URLParamProviderQuotationDetail;
 
 +(NSString *)URLParamProviderAddMessage;
+
++(NSString *)URLParamProviderConversationList;
 
 +(NSString *)URLParamProviderQuotationHistoryConversationList;
 
@@ -107,6 +113,8 @@
 +(NSString *)URLParamProviderAddReplyforanissue;
 
 /* ************************ Customer *************************** */
+
++(NSArray *)WebParamHelpPages;
 
 +(NSArray *)WebParamCustomerBookingSearch;
 
@@ -176,13 +184,15 @@
 
 +(NSArray *)WebParamProviderAddQuotation;
 
++(NSArray *)WebParamProviderMyQuotationList;
+
 +(NSArray *)WebParamProviderMyQuotationRequestsListAddQuotation;
 
 +(NSArray *)WebParamProviderQuotationDetail;
 
 +(NSArray *)WebParamProviderAddMessage;
 
-+(NSArray *)WebParamProviderQuotationHistoryConversationList;
++(NSArray *)WebParamProviderConversationList;
 
 +(NSArray *)WebParamProviderAddReply;
 

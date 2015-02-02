@@ -1,12 +1,12 @@
 //
-//  PMyQuotations.m
+//  PIssues.m
 //  Hema
 //
 //  Created by Mac on 13/01/15.
 //  Copyright (c) 2015 Hema. All rights reserved.
 //
 
-#import "PMyQuotations.h"
+#import "PIssueDetails.h"
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
@@ -16,7 +16,7 @@
 #import "GlobalStrings.h"
 #import "MPApplicationGlobalConstants.h"
 
-@interface PMyQuotations ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
+@interface PIssueDetails ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
 }
@@ -28,17 +28,20 @@
 @property (nonatomic,retain) NSArray *DataStringArray;
 @property (nonatomic,retain) NSMutableArray *TableDataArray;
 @property (nonatomic,retain) NSMutableArray *CategoryArray;
+
+@property (nonatomic,retain) NSString *AssignGroupId;
 @end
 
-@implementation PMyQuotations
+@implementation PIssueDetails
 
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil GroupId:(NSString *)ParamGroupId
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         mainFrame = [[UIScreen mainScreen] bounds];
         self.view.layer.frame = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
         [self.view setBackgroundColor:[UIColor whiteColor]];
+        self.AssignGroupId = ParamGroupId;
     }
     return self;
 }
@@ -46,6 +49,8 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    mainFrame = [[UIScreen mainScreen] bounds];
     
     [self.view addSubview:[self UIViewSetHeaderViewWithbackButton:YES]];
     [self.view addSubview:[self UIViewSetFooterView]];
@@ -56,14 +61,15 @@
     [WelcomeMessage setTextColor:[UIColor darkGrayColor]];
     [WelcomeMessage setBackgroundColor:[UIColor clearColor]];
     [WelcomeMessage setTextAlignment:NSTextAlignmentLeft];
-    [WelcomeMessage setText:@"My Quotations"];
+    [WelcomeMessage setText:@"My Issues"];
     [self.view addSubview:WelcomeMessage];
     
     UILabel *WelcomeUnderline = [[UILabel alloc] initWithFrame:CGRectMake(10, 115, mainFrame.size.width-20, 1)];
     [WelcomeUnderline setBackgroundColor:[UIColor lightGrayColor]];
     [self.view addSubview:WelcomeUnderline];
     
-    _HeaderContainerArray = [[NSArray alloc] initWithObjects:@"Module Name",@"Quotation Bid Amount",@"Duration",@"Quotation Status",@"Quotation State",@"Booking Number",@"Action", nil];
+    
+    _HeaderContainerArray = [[NSArray alloc] initWithObjects:@"Module Name",@"Module Status",@"Booking Number",@"Action", nil];
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 120, self.view.frame.size.width, self.view.frame.size.height-181)];
     [_MainScrollView setUserInteractionEnabled:YES];
@@ -76,7 +82,6 @@
     [_DataContainerView setDelegate:self];
     [_DataContainerView setDataSource:self];
     [_DataContainerView setBounces:NO];
-    [_DataContainerView setHidden:YES];
     [_DataContainerView setBackgroundColor:[UIColor clearColor]];
     [_MainScrollView addSubview:_DataContainerView];
     
@@ -86,12 +91,11 @@
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
     
-    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
+    _DataStringArray =[[NSArray alloc] initWithObjects:self.AssignGroupId, nil];
     
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         [self GetProviderServiceListDetails];
     });
-    
 }
 
 #pragma webservice data delegate
@@ -104,7 +108,7 @@
             SHOW_NETWORK_ERROR_ALERT();
         });
     } else {
-        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderMyQuotationList ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderMyQuotationList];
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderMyIssues ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderMyIssues];
         [Datadelegate setDelegate:self];
     }
 }
@@ -116,9 +120,10 @@
         if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
             
             self.TableDataArray = [[NSMutableArray alloc] init];
-            for (id WEbdetailsData in [ParamObjectCarrier objectForKey:@"my-quotations"]) {
+            for (id WEbdetailsData in [ParamObjectCarrier objectForKey:@"my-awarded-quotations"]) {
                 
-                ProviderMYQuotationList *LocalObject = [[ProviderMYQuotationList alloc] initWithQuotationId:[WEbdetailsData objectForKey:@"id"] QuotationModuleId:[WEbdetailsData objectForKey:@"module_id"] QuotationModuleName:[WEbdetailsData objectForKey:@"module_name"] QuotationBidAmount:[WEbdetailsData objectForKey:@"bid_amount"] QuotationStartDate:[WEbdetailsData objectForKey:@"start_date"] QuotationEndDate:[WEbdetailsData objectForKey:@"end_date"] QuotationDuration:[WEbdetailsData objectForKey:@"duration"] QuotationNote:[WEbdetailsData objectForKey:@"note"] QuotationIsBlocked:[WEbdetailsData objectForKey:@"is_blocked"] QuotationIsAwarded:[WEbdetailsData objectForKey:@"is_awarded"] QuotationIsDeclined:[WEbdetailsData objectForKey:@"is_declined"] QuotationIsRevision:[WEbdetailsData objectForKey:@"is_revision"] QuotationQuotationTime:[WEbdetailsData objectForKey:@"quotation_time"] QuotationBookingNumber:[WEbdetailsData objectForKey:@"booking_no"] QuotationBookingIsPaid:[WEbdetailsData objectForKey:@"is_paid"]];
+                ProviderIssueList *LocalObject = [[ProviderIssueList alloc] initWithIssueListId:[WEbdetailsData objectForKey:@"id"] IssueListModuleId:[WEbdetailsData objectForKey:@"module_id"] IssueListModuleName:[WEbdetailsData objectForKey:@"module_name"] IssueListBidAmount:[WEbdetailsData objectForKey:@"bid_amount"] IssueListStartDate:[WEbdetailsData objectForKey:@"start_date"] IssueListEndDate:[WEbdetailsData objectForKey:@"end_date"] IssueListDuration:[WEbdetailsData objectForKey:@"duration"] IssueListNote:[WEbdetailsData objectForKey:@"note"] IssueListIsBlocked:[WEbdetailsData objectForKey:@"is_blocked"] IssueListIsAwarded:[WEbdetailsData objectForKey:@"is_awarded"] IssueListIsDeclined:[WEbdetailsData objectForKey:@"is_declined"] IssueListIsRevision:[WEbdetailsData objectForKey:@"is_revision"] IssueListQuotationTime:[WEbdetailsData objectForKey:@"quotation_time"] IssueListBookingNumber:[WEbdetailsData objectForKey:@"booking_no"] IssueListIsPaid:[WEbdetailsData objectForKey:@"is_paid"]];
+                
                 [self.TableDataArray addObject:LocalObject];
             }
             [_DataContainActivity stopAnimating];
@@ -150,35 +155,26 @@
     float SeperaterLabelDiff = 150.0f;
     float NextSeperaterPosition = 0.0f;
     
-    ProviderMYQuotationList *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
+    ProviderIssueList *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 5.5, SeperaterLabelDiff, 50)];
+        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff-10, 40)];
         [TitleLabel setBackgroundColor:[UIColor clearColor]];
         [TitleLabel setTextColor:[UIColor darkTextColor]];
         switch (i) {
             case 0:
-                [TitleLabel setText:LocalObject.QuotationModuleName];
+                [TitleLabel setText:LocalObject.IssueListModuleName];
                 break;
             case 1:
-                [TitleLabel setText:[NSString stringWithFormat:@"%@ USD",LocalObject.QuotationBidAmount]];
+                [TitleLabel setText:([LocalObject.IssueListIsAwarded intValue] == 1)?@"Awarded":@"Open"];
                 break;
             case 2:
-                [TitleLabel setText:[NSString stringWithFormat:@"%@ Day (s)",LocalObject.QuotationDuration]];
-                break;
-            case 3:
-                [TitleLabel setText:[LocalObject.QuotationIsAwarded isEqualToString:@"1"]?@"Awarded":@"Not Awarded"];
-                break;
-            case 4:
-                [TitleLabel setText:[LocalObject.QuotationIsBlocked isEqualToString:@"1"]?@"Close":@"Open"];
-                break;
-            case 5:
-                [TitleLabel setText:LocalObject.QuotationBookingNumber];
+                [TitleLabel setText:LocalObject.IssueListBookingNumber];
                 break;
         }
-        [TitleLabel setTextAlignment:NSTextAlignmentCenter];
         [TitleLabel setNumberOfLines:0];
+        [TitleLabel setTextAlignment:(i==1)?NSTextAlignmentCenter:NSTextAlignmentLeft];
         [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
         [DataCell.contentView addSubview:TitleLabel];
         

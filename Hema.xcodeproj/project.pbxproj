@@ -96,6 +96,7 @@
 		04BC9C341A31987400FCDA40 /* WebserviceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC9C1E1A31987400FCDA40 /* WebserviceHelper.m */; };
 		04BC9C371A31ABB800FCDA40 /* WebserviceProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC9C361A31ABB800FCDA40 /* WebserviceProtocol.m */; };
 		04BC9C3A1A31B42900FCDA40 /* UrlParameterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC9C391A31B42900FCDA40 /* UrlParameterString.m */; };
+		04BCD1241A7FBF3E00676407 /* PIssueDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD1231A7FBF3E00676407 /* PIssueDetails.m */; };
 		04BE67D81A4AE0F30027E382 /* splash_page.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04BE67D71A4AE0F30027E382 /* splash_page.jpg */; };
 		04BE67DB1A4AE3B50027E382 /* UITextView+Extentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BE67DA1A4AE3B50027E382 /* UITextView+Extentation.m */; };
 		04BEEBE91A416B1900E44E27 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BEEBE51A416B1900E44E27 /* fb.png */; };
@@ -329,6 +330,8 @@
 		04BC9C361A31ABB800FCDA40 /* WebserviceProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebserviceProtocol.m; sourceTree = "<group>"; };
 		04BC9C381A31B42900FCDA40 /* UrlParameterString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlParameterString.h; sourceTree = "<group>"; };
 		04BC9C391A31B42900FCDA40 /* UrlParameterString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlParameterString.m; sourceTree = "<group>"; };
+		04BCD1221A7FBF3E00676407 /* PIssueDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIssueDetails.h; sourceTree = "<group>"; };
+		04BCD1231A7FBF3E00676407 /* PIssueDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIssueDetails.m; sourceTree = "<group>"; };
 		04BE67D71A4AE0F30027E382 /* splash_page.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = splash_page.jpg; sourceTree = "<group>"; };
 		04BE67D91A4AE3B50027E382 /* UITextView+Extentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Extentation.h"; sourceTree = "<group>"; };
 		04BE67DA1A4AE3B50027E382 /* UITextView+Extentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Extentation.m"; sourceTree = "<group>"; };
@@ -1087,6 +1090,8 @@
 			children = (
 				04C99A5F1A654CCB00DC5BAC /* PIssues.h */,
 				04C99A601A654CCB00DC5BAC /* PIssues.m */,
+				04BCD1221A7FBF3E00676407 /* PIssueDetails.h */,
+				04BCD1231A7FBF3E00676407 /* PIssueDetails.m */,
 			);
 			name = Issues;
 			sourceTree = "<group>";
@@ -1592,6 +1597,7 @@
 				04C99A7D1A654D9500DC5BAC /* PViewProfile.m in Sources */,
 				04DBE5EB1A63D186002B0EF8 /* CChangePassword.m in Sources */,
 				049F9EDF1A31D93E002145C3 /* PECropViewController.m in Sources */,
+				04BCD1241A7FBF3E00676407 /* PIssueDetails.m in Sources */,
 				04C7EBBB1A7934A1007FFBCE /* MDIncrementalImageView.m in Sources */,
 				04BC9C201A31987400FCDA40 /* AFHTTPClient.m in Sources */,
 				04BC9C331A31987400FCDA40 /* SOAPEnvelope.m in Sources */,

@@ -10,8 +10,13 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "GlobalStrings.h"
+#import "MPApplicationGlobalConstants.h"
 
-@interface PHistoryOfConversion ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface PHistoryOfConversion ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
 }
@@ -21,6 +26,9 @@
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *HeaderContainerArray;
 
+@property (nonatomic,retain) NSArray *DataStringArray;
+@property (nonatomic,retain) NSMutableArray *TableDataArray;
+@property (nonatomic,retain) NSMutableArray *CategoryArray;
 @end
 
 @implementation PHistoryOfConversion
@@ -70,6 +78,7 @@
     [_DataContainerView setDelegate:self];
     [_DataContainerView setDataSource:self];
     [_DataContainerView setBounces:NO];
+    [_DataContainerView setHidden:YES];
     [_DataContainerView setBackgroundColor:[UIColor clearColor]];
     [_MainScrollView addSubview:_DataContainerView];
     
@@ -79,14 +88,63 @@
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
     
+    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
+    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        sleep(5);
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [_DataContainActivity stopAnimating];
-            [_DataContainerView setHidden:NO];
-        });
+        [self GetProviderServiceListDetails];
     });
     
+}
+
+#pragma webservice data delegate
+
+-(void)GetProviderServiceListDetails
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderConversationList ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderConversationList];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        
+        if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+            
+            self.TableDataArray = [[NSMutableArray alloc] init];
+            
+            for (id WEbdetailsData in [ParamObjectCarrier objectForKey:@"Messages"]) {
+                
+                ProverHistoryOfConversion *LocalObject = [[ProverHistoryOfConversion alloc] initWithConversionId:[WEbdetailsData objectForKey:@"id"] ConversionReplyCount:[WEbdetailsData objectForKey:@"reply_count"] ConversionProviderId:[WEbdetailsData objectForKey:@"provider_id"] ConversionMessageTitle:[WEbdetailsData objectForKey:@"msg_title"] ConversionMessageDetails:[WEbdetailsData objectForKey:@"msg"] ConversionMessageTime:[WEbdetailsData objectForKey:@"msg_time"] ConversionIsBlocked:[WEbdetailsData objectForKey:@"is_blocked"] ConversionIsReplied:[WEbdetailsData objectForKey:@"is_replied"]];
+                
+                [self.TableDataArray addObject:LocalObject];
+            }
+            
+            [_DataContainActivity stopAnimating];
+            [_DataContainerView setHidden:NO];
+            [_DataContainerView reloadData];
+            
+        } else if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 2) {
+            
+            UIAlertView *DataAlert = [[UIAlertView alloc] initWithTitle:@"Sorry" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [DataAlert setTag:120];
+            [DataAlert show];
+            
+        } else {
+            NSLog(@"------------param code arror %@",ParamObjectCarrier);
+        }
+    });
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Error data --- %@",ParamObjectCarrier);
 }
 
 #pragma Tableview Datasorce Delegate Methods
@@ -100,11 +158,27 @@
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff, 15)];
         [TitleLabel setBackgroundColor:[UIColor clearColor]];
         [TitleLabel setTextColor:[UIColor darkTextColor]];
-        [TitleLabel setText:@"View"];
-        [TitleLabel setTextAlignment:NSTextAlignmentCenter];
+        [TitleLabel setNumberOfLines:0];
+        
+        ProverHistoryOfConversion *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
+        switch (i) {
+            case 0:
+                [TitleLabel setText:LocalObject.ConversionMessageTitle];
+                break;
+            case 1:
+                [TitleLabel setText:LocalObject.ConversionMessageDetails];
+                break;
+            case 2:
+                [TitleLabel setText:LocalObject.ConversionMessageTime];
+                break;
+            case 3:
+                [TitleLabel setText:[NSString stringWithFormat:@"%@",LocalObject.ConversionReplyCount]];
+                break;
+        }
+        [TitleLabel setTextAlignment:(i==3)?NSTextAlignmentCenter:NSTextAlignmentLeft];
         [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
         [DataCell.contentView addSubview:TitleLabel];
         
@@ -127,7 +201,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 100;
+    return [self.TableDataArray count];
 }
 
 #pragma Tableview Delegate Methods

@@ -10,8 +10,13 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "GlobalStrings.h"
+#import "MPApplicationGlobalConstants.h"
 
-@interface PIssues ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface PIssues ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
 }
@@ -20,7 +25,9 @@
 @property (nonatomic,retain) UITableView  * DataContainerView;
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *HeaderContainerArray;
-
+@property (nonatomic,retain) NSArray *DataStringArray;
+@property (nonatomic,retain) NSMutableArray *TableDataArray;
+@property (nonatomic,retain) NSMutableArray *CategoryArray;
 @end
 
 @implementation PIssues
@@ -79,14 +86,60 @@
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
     
+    //_DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
+    _DataStringArray =[[NSArray alloc] initWithObjects:@"3", nil];
+    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        sleep(5);
-        dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self GetProviderServiceListDetails];
+    });
+}
+
+#pragma webservice data delegate
+
+-(void)GetProviderServiceListDetails
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderMyIssues ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderMyIssues];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        
+        if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+            
+            self.TableDataArray = [[NSMutableArray alloc] init];
+            for (id WEbdetailsData in [ParamObjectCarrier objectForKey:@"my-awarded-quotations"]) {
+                
+                ProviderIssueList *LocalObject = [[ProviderIssueList alloc] initWithIssueListId:[WEbdetailsData objectForKey:@"id"] IssueListModuleId:[WEbdetailsData objectForKey:@"module_id"] IssueListModuleName:[WEbdetailsData objectForKey:@"module_name"] IssueListBidAmount:[WEbdetailsData objectForKey:@"bid_amount"] IssueListStartDate:[WEbdetailsData objectForKey:@"start_date"] IssueListEndDate:[WEbdetailsData objectForKey:@"end_date"] IssueListDuration:[WEbdetailsData objectForKey:@"duration"] IssueListNote:[WEbdetailsData objectForKey:@"note"] IssueListIsBlocked:[WEbdetailsData objectForKey:@"is_blocked"] IssueListIsAwarded:[WEbdetailsData objectForKey:@"is_awarded"] IssueListIsDeclined:[WEbdetailsData objectForKey:@"is_declined"] IssueListIsRevision:[WEbdetailsData objectForKey:@"is_revision"] IssueListQuotationTime:[WEbdetailsData objectForKey:@"quotation_time"] IssueListBookingNumber:[WEbdetailsData objectForKey:@"booking_no"] IssueListIsPaid:[WEbdetailsData objectForKey:@"is_paid"]];
+                
+                [self.TableDataArray addObject:LocalObject];
+            }
             [_DataContainActivity stopAnimating];
             [_DataContainerView setHidden:NO];
-        });
+            [_DataContainerView reloadData];
+            
+        } else if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 2) {
+            
+            UIAlertView *DataAlert = [[UIAlertView alloc] initWithTitle:@"Sorry" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [DataAlert setTag:120];
+            [DataAlert show];
+            
+        } else {
+            NSLog(@"------------param code arror %@",ParamObjectCarrier);
+        }
     });
-    
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Error data --- %@",ParamObjectCarrier);
 }
 
 #pragma Tableview Datasorce Delegate Methods
@@ -98,13 +151,26 @@
     float SeperaterLabelDiff = 150.0f;
     float NextSeperaterPosition = 0.0f;
     
+    ProviderIssueList *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
+    
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff-10, 40)];
         [TitleLabel setBackgroundColor:[UIColor clearColor]];
         [TitleLabel setTextColor:[UIColor darkTextColor]];
-        [TitleLabel setText:@"View"];
-        [TitleLabel setTextAlignment:NSTextAlignmentCenter];
+        switch (i) {
+            case 0:
+                [TitleLabel setText:LocalObject.IssueListModuleName];
+                break;
+            case 1:
+                [TitleLabel setText:([LocalObject.IssueListIsAwarded intValue] == 1)?@"Awarded":@"Open"];
+                break;
+            case 2:
+                [TitleLabel setText:LocalObject.IssueListBookingNumber];
+                break;
+        }
+        [TitleLabel setNumberOfLines:0];
+        [TitleLabel setTextAlignment:(i==1)?NSTextAlignmentCenter:NSTextAlignmentLeft];
         [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
         [DataCell.contentView addSubview:TitleLabel];
         
@@ -127,7 +193,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 100;
+    return [self.TableDataArray count];
 }
 
 #pragma Tableview Delegate Methods

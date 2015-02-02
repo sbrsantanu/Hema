@@ -21,6 +21,8 @@
  *  WebService URL List
  */
 
++(NSString *)URLParamHelppages { return kNWEBHelpParamURL; }
+
 +(NSString *)URLParamCustomerBookingSearch { return kNWEBCustomerBookingSearchParamURL; }
 
 +(NSString *)URLParamCustomerBookingDetails { return kNWEBCustomerBookingDetailsParamURL; }
@@ -83,11 +85,13 @@
 
 +(NSString *)URLParamProviderEditService  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderQuotaionRequestsList  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderQuotaionRequestsList  { return kNWEBProviderQuotaionRequestsListParamURL; }
 
 +(NSString *)URLParamProviderQuotaionRequestsDetail  { return kNWEBCustomerBookingSearchParamURL; }
 
 +(NSString *)URLParamProviderAddQuotation  { return kNWEBCustomerBookingSearchParamURL; }
+
++(NSString *)URLParamProviderMyQuotationList  { return kNWEBProviderMyQuotationListParamURL; }
 
 +(NSString *)URLParamProviderMyQuotationRequestsListAddQuotation  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -95,7 +99,7 @@
 
 +(NSString *)URLParamProviderAddMessage  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderQuotationHistoryConversationList  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderConversationList  { return kNWEBProviderConversationListParamURL; }
 
 +(NSString *)URLParamProviderAddReply  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -105,7 +109,7 @@
 
 +(NSString *)URLParamProviderReplyListforaSingleMessage  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderMyIssues  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderMyIssues  { return kNWEBProviderAllIssueListParamURL; }
 
 +(NSString *)URLParamProviderMyIssuesIndividualAwarded  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -116,6 +120,8 @@
 /**
  *  Web Service Array Lists
  */
+
++(NSArray *)WebParamHelpPages { return [self ReturnWebArrayFromString:kNWEBParamHelpDetails]; }
 
 +(NSArray *)WebParamCustomerBookingSearch { return [self ReturnWebArrayFromString:kNWEBParamCustomerBookingSearch]; }
 
@@ -187,13 +193,15 @@
 
 +(NSArray *)WebParamProviderAddQuotation { return [self ReturnWebArrayFromString:kNWEBParamProviderProviderAddQuotation]; }
 
++(NSArray *)WebParamProviderMyQuotationList { return [self ReturnWebArrayFromString:kNWEBParamProviderMyQuotationList]; }
+
 +(NSArray *)WebParamProviderMyQuotationRequestsListAddQuotation { return [self ReturnWebArrayFromString:kNWEBParamProviderMyQuotationRequestsListAddQuotation]; }
 
 +(NSArray *)WebParamProviderQuotationDetail { return [self ReturnWebArrayFromString:kNWEBParamProviderQuotationDetail]; }
 
 +(NSArray *)WebParamProviderAddMessage { return [self ReturnWebArrayFromString:kNWEBParamProviderAddMessage]; }
 
-+(NSArray *)WebParamProviderQuotationHistoryConversationList { return [self ReturnWebArrayFromString:kNWEBParamProviderQuotationHistoryConversationList]; }
++(NSArray *)WebParamProviderConversationList { return [self ReturnWebArrayFromString:kNWEBParamProviderConversationList]; }
 
 +(NSArray *)WebParamProviderAddReply { return [self ReturnWebArrayFromString:kNWEBParamProviderAddReply]; }
 

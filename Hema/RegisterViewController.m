@@ -15,6 +15,10 @@
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
 #import "NSString+PJR.h"
+#import "MPApplicationGlobalConstants.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
 
 typedef enum
 {
@@ -28,7 +32,7 @@ typedef enum {
     SubscribeMeTypeYes
 } SubscribeMe;
 
-@interface RegisterViewController ()<UIScrollViewDelegate,UITextFieldDelegate,RMPickerViewControllerDelegate,UIAlertViewDelegate,UITextViewDelegate>
+@interface RegisterViewController ()<UIScrollViewDelegate,UITextFieldDelegate,RMPickerViewControllerDelegate,UIAlertViewDelegate,UITextViewDelegate,WebserviceProtocolDelegate>
 @property (nonatomic,retain) UIScrollView *MainScrollView;
 @property (nonatomic,retain) UIView *HeaderNavigationViewBackgroundView;
 @property (nonatomic,retain) NSArray *RGroupArray;
@@ -61,6 +65,8 @@ typedef enum {
 
 @property (nonatomic,retain) SDAPlaceholderTextView *DescriptionTextView;
 @property (nonatomic,retain) SDAPlaceholderTextView *ServiceRequiredTextView;
+
+@property (nonatomic,retain) NSArray     * DataValueArray;
 
 @property (assign) SubscribeMe SubscribeMeType;
 
@@ -345,6 +351,7 @@ typedef enum {
     self.TFPassword = [[UITextField alloc] initWithFrame:CGRectMake(20, LastPosition, TextboxWidth, 40)];
     [self.TFPassword customizeWithPlaceholderText:@"Password" andImageOnRightView:nil andLeftBarText:@"*"];
     [self.TFPassword setTag:nextdatatag];
+    [self.TFPassword setSecureTextEntry:YES];
     [_MainScrollView addSubview:self.TFPassword];
     
     LastPosition = LastPosition + Difference;
@@ -354,6 +361,7 @@ typedef enum {
     self.TFCPassword = [[UITextField alloc] initWithFrame:CGRectMake(20, LastPosition, TextboxWidth, 40)];
     [self.TFCPassword customizeWithPlaceholderText:@"Confirm Password" andImageOnRightView:nil andLeftBarText:@"*"];
     [self.TFCPassword setTag:nextdatatag];
+    [self.TFCPassword setSecureTextEntry:YES];
     [_MainScrollView addSubview:self.TFCPassword];
     
     LastPosition = LastPosition + Difference;
@@ -599,6 +607,14 @@ typedef enum {
 
 - (void)pickerViewController:(RMPickerViewController *)vc didSelectRows:(NSArray *)selectedRows
 {
+    for(id aSubView in [_MainScrollView subviews])
+    {
+        if([aSubView isKindOfClass:[UITextField class]])
+        {
+            UITextField *textField=(UITextField*)aSubView;
+            [textField resignFirstResponder];
+        }
+    }
     if (_DropdownSelectionMode == SelectionTypeGroup) {
         [self.TFSelectAgroup setText:[NSString stringWithFormat:@"%@",[_RGroupArray objectAtIndex:[[selectedRows objectAtIndex:0] intValue]]]];
     } else if (_DropdownSelectionMode == SelectionTypeState) {
@@ -794,9 +810,9 @@ typedef enum {
         [self ShowAlertWithTitle:@"Sorry" Description:@"Provide password again" Tag:131 cancelButtonTitle:@"Ok"];
         ValidationSuccess = NO;
         
-    } else if (![[self.TFCPassword.text CleanTextField] isEmail]) {
+    } else if (![[self.TFemail.text CleanTextField] isEmail]) {
         
-        [self ShowAlertWithTitle:@"Sorry" Description:@"Provide password again" Tag:132 cancelButtonTitle:@"Ok"];
+        [self ShowAlertWithTitle:@"Sorry" Description:@"Provide valied email" Tag:132 cancelButtonTitle:@"Ok"];
         ValidationSuccess = NO;
         
     } else if (![[self.TFPassword.text CleanTextField] isMinLength:6 andMaxLength:12]) {
@@ -804,12 +820,12 @@ typedef enum {
         [self ShowAlertWithTitle:@"Sorry" Description:@"Password length must be 6-12 character long" Tag:133 cancelButtonTitle:@"Ok"];
         ValidationSuccess = NO;
         
-    } else if (![[self.TFemail.text CleanTextField] isEqualToString:[self.TFCPassword.text CleanTextField]]){
+    } else if (![[self.TFPassword.text CleanTextField] isEqualToString:[self.TFCPassword.text CleanTextField]]){
         
         [self ShowAlertWithTitle:@"Sorry" Description:@"password didn't match" Tag:134 cancelButtonTitle:@"Ok"];
         ValidationSuccess = NO;
         
-    } else if ([[self.TFMobile.text CleanTextField] isPhoneNumber]) {
+    } else if (![[self.TFMobile.text CleanTextField] isPhoneNumber]) {
         
         [self ShowAlertWithTitle:@"Sorry" Description:@"Provide proper phone number" Tag:135 cancelButtonTitle:@"Ok"];
         ValidationSuccess = NO;
@@ -818,10 +834,43 @@ typedef enum {
     
     if (ValidationSuccess) {
         
-        NSLog(@"Everything is ok, validation successfull");
+        NSString *SubscribeMe  = (self.SubscribeMeType == SubscribeMeTypeYes)?@"1":@"0";
+        
+        self.DataValueArray = [[NSArray alloc] initWithObjects:
+                               [self.TFSelectAgroup.text CleanTextField],       // group
+                               [self.TFName.text CleanTextField],               // name
+                               [self.TFofficephone.text CleanTextField],        // phone
+                               [self.TFMobile.text CleanTextField],             // mobile
+                               [self.TFTitle.text CleanTextField],              // title
+                               [self.TFfax.text CleanTextField],                // fax
+                               [self.TFAssignedto.text CleanTextField],         // assign_to
+                               [self.TFAddress.text CleanTextField],            // address
+                               [self.TFcity.text CleanTextField],               // city
+                               [self.TFstate.text CleanTextField],              // state
+                               [self.TFzip.text CleanTextField],                // zip
+                               [self.TFemail.text CleanTextField],              // email
+                               [self.TFPassword.text CleanTextField],           // password
+                               [self.TFPassword.text CleanTextField],           // password2
+                               [self.TFleadsource.text CleanTextField],         // lead_source
+                               self.ServiceRequiredTextView.text,               // service_required
+                               self.DescriptionTextView.text,                   // description
+                               SubscribeMe, nil];                               // subscribeme
+        
+        for (id AlltextField in _MainScrollView.subviews) {
+            if ([AlltextField isKindOfClass:[UITextField class]]) {
+                UITextField *DatatextField = (UITextField *)AlltextField;
+                [DatatextField resignFirstResponder];
+            }
+        }
+        for (id AlltextView in _MainScrollView.subviews) {
+            if ([AlltextView isKindOfClass:[UITextView class]]) {
+                UITextView *DatatextField = (UITextView *)AlltextView;
+                [DatatextField resignFirstResponder];
+            }
+        }
+        [self CallWebserviceForData];
     }
 }
-
 
 #pragma UIAlertview Delegate Methods
 
@@ -834,6 +883,45 @@ typedef enum {
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
+    if (alertView.tag == 1254) {
+        LoginViewController *LoginView = [[LoginViewController alloc] init];
+        [self GotoDifferentViewWithAnimation:LoginView];
+    }
 }
+
+#pragma webservice delegate return methods
+
+-(void)CallWebserviceForData
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamCustomerRegistration ValueObject:self.DataValueArray UrlParameter:UrlParameterString.URLParamCustomerRegistration];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    NSLog(@"Webservice success ----- %@",ParamObjectCarrier);
+    if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+        
+        UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:@"Success" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [AlertView setTag:1254];
+        [AlertView show];
+        
+    } else {
+        UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:@"Sorry" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [AlertView show];
+    }
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Webservice error ----- %@",[NSString stringWithFormat:@"%@",ParamObjectCarrier]);
+}
+
 @end

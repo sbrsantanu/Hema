@@ -10,9 +10,13 @@
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
 #import "UITextView+Extentation.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
+#import "GlobalStrings.h"
+#import "MPApplicationGlobalConstants.h"
 
-
-@interface PViewQuotationRequest ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface PViewQuotationRequest ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
     CGRect mainFrame;
 }
@@ -21,6 +25,9 @@
 @property (nonatomic,retain) UITableView  * DataContainerView;
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *HeaderContainerArray;
+
+@property (nonatomic,retain) NSArray *DataStringArray;
+@property (nonatomic,retain) NSMutableArray *TableDataArray;
 
 @end
 
@@ -57,7 +64,6 @@
     [WelcomeUnderline setBackgroundColor:[UIColor lightGrayColor]];
     [self.view addSubview:WelcomeUnderline];
     
-    
     _HeaderContainerArray = [[NSArray alloc] initWithObjects:@"Module Name",@"Module Requirement",@"Start Date",@"End Date",@"Maximum Bid Amount",@"Allowed Duration",@"Action", nil];
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 120, self.view.frame.size.width, self.view.frame.size.height-181)];
@@ -71,6 +77,7 @@
     [_DataContainerView setDelegate:self];
     [_DataContainerView setDataSource:self];
     [_DataContainerView setBounces:NO];
+    [_DataContainerView setHidden:YES];
     [_DataContainerView setBackgroundColor:[UIColor clearColor]];
     [_MainScrollView addSubview:_DataContainerView];
     
@@ -80,16 +87,51 @@
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
     
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        sleep(5);
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [_DataContainActivity stopAnimating];
-            [_DataContainerView setHidden:NO];
-        });
-    });
+    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
     
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self GetProviderServiceListDetails];
+    });
 }
 
+#pragma webservice data delegate
+
+-(void)GetProviderServiceListDetails
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderQuotaionRequestsList ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderQuotaionRequestsList];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        
+        if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+            [_DataContainActivity stopAnimating];
+            [_DataContainerView setHidden:NO];
+            [_DataContainerView reloadData];
+        } else if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 2) {
+            
+            UIAlertView *DataAlert = [[UIAlertView alloc] initWithTitle:@"Sorry" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [DataAlert setTag:120];
+            [DataAlert show];
+            
+        } else {
+            NSLog(@"------------param code arror %@",ParamObjectCarrier);
+        }
+    });
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Error data --- %@",ParamObjectCarrier);
+}
 #pragma Tableview Datasorce Delegate Methods
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

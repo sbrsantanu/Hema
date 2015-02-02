@@ -146,3 +146,112 @@ CategoryName:(NSString *)ParamCategoryName
 }
 
 @end
+
+@implementation ProviderMYQuotationList
+
+-(id)initWithQuotationId:(NSString *)ParamQuotationId
+       QuotationModuleId:(NSString *)ParamQuotationModuleId
+     QuotationModuleName:(NSString *)ParamQuotationModuleName
+      QuotationBidAmount:(NSString *)ParamQuotationBidAmount
+      QuotationStartDate:(NSString *)ParamQuotationStartDate
+        QuotationEndDate:(NSString *)ParamQuotationEndDate
+       QuotationDuration:(NSString *)ParamQuotationDuration
+           QuotationNote:(NSString *)ParamQuotationNote
+      QuotationIsBlocked:(NSString *)ParamQuotationIsBlocked
+      QuotationIsAwarded:(NSString *)ParamQuotationIsAwarded
+     QuotationIsDeclined:(NSString *)ParamQuotationIsDeclined
+     QuotationIsRevision:(NSString *)ParamQuotationIsRevision
+  QuotationQuotationTime:(NSString *)ParamQuotationQuotationTime
+  QuotationBookingNumber:(NSString *)ParamQuotationBookingNumber
+  QuotationBookingIsPaid:(NSString *)ParamQuotationBookingIsPaid
+{
+    self = [super init];
+    if (self) {
+        self.QuotationId            = ParamQuotationId;
+        self.QuotationModuleId      = ParamQuotationModuleId;
+        self.QuotationModuleName    = ParamQuotationModuleName;
+        self.QuotationBidAmount     = ParamQuotationBidAmount;
+        self.QuotationStartDate     = ParamQuotationStartDate;
+        self.QuotationEndDate       = ParamQuotationEndDate;
+        self.QuotationDuration      = ParamQuotationDuration;
+        self.QuotationNote          = ParamQuotationNote;
+        self.QuotationIsBlocked     = ParamQuotationIsBlocked;
+        self.QuotationIsAwarded     = ParamQuotationIsAwarded;
+        self.QuotationIsDeclined    = ParamQuotationIsDeclined;
+        self.QuotationIsRevision    = ParamQuotationIsRevision;
+        self.QuotationQuotationTime = ParamQuotationQuotationTime;
+        self.QuotationBookingNumber = ParamQuotationBookingNumber;
+        self.QuotationBookingIsPaid = ParamQuotationBookingIsPaid;
+    }
+    return self;
+}
+
+@end
+
+@implementation ProverHistoryOfConversion
+
+-(id)initWithConversionId:(NSString *)ParamConversionId
+ConversionReplyCount:(NSString *)ParamConversionReplyCount
+ConversionProviderId:(NSString *)ParamConversionProviderId
+ConversionMessageTitle:(NSString *)ParamConversionMessageTitle
+ConversionMessageDetails:(NSString *)ParamConversionMessageDetails
+ConversionMessageTime:(NSString *)ParamConversionMessageTime
+ConversionIsBlocked:(NSString *)ParamConversionIsBlocked
+ConversionIsReplied:(NSString *)ParamConversionIsReplied
+{
+    self = [super init];
+    if (self) {
+        self.ConversionId                   = ParamConversionId;
+        self.ConversionReplyCount           = ParamConversionReplyCount;
+        self.ConversionProviderId           = ParamConversionProviderId;
+        self.ConversionMessageTitle         = ParamConversionMessageTitle;
+        self.ConversionMessageDetails       = ParamConversionMessageDetails;
+        self.ConversionMessageTime          = ParamConversionMessageTime;
+        self.ConversionIsBlocked            = ParamConversionIsBlocked;
+        self.ConversionIsReplied            = ParamConversionIsReplied;
+    }
+    return self;
+}
+
+@end
+
+@implementation ProviderIssueList
+
+-(id)initWithIssueListId:(NSString *)ParamIssueListId
+       IssueListModuleId:(NSString *)ParamIssueListModuleId
+     IssueListModuleName:(NSString *)ParamIssueListModuleName
+      IssueListBidAmount:(NSString *)ParamIssueListBidAmount
+      IssueListStartDate:(NSString *)ParamIssueListStartDate
+        IssueListEndDate:(NSString *)ParamIssueListEndDate
+       IssueListDuration:(NSString *)ParamIssueListDuration
+           IssueListNote:(NSString *)ParamIssueListNote
+      IssueListIsBlocked:(NSString *)ParamIssueListIsBlocked
+      IssueListIsAwarded:(NSString *)ParamIssueListIsAwarded
+     IssueListIsDeclined:(NSString *)ParamIssueListIsDeclined
+     IssueListIsRevision:(NSString *)ParamIssueListIsRevision
+  IssueListQuotationTime:(NSString *)ParamIssueListQuotationTime
+  IssueListBookingNumber:(NSString *)ParamIssueListBookingNumber
+         IssueListIsPaid:(NSString *)ParamIssueListIsPaid
+{
+    self = [super init];
+    if (self) {
+        self.IssueListId            = ParamIssueListId;
+        self.IssueListModuleId      = ParamIssueListModuleId;
+        self.IssueListModuleName    = ParamIssueListModuleName;
+        self.IssueListBidAmount     = ParamIssueListBidAmount;
+        self.IssueListStartDate     = ParamIssueListStartDate;
+        self.IssueListEndDate       = ParamIssueListEndDate;
+        self.IssueListDuration      = ParamIssueListDuration;
+        self.IssueListNote          = ParamIssueListNote;
+        self.IssueListIsBlocked     = ParamIssueListIsBlocked;
+        self.IssueListIsAwarded     = ParamIssueListIsAwarded;
+        self.IssueListIsDeclined    = ParamIssueListIsDeclined;
+        self.IssueListIsRevision    = ParamIssueListIsRevision;
+        self.IssueListQuotationTime = ParamIssueListQuotationTime;
+        self.IssueListBookingNumber = ParamIssueListBookingNumber;
+        self.IssueListIsPaid        = ParamIssueListIsPaid;
+    }
+    return self;
+}
+
+@end

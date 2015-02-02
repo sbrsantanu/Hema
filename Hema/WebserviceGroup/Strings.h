@@ -22,6 +22,8 @@ static NSString * const kNWEBCustomerBookingSearchParamURL      = @"search_booki
 static NSString * const kNWEBCustomerBookingDetailsParamURL     = @"view_booking.php";
 static NSString * const kNWEBCustomerBookingApplyParamURL       = @"booking_apply.php";
 
+static NSString * const kNWEBHelpParamURL                       = @"pages.php";
+
 static NSString * const kNWEBCustomerRegistrationParamURL       = @"registration.php";
 static NSString * const kNWEBCustomerLoginParamURL              = @"customer_login.php";
 static NSString * const kNWEBCustomerDashboardParamURL          = @"customer_dashboard.php";
@@ -56,7 +58,7 @@ static NSString * const kNWEBProviderViewServicelistParamURL    = @"provider_ser
 static NSString * const kNWEBProviderViewServiceDetailParamURL  = @"provider_veiw_service.php";
 static NSString * const kNWEBProviderEditServiceParamURL        = @"";
 static NSString * const kNWEBProviderQuotaionRequestsListParamURL
-= @"";
+= @"provider_quotation_request.php";
 static NSString * const kNWEBProviderQuotaionRequestsDetailParamURL
 = @"";
 static NSString * const kNWEBProviderAddQuotationParamURL       = @"";
@@ -64,8 +66,8 @@ static NSString * const kNWEBProviderMyQuotationRequestsListParamURL
 = @"provider_my_quotation_list.php";
 static NSString * const kNWEBProviderQuotationDetailParamURL    = @"provider_my_quotation_detail.php";
 static NSString * const kNWEBProviderAddMessageParamURL         = @"";
-static NSString * const kNWEBProviderQuotationHistoryConversationListParamURL
-= @"";
+static NSString * const kNWEBProviderConversationListParamURL   = @"provider_history_of_conversation.php";
+static NSString * const kNWEBProviderMyQuotationListParamURL    = @"provider_my_quotation_list.php";
 static NSString * const kNWEBProviderAddReplyParamURL           = @"provider_add_reply.php";
 static NSString * const kNWEBProviderContactWithHemaAdminParamURL
 = @"provider_contact_with_hema_admin.php";
@@ -78,6 +80,8 @@ static NSString * const kNWEBProviderMyIssuesIndividualAwardedParamURL
 = @"provider_my_issue_list.php";
 static NSString * const kNWEBProviderMyIssuesIndividualListofRepliesforasingleissueParamURL
 = @"provider_issue_reply_list.php";
+
+static NSString * const kNWEBProviderAllIssueListParamURL       = @"provider_awarded_module_list.php";
 static NSString * const kNWEBProviderAddReplyforanissueParamURL = @"provider_add_issue_reply.php";
 
 /**
@@ -87,7 +91,7 @@ static NSString * const kNWEBProviderAddReplyforanissueParamURL = @"provider_add
 static NSString * const kNWEBParamCustomerBookingSearch         = @"RadioGroup1&&city&&end_date&&start_date";
 static NSString * const kNWEBParamCustomerBookingDetails        = @"booking_id";
 static NSString * const kNWEBParamCustomerBookingApply          = @"name&&email&&title&&body&&booking_id";
-
+static NSString * const kNWEBParamHelpDetails                   = @"page_id";
 /* ************************ Customer *************************** */
 
 static NSString * const kNWEBParamCustomerRegistration          = @"group&&name&&phone&&mobile&&title&&fax&&assign_to&&address&&city&&state&&zip&&email&&password&&password2&&lead_source&&service_required&&description&&subscribeme";
@@ -122,16 +126,18 @@ static NSString * const kNWEBParamProviderAddService            = @"";
 static NSString * const kNWEBParamProviderViewServicelist       = @"provider_id";
 static NSString * const kNWEBParamProviderViewServiceDetail     = @"service_id";
 static NSString * const kNWEBParamProviderEditService           = @"";
-static NSString * const kNWEBParamProviderQuotaionRequestsList  = @"";
+static NSString * const kNWEBParamProviderQuotaionRequestsList  = @"provider_id";
 static NSString * const kNWEBParamProviderProviderQuotaionRequestsDetail
 = @"";
 static NSString * const kNWEBParamProviderProviderAddQuotation  = @"";
+
+static NSString * const kNWEBParamProviderMyQuotationList       = @"provider_id";
+
 static NSString * const kNWEBParamProviderMyQuotationRequestsListAddQuotation
 = @"provider_id";
 static NSString * const kNWEBParamProviderQuotationDetail       = @"quotation_id";
 static NSString * const kNWEBParamProviderAddMessage            = @"";
-static NSString * const kNWEBParamProviderQuotationHistoryConversationList
-= @"";
+static NSString * const kNWEBParamProviderConversationList      = @"provider_id";
 static NSString * const kNWEBParamProviderAddReply              = @"msg_id&&reply_msg";
 static NSString * const kNWEBParamProviderContactWithHemaAdmin  = @"provider_id&&msg_title&&msg";
 static NSString * const kNWEBParamProviderHistoryConversationList

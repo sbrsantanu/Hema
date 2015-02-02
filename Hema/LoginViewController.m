@@ -488,9 +488,11 @@ typedef enum {
     }
 }
 
+/**
 -(void)RemoveAllObjectFromKeychain
 {
     [self.keychainItemWrapper resetKeychainItem];
 }
+*/
 
 @end
