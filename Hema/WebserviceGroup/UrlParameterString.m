@@ -33,6 +33,8 @@
 
 +(NSString *)URLParamCustomerLogin  { return kNWEBCustomerLoginParamURL; }
 
++(NSString *)URLParamCustomerForgetPassword  { return kNWEBCustomerForgetPasswordParamURL; }
+
 +(NSString *)URLParamCustomerDashboard  { return kNWEBCustomerDashboardParamURL; }
 
 +(NSString *)URLParamCustomerViewProfile  { return kNWEBCustomerViewProfileParamURL; }
@@ -68,6 +70,8 @@
 +(NSString *)URLParamProviderConversionHistory  { return kNWEBCustomerBookingSearchParamURL; }
 
 +(NSString *)URLParamProviderLogin  { return kNWEBProviderLoginParamURL; }
+
++(NSString *)URLParamProviderForgetPassword  { return kNWEBProviderForgetPasswordParamURL; }
 
 +(NSString *)URLParamProviderDashboard  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -135,6 +139,8 @@
 
 +(NSArray *)WebParamCustomerLogin { return [self ReturnWebArrayFromString:kNWEBParamCustomerLogin]; }
 
++(NSArray *)WebParamCustomerForgetPassword { return [self ReturnWebArrayFromString:kNWEBParamCustomerForgetPassword]; }
+
 +(NSArray *)WebParamCustomerDashboard { return [self ReturnWebArrayFromString:kNWEBParamCustomerDashboard]; }
 
 +(NSArray *)WebParamCustomerViewProfile { return [self ReturnWebArrayFromString:kNWEBParamCustomerViewProfile]; }
@@ -170,6 +176,8 @@
 +(NSArray *)WebParamProviderConversionHistory { return [self ReturnWebArrayFromString:kNWEBParamProviderConversionHistory]; }
 
 +(NSArray *)WebParamProviderLogin { return [self ReturnWebArrayFromString:kNWEBParamProviderLogin]; }
+
++(NSArray *)WebParamProviderForgetPassword { return [self ReturnWebArrayFromString:kNWEBParamProviderForgetPassword]; }
 
 +(NSArray *)WebParamProviderDashboard { return [self ReturnWebArrayFromString:kNWEBParamProviderDashboard]; }
 

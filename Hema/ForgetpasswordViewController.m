@@ -13,19 +13,26 @@
 #import "RegisterViewController.h"
 #import "UIColor+HexColor.h"
 #import "UITextField+Attribute.h"
+#import "NSString+PJR.h"
+#import "MPApplicationGlobalConstants.h"
+#import "WebserviceProtocol.h"
+#import "UrlParameterString.h"
+#import "GlobalModelObjects.h"
 
-@interface ForgetpasswordViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>{
+@interface ForgetpasswordViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,WebserviceProtocolDelegate>{
     CGRect mainFrame;
 }
-@property (nonatomic,retain) UIScrollView *MainScrollView;
-@property (nonatomic,retain) UITextField *EmailTextField;
+@property (nonatomic,retain) UIScrollView       *MainScrollView;
+@property (nonatomic,retain) UITextField        *EmailTextField;
+@property (nonatomic,retain) NSArray            *DataStringArray;
 @end
 
 @implementation ForgetpasswordViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil LoginType:(LoginType)LoginProcessType
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self.AppLoginType = LoginProcessType;
     if (self) {
         mainFrame = [[UIScreen mainScreen] bounds];
         self.view.layer.frame = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
@@ -55,7 +62,7 @@
     // Put Email id
     
     _EmailTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 20, mainFrame.size.width-40, 40)];
-    [_EmailTextField customizeWithplaceholderText:@"Email Id" andImage:@" "];
+    [_EmailTextField customizeWithplaceholderText:@"Email Id" andImage:@"*"];
     [_EmailTextField setTag:443];
     [_EmailTextField setDelegate:self];
     [_MainScrollView addSubview:_EmailTextField];
@@ -78,8 +85,30 @@
             [DatatextField setDelegate:self];
         }
     }
-    
-    
+}
+
+#pragma webservice data delegate
+
+-(void)GetProviderServiceListDetails
+{
+    if (!IS_NETWORK_AVAILABLE())
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SHOW_NETWORK_ERROR_ALERT();
+        });
+    } else {
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderMyIssues ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderMyIssues];
+        [Datadelegate setDelegate:self];
+    }
+}
+
+-(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
+{
+    NSLog(@"Success with ParamObjectCarrier -- %@",ParamObjectCarrier);
+}
+-(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
+{
+    NSLog(@"Error with ParamObjectCarrier -- %@",ParamObjectCarrier);
 }
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField
@@ -104,41 +133,47 @@
 
 -(void)GobacktoPrevPage
 {
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    LoginViewController *LoginView = [[LoginViewController alloc] init];
     [self GotoDifferentViewWithAnimation:LoginView];
 }
 
 -(void)Recoverpassword
 {
+    NSLog(@"Recoverpassword");
     
+    for (id AlltextField in _MainScrollView.subviews) {
+        if ([AlltextField isKindOfClass:[UITextField class]]) {
+            UITextField *DatatextField = (UITextField *)AlltextField;
+            [DatatextField resignFirstResponder];
+        }
+    }
+    
+    BOOL IsValidated = YES;
+  /**
+    if ([_EmailTextField.text CleanTextField].length == 0) {
+        [self ShowAletviewWIthTitle:@"Error" Tag:121 Message:@"Email Please"];
+        IsValidated = NO;
+    } else if (![[_EmailTextField.text CleanTextField] isEmail]) {
+        [self ShowAletviewWIthTitle:@"Error" Tag:121 Message:@"valied Email Please"];
+        IsValidated = NO;
+    }
+    
+    if (IsValidated) {
+        _DataStringArray = [[NSArray alloc] initWithObjects:[_EmailTextField.text CleanTextField], nil];
+        [self GetProviderServiceListDetails];
+    }
+   .*/
 }
-
--(void)GotoHome
-{
-    HomeViewController *HomeView = [[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HomeView];
-}
-
--(void)GotoLogin
-{
-    LoginViewController *LoginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:LoginView];
-}
-
--(void)GotoRegister
-{
-    RegisterViewController *Register = [[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:Register];
-}
-
--(void)GotoHelp
-{
-    HelpViewController *HelpView = [[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
-    [self GotoDifferentViewWithAnimation:HelpView];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(void)ShowAletviewWIthTitle:(NSString *)ParamTitle Tag:(int)ParamTag Message:(NSString *)ParamMessage
+{
+    UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [AlertView setTag:ParamTag];
+    [AlertView show];
+    
 }
 
 @end

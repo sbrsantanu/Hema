@@ -26,6 +26,7 @@ static NSString * const kNWEBHelpParamURL                       = @"pages.php";
 
 static NSString * const kNWEBCustomerRegistrationParamURL       = @"registration.php";
 static NSString * const kNWEBCustomerLoginParamURL              = @"customer_login.php";
+static NSString * const kNWEBCustomerForgetPasswordParamURL     = @"customer_forgot_password.php";
 static NSString * const kNWEBCustomerDashboardParamURL          = @"customer_dashboard.php";
 static NSString * const kNWEBCustomerViewProfileParamURL        = @"customer_veiw_profile.php";
 static NSString * const kNWEBCustomerEditProfileParamURL        = @"customer_edit.php";
@@ -49,6 +50,7 @@ static NSString * const kNWEBCustomerNotificationParamURL       = @"customer_not
 
 static NSString * const kNWEBProviderConversionHistoryParamURL  = @"provider_history_of_conversation.php";
 static NSString * const kNWEBProviderLoginParamURL              = @"provider_login.php";
+static NSString * const kNWEBProviderForgetPasswordParamURL     = @"provider_forgot_password.php";
 static NSString * const kNWEBProviderDashboardParamURL          = @"";
 static NSString * const kNWEBProviderViewProfileParamURL        = @"provider_veiw_profile.php";
 static NSString * const kNWEBProviderEditProfileParamURL        = @"";
@@ -96,6 +98,7 @@ static NSString * const kNWEBParamHelpDetails                   = @"page_id";
 
 static NSString * const kNWEBParamCustomerRegistration          = @"group&&name&&phone&&mobile&&title&&fax&&assign_to&&address&&city&&state&&zip&&email&&password&&password2&&lead_source&&service_required&&description&&subscribeme";
 static NSString * const kNWEBParamCustomerLogin                 = @"email&&password";
+static NSString * const kNWEBParamCustomerForgetPassword        = @"email";
 static NSString * const kNWEBParamCustomerDashboard             = @"customer_id";
 static NSString * const kNWEBParamCustomerViewProfile           = @"customer_id";
 static NSString * const kNWEBParamCustomerEditProfile           = @"group&&name&&phone&&mobile&&title&&fax&&assign_to&&address&&city&&state&&zip&&lead_source&&service_required&&description&&subscribeme&&user_id";
@@ -118,6 +121,7 @@ static NSString * const kNWEBParamCustomerNotification          = @"customer_id"
 
 static NSString * const kNWEBParamProviderConversionHistory     = @"provider_id";
 static NSString * const kNWEBParamProviderLogin                 = @"email&&password";
+static NSString * const kNWEBParamProviderForgetPassword        = @"email";
 static NSString * const kNWEBParamProviderDashboard             = @"";
 static NSString * const kNWEBParamProviderViewProfile           = @"provider_id";
 static NSString * const kNWEBParamProviderEditProfile           = @"";

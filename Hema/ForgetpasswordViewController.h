@@ -9,6 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "GlobalObjects.h"
 
+typedef enum {
+    LoginTypeNone,
+    LoginTypeCustomer,
+    LoginTypeProvider
+} LoginType;
+
 @interface ForgetpasswordViewController : GlobalObjects
+
+@property (assign) LoginType AppLoginType;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil LoginType:(LoginType)LoginProcessType;
 
 @end

@@ -26,6 +26,8 @@
 
 +(NSString *)URLParamCustomerLogin;
 
++(NSString *)URLParamCustomerForgetPassword;
+
 +(NSString *)URLParamCustomerDashboard;
 
 +(NSString *)URLParamCustomerViewProfile;
@@ -61,6 +63,8 @@
 +(NSString *)URLParamProviderConversionHistory;
 
 +(NSString *)URLParamProviderLogin;
+
++(NSString *)URLParamProviderForgetPassword;
 
 +(NSString *)URLParamProviderDashboard;
 
@@ -126,6 +130,8 @@
 
 +(NSArray *)WebParamCustomerLogin;
 
++(NSArray *)WebParamCustomerForgetPassword;
+
 +(NSArray *)WebParamCustomerDashboard;
 
 +(NSArray *)WebParamCustomerViewProfile;
@@ -161,6 +167,8 @@
 +(NSArray *)WebParamProviderConversionHistory;
 
 +(NSArray *)WebParamProviderLogin;
+
++(NSArray *)WebParamProviderForgetPassword;
 
 +(NSArray *)WebParamProviderDashboard;
 

@@ -24,6 +24,7 @@
 #import "KeychainItemWrapper.h"
 #import <Security/Security.h>
 #import "GlobalStrings.h"
+#import "ForgetpasswordViewController.h"
 
 typedef enum {
     UserLoginTypeNone,
@@ -241,6 +242,12 @@ typedef enum {
     }
     
     [_MainScrollView setContentSize:CGSizeMake(mainFrame.size.width, mainFrame.size.height)];
+}
+
+-(void)Forgetpassword
+{
+    ForgetpasswordViewController *ForgetpasswordView = [[ForgetpasswordViewController alloc] init];
+    [self GotoDifferentViewWithAnimation:ForgetpasswordView];
 }
 
 -(void)LoginProcess
