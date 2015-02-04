@@ -643,7 +643,6 @@ typedef enum {
     [RemembermeLabel setTextColor:[UIColor colorFromHex:0xe66a4c]];
     [_MainScrollView addSubview:RemembermeLabel];
     
-    
     // Find Now Button
     
     _SubmitButton = [[UIButton alloc] initWithFrame:CGRectMake(SubmitButtonxposition ,LastPosition+50, SubmitButtonWidth, SubmitButtonHeight)];
@@ -961,7 +960,7 @@ typedef enum {
     {
         if([aSubView isKindOfClass:[UITextField class]])
         {
-            UITextField *textfield=(UITextField*)aSubView;
+            UITextField *textfield = (UITextField*)aSubView;
             [textfield resignFirstResponder];
         }
     }
