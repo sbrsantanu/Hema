@@ -68,9 +68,15 @@
     // Back Button
     
     if (backButton) {
-        UIButton *SetbackButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 10, 32, 32)];
-        [SetbackButton setImage:[UIImage imageNamed:@"goback.png"] forState:UIControlStateNormal];
+        
+        UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 10, 32, 32)];
+        [HeaderViewBackgroundView addSubview:backImageView];
+        [backImageView setBackgroundColor:[UIColor clearColor]];
+        [backImageView setImage:[UIImage imageNamed:@"goback.png"]];
+        
+        UIButton *SetbackButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 49)];
         [SetbackButton addTarget:self action:@selector(Goback:) forControlEvents:UIControlEventTouchUpInside];
+        [SetbackButton setBackgroundColor:[UIColor clearColor]];
         [HeaderViewBackgroundView addSubview:SetbackButton];
     }
     

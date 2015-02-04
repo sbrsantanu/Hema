@@ -186,7 +186,7 @@ int BookingListWebAlertTag = 9658;
 {
     if (alertView.tag == BookingListWebAlertTag) {
         if (buttonIndex == 1) {
-            [self CallWebserviceForData];
+            [self Goback:nil];
         }
     }
 }
@@ -316,6 +316,11 @@ int BookingListWebAlertTag = 9658;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    BookingListObjects *LocalObject = [self.BookingDataArray objectAtIndex:indexPath.row];
+    BookingDetailsViewController *BookingDetails = [[BookingDetailsViewController alloc] initWithBookingId:[LocalObject BookingListId] WithBookingOption:NO];
+    [self GotoDifferentViewWithAnimation:BookingDetails];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -168,6 +168,7 @@
 		04CAC4F51A56ED2A007527D2 /* Providerdashboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04CAC4F31A56ED2A007527D2 /* Providerdashboard.xib */; };
 		04CAC4FA1A56ED71007527D2 /* Customerdashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC4F81A56ED71007527D2 /* Customerdashboard.m */; };
 		04CAC4FB1A56ED71007527D2 /* Customerdashboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04CAC4F91A56ED71007527D2 /* Customerdashboard.xib */; };
+		04CB380E1A81F70500890E51 /* FPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB380D1A81F70500890E51 /* FPassword.m */; };
 		04CBCDA61A63F26000015EDB /* CViewEventInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBCDA51A63F26000015EDB /* CViewEventInformation.m */; };
 		04CBCDAA1A63F54600015EDB /* CContactToHemaAdmin.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBCDA91A63F54600015EDB /* CContactToHemaAdmin.m */; };
 		04CBCDAD1A63FA6000015EDB /* CNotificationList.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CBCDAC1A63FA6000015EDB /* CNotificationList.m */; };
@@ -451,6 +452,8 @@
 		04CAC4F71A56ED71007527D2 /* Customerdashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Customerdashboard.h; sourceTree = "<group>"; };
 		04CAC4F81A56ED71007527D2 /* Customerdashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Customerdashboard.m; sourceTree = "<group>"; };
 		04CAC4F91A56ED71007527D2 /* Customerdashboard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Customerdashboard.xib; sourceTree = "<group>"; };
+		04CB380C1A81F70500890E51 /* FPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPassword.h; sourceTree = "<group>"; };
+		04CB380D1A81F70500890E51 /* FPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FPassword.m; sourceTree = "<group>"; };
 		04CBCDA41A63F26000015EDB /* CViewEventInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CViewEventInformation.h; sourceTree = "<group>"; };
 		04CBCDA51A63F26000015EDB /* CViewEventInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CViewEventInformation.m; sourceTree = "<group>"; };
 		04CBCDA81A63F54600015EDB /* CContactToHemaAdmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CContactToHemaAdmin.h; sourceTree = "<group>"; };
@@ -561,6 +564,8 @@
 				043553071A42B1A3002FB1CE /* ForgetpasswordViewController.m */,
 				043553081A42B1A3002FB1CE /* ForgetpasswordViewController.xib */,
 				0435530B1A42B1E7002FB1CE /* ForgetpasswordViewController4s.xib */,
+				04CB380C1A81F70500890E51 /* FPassword.h */,
+				04CB380D1A81F70500890E51 /* FPassword.m */,
 			);
 			name = Forgetpassword;
 			sourceTree = "<group>";
@@ -1572,6 +1577,7 @@
 				04C82F701A5419840038D562 /* BookingDetailsViewController.m in Sources */,
 				04C99A701A654D5A00DC5BAC /* PViewServices.m in Sources */,
 				04CBCDAD1A63FA6000015EDB /* CNotificationList.m in Sources */,
+				04CB380E1A81F70500890E51 /* FPassword.m in Sources */,
 				04BC9C291A31987400FCDA40 /* UIImageView+AFNetworking.m in Sources */,
 				04C99A671A654CEA00DC5BAC /* PContactWithHemaAdmin.m in Sources */,
 				04BC9C341A31987400FCDA40 /* WebserviceHelper.m in Sources */,

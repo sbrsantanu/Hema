@@ -1,12 +1,12 @@
 //
-//  ForgetpasswordViewController.m
+//  FPassword.m
 //  Hema
 //
-//  Created by Mac on 18/12/14.
-//  Copyright (c) 2014 Hema. All rights reserved.
+//  Created by Mac on 04/02/15.
+//  Copyright (c) 2015 Hema. All rights reserved.
 //
 
-#import "ForgetpasswordViewController.h"
+#import "FPassword.h"
 #import "LoginViewController.h"
 #import "HelpViewController.h"
 #import "HomeViewController.h"
@@ -19,7 +19,7 @@
 #import "UrlParameterString.h"
 #import "GlobalModelObjects.h"
 
-@interface ForgetpasswordViewController ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,WebserviceProtocolDelegate>{
+@interface FPassword ()<UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate,WebserviceProtocolDelegate>{
     CGRect mainFrame;
 }
 @property (nonatomic,retain) UIScrollView       *MainScrollView;
@@ -27,9 +27,9 @@
 @property (nonatomic,retain) NSArray            *DataStringArray;
 @end
 
-@implementation ForgetpasswordViewController
+@implementation FPassword
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil LoginType:(LoginType)LoginProcessType
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil LoginType:(SLoginType)LoginProcessType
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     self.AppLoginType = LoginProcessType;
@@ -49,26 +49,27 @@
     [self.view addSubview:[self UIViewSetFooterView]];
     [self.view addSubview:[self UIViewSetHeaderNavigationViewWithSelectedTab:@"Login"]];
     
+    mainFrame = [[UIScreen mainScreen] bounds];
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 85, mainFrame.size.width, mainFrame.size.height-150)];
     [_MainScrollView setContentSize:CGSizeMake(mainFrame.size.width, mainFrame.size.height)];
     [_MainScrollView setUserInteractionEnabled:YES];
-    [_MainScrollView setBackgroundColor:[UIColor redColor]];
+    [_MainScrollView setBackgroundColor:[UIColor clearColor]];
     [_MainScrollView setDelegate:self];
     [self.view addSubview:_MainScrollView];
     
-    UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, 9, mainFrame.size.width-21, 21)];
+    UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, 19, mainFrame.size.width-21, 21)];
     [TitleLabel setFont:[UIFont fontWithName:@"Arial-Bold" size:14.0]];
     [TitleLabel setTextColor:[UIColor colorFromHex:0xe66a4c]];
     [TitleLabel setText:@"Forget Password"];
     [_MainScrollView addSubview:TitleLabel];
     
-    UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(159, 19, mainFrame.size.width-170, 1)];
+    UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(159, 29, mainFrame.size.width-170, 1)];
     [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
     [_MainScrollView addSubview:SeperaterLabel];
     
     // Put Email id
     
-    _EmailTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 20, mainFrame.size.width-40, 40)];
+    _EmailTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 120, mainFrame.size.width-40, 40)];
     [_EmailTextField customizeWithplaceholderText:@"Email Id" andImage:@"*"];
     [_EmailTextField setTag:443];
     [_EmailTextField setDelegate:self];
@@ -76,7 +77,7 @@
     
     // Submit Button
     
-    UIButton *SubmitButton = [[UIButton alloc] initWithFrame:CGRectMake(mainFrame.size.width/2-70 ,80, 140, 40)];
+    UIButton *SubmitButton = [[UIButton alloc] initWithFrame:CGRectMake(mainFrame.size.width/2-70 ,200, 140, 40)];
     [SubmitButton setBackgroundColor:[UIColor colorFromHex:0xe66a4c]];
     [SubmitButton setTitle:@"Submit" forState:UIControlStateNormal];
     [SubmitButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
@@ -103,8 +104,9 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             SHOW_NETWORK_ERROR_ALERT();
         });
-    } else {
-        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderMyIssues ValueObject:self.DataStringArray UrlParameter:UrlParameterString.URLParamProviderMyIssues];
+    } else { //WebParamCustomerForgetPassword
+        
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:(_AppLoginType == LoginTypeCustomer)?UrlParameterString.WebParamCustomerForgetPassword:UrlParameterString.WebParamProviderForgetPassword ValueObject:self.DataStringArray UrlParameter:(_AppLoginType == LoginTypeCustomer)?UrlParameterString.URLParamCustomerForgetPassword:UrlParameterString.URLParamProviderForgetPassword];
         [Datadelegate setDelegate:self];
     }
 }
@@ -112,10 +114,29 @@
 -(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
 {
     NSLog(@"Success with ParamObjectCarrier -- %@",ParamObjectCarrier);
+    
+    for (id AlltextField in _MainScrollView.subviews) {
+        if ([AlltextField isKindOfClass:[UITextField class]]) {
+            UITextField *DatatextField = (UITextField *)AlltextField;
+            [DatatextField setText:nil];
+        }
+    }
+    
+    UIAlertView *DataAlertView = [[UIAlertView alloc] initWithTitle:([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1)?@"Success":@"Error" message:[ParamObjectCarrier objectForKey:@"message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [DataAlertView show];
+    
 }
 -(void)RetunWebserviceDataWithError:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSError *)ParamObjectCarrier
 {
-    NSLog(@"Error with ParamObjectCarrier -- %@",ParamObjectCarrier);
+    for (id AlltextField in _MainScrollView.subviews) {
+        if ([AlltextField isKindOfClass:[UITextField class]]) {
+            UITextField *DatatextField = (UITextField *)AlltextField;
+            [DatatextField setText:nil];
+        }
+    }
+    
+    UIAlertView *DataAlertView = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@",ParamObjectCarrier] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [DataAlertView show];
 }
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField
@@ -146,8 +167,6 @@
 
 -(void)Recoverpassword
 {
-    NSLog(@"Recoverpassword");
-    
     for (id AlltextField in _MainScrollView.subviews) {
         if ([AlltextField isKindOfClass:[UITextField class]]) {
             UITextField *DatatextField = (UITextField *)AlltextField;
@@ -156,21 +175,20 @@
     }
     
     BOOL IsValidated = YES;
-  /**
-    if ([_EmailTextField.text CleanTextField].length == 0) {
-        [self ShowAletviewWIthTitle:@"Error" Tag:121 Message:@"Email Please"];
-        IsValidated = NO;
-    } else if (![[_EmailTextField.text CleanTextField] isEmail]) {
-        [self ShowAletviewWIthTitle:@"Error" Tag:121 Message:@"valied Email Please"];
-        IsValidated = NO;
-    }
-    
-    if (IsValidated) {
-        _DataStringArray = [[NSArray alloc] initWithObjects:[_EmailTextField.text CleanTextField], nil];
-        [self GetProviderServiceListDetails];
-    }
-   .*/
+     if ([_EmailTextField.text CleanTextField].length == 0) {
+         [self ShowAletviewWIthTitle:@"Error" Tag:121 Message:@"Email Please"];
+         IsValidated = NO;
+     } else if (![[_EmailTextField.text CleanTextField] isEmail]) {
+         [self ShowAletviewWIthTitle:@"Error" Tag:121 Message:@"valied Email Please"];
+         IsValidated = NO;
+     }
+     
+     if (IsValidated) {
+         _DataStringArray = [[NSArray alloc] initWithObjects:[_EmailTextField.text CleanTextField], nil];
+         [self GetProviderServiceListDetails];
+     }
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -180,7 +198,6 @@
     UIAlertView *AlertView = [[UIAlertView alloc] initWithTitle:ParamTitle message:ParamMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
     [AlertView setTag:ParamTag];
     [AlertView show];
-    
 }
 
 @end

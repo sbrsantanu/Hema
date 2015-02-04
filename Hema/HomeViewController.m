@@ -132,10 +132,21 @@ typedef enum {
     [_BookEventStartDate setTag:444];
     [_MainScrollView addSubview:_BookEventStartDate];
     
+    UIButton *BookEventStartSelectBut = [[UIButton alloc] initWithFrame:CGRectMake(_BookEventStartDate.layer.frame.size.width-40, 0, 40, 40)];
+   // [BookEventStartSelectBut setBackgroundColor:[UIColor redColor]];
+    [BookEventStartSelectBut addTarget:self action:@selector(BookEventStartSelectButSelect) forControlEvents:UIControlEventTouchUpInside];
+    [_BookEventStartDate addSubview:BookEventStartSelectBut];
+    
     _BookEventEnddate = [[UITextField alloc] initWithFrame:CGRectMake(20, 260, mainFrame.size.width-40, 40)];
     [_BookEventEnddate customizeWithPlaceholderText:@"- End Date" andImageOnRightView:@"calender.png" andLeftBarText:@""];
     [_BookEventEnddate setTag:445];
     [_MainScrollView addSubview:_BookEventEnddate];
+    
+    UIButton *BookEventEndSelectBut = [[UIButton alloc] initWithFrame:CGRectMake(_BookEventStartDate.layer.frame.size.width-40, 0, 40, 40)];
+    [BookEventStartSelectBut addTarget:self action:@selector(BookEventEndSelectButSelect) forControlEvents:UIControlEventTouchUpInside];
+   // [BookEventEndSelectBut setBackgroundColor:[UIColor redColor]];
+    [_BookEventEnddate bringSubviewToFront:BookEventEndSelectBut];
+    [_BookEventEnddate addSubview:BookEventEndSelectBut];
     
     // Find Now Button
     
@@ -166,6 +177,18 @@ typedef enum {
     self.DateSelectedMode = DateSelectedNone;
     self.CategorySelectedMode = CategorySelectedConference;
     
+}
+
+-(void)BookEventStartSelectButSelect
+{
+    self.DateSelectedMode = DateSelectedStartDate;
+    [self openDateSelectionController:_BookEventStartDate];
+}
+
+-(void)BookEventEndSelectButSelect
+{
+    self.DateSelectedMode = DateSelectedenddate;
+    [self openDateSelectionController:_BookEventEnddate];
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
@@ -259,8 +282,17 @@ typedef enum {
 -(void)FindNow
 {
     BookingListViewController *BookingList = nil;
+    for (id AlltextField in _MainScrollView.subviews) {
+        if ([AlltextField isKindOfClass:[UITextField class]]) {
+            UITextField *DatatextField = (UITextField *)AlltextField;
+            [DatatextField resignFirstResponder];
+        }
+    }
+    
     if (_CategorySelectedMode == CategorySelectedNone) {
+        
         NSLog(@"Need to select category first");
+        
     } else if (_CategorySelectedMode == CategorySelectedConference) {
         BookingList = [[BookingListViewController alloc] initWithBookingCategory:SelectedBookingTypeConference CityorHotelname:[_BookEvent.text CleanTextField] StartDate:[_BookEventStartDate.text CleanTextField] EndDate:[_BookEventEnddate.text CleanTextField]];
     } else if (_CategorySelectedMode == CategorySelectedEvent) {

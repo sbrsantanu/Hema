@@ -23,4 +23,8 @@
 -(void) customizeDropdownFieldWithPlaceholderText:(NSString *)Text
                                    andLeftBarText:(NSString *)laftBarText;
 
+-(void) customizeWithPlaceholderText:(NSString *)Text
+           andButtonImageOnRightView:(NSString *)Image
+                      andLeftBarText:(NSString *)laftBarText
+                         andSelecter:(SEL)Selecter;
 @end

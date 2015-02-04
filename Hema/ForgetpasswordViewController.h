@@ -10,9 +10,9 @@
 #import "GlobalObjects.h"
 
 typedef enum {
-    LoginTypeNone,
-    LoginTypeCustomer,
-    LoginTypeProvider
+    SLoginTypeNone,
+    SLoginTypeCustomer,
+    SLoginTypeProvider
 } LoginType;
 
 @interface ForgetpasswordViewController : GlobalObjects

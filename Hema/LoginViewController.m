@@ -25,6 +25,7 @@
 #import <Security/Security.h>
 #import "GlobalStrings.h"
 #import "ForgetpasswordViewController.h"
+#import "FPassword.h"
 
 typedef enum {
     UserLoginTypeNone,
@@ -246,7 +247,7 @@ typedef enum {
 
 -(void)Forgetpassword
 {
-    ForgetpasswordViewController *ForgetpasswordView = [[ForgetpasswordViewController alloc] init];
+    FPassword *ForgetpasswordView = [[FPassword alloc] initWithNibName:nil bundle:nil LoginType:(_UserloginMode == UserLoginTypeCustomer)?LoginTypeCustomer:LoginTypeProvider];
     [self GotoDifferentViewWithAnimation:ForgetpasswordView];
 }
 
