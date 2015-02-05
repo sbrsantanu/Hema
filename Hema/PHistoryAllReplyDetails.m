@@ -20,6 +20,7 @@
     CGRect mainFrame;
 }
 @property (nonatomic,retain) UIScrollView * MainScrollView;
+@property (nonatomic,retain) UIScrollView * DetailsScrollView;
 @property (nonatomic,retain) UITableView  * DataContainerView;
 @property (nonatomic,retain) UIActivityIndicatorView *DataContainActivity;
 @property (nonatomic,retain) NSArray *HeaderContainerArray;
@@ -29,6 +30,18 @@
 
 @property (weak) ProverHistoryOfConversion *DataConversionDetails;
 @property (nonatomic,retain) NSString *ProviderName;
+
+@property (nonatomic,retain) UILabel *ConversionTitlelabel;
+@property (nonatomic,retain) UITextField *ConversionTitleTextField;
+
+@property (nonatomic,retain) UILabel *ConversionDetailsLabel;
+@property (nonatomic,retain) UITextView *ConversionDetailsTextField;
+
+@property (nonatomic,retain) UILabel *ProviderNamelabel;
+@property (nonatomic,retain) UITextField *ProviderNameTextField;
+
+@property (nonatomic,retain) UILabel *ConvirsionDatelabel;
+@property (nonatomic,retain) UITextField *ConvirsionDateTextField;
 @end
 
 @implementation PHistoryAllReplyDetails
@@ -47,7 +60,7 @@
         _DataStringArray =[[NSArray alloc] initWithObjects:@"3", nil];
         
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-            [self GetProviderServiceListDetails];
+           // [self GetProviderServiceListDetails];
         });
     }
     return self;
@@ -75,12 +88,6 @@
     
     mainFrame = [[UIScreen mainScreen] bounds];
     
-    CGRect frame = _DataContainActivity.frame;
-    frame.origin.x = mainFrame.size.width / 2 - frame.size.width / 2;
-    frame.origin.y = mainFrame.size.height / 2 - frame.size.height / 2;
-    _DataContainActivity.frame = frame;
-    [self.view addSubview:_DataContainActivity];
-    
     UILabel *WelcomeMessage1 = [[UILabel alloc] initWithFrame:CGRectMake(10, 270, mainFrame.size.width-10, 20)];
     [WelcomeMessage1 setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
     [WelcomeMessage1 setTextColor:[UIColor darkGrayColor]];
@@ -93,15 +100,84 @@
     [WelcomeUnderline1 setBackgroundColor:[UIColor lightGrayColor]];
     [self.view addSubview:WelcomeUnderline1];
     
+    _DetailsScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 120, mainFrame.size.width, 150)];
+    [_DetailsScrollView setUserInteractionEnabled:YES];
+    [_DetailsScrollView setContentSize:CGSizeMake(mainFrame.size.width, 2000)];
+    [_DetailsScrollView setDelegate:self];
+    [_DetailsScrollView setBounces:YES];
+    [_DetailsScrollView setBackgroundColor:[UIColor colorFromHex:0xededf2]];
+    [self.view addSubview:_DetailsScrollView];
+    
     //_DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 300, mainFrame.size.width, mainFrame.size.height-(215+150))];
     [_MainScrollView setUserInteractionEnabled:YES];
     [_MainScrollView setContentSize:CGSizeMake(mainFrame.size.width, 2000)];
-    [_MainScrollView setDelegate:self];     [_MainScrollView setBounces:YES];
+    [_MainScrollView setDelegate:self];
+    [_MainScrollView setBounces:YES];
     [_MainScrollView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:_MainScrollView];
    
+    CGRect frame = _DataContainActivity.frame;
+    frame.origin.x = _MainScrollView.frame.size.width / 2 - frame.size.width / 2;
+    frame.origin.y = 100;
+    _DataContainActivity.frame = frame;
+    [_DataContainActivity startAnimating];
+    [_DataContainActivity setHidesWhenStopped:YES];
+    [_DataContainActivity setColor:[UIColor colorFromHex:0xededf2]];
+    [_MainScrollView addSubview:_DataContainActivity];
+    
+    /**
+     *  =======================================================
+     *  =======================================================
+     */
+    
+    self.ConversionTitlelabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, mainFrame.size.width, 20)];
+    [self.ConversionTitlelabel setText:@"Title"];
+    [_DetailsScrollView addSubview:self.ConversionTitlelabel];
+    
+    self.ConversionTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, 40, mainFrame.size.width+2, 40)];
+    [self.ConversionTitleTextField setText:[self.DataConversionDetails ConversionMessageTitle]];
+    [_DetailsScrollView addSubview:self.ConversionTitleTextField];
+    
+    /**
+     *  =======================================================
+     *  =======================================================
+     */
+    
+    self.ConversionDetailsLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 110, mainFrame.size.width, 20)];
+    [self.ConversionDetailsLabel setText:@"Details"];
+    [_DetailsScrollView addSubview:self.ConversionDetailsLabel];
+    
+    self.ConversionDetailsTextField = [[UITextView alloc] initWithFrame:CGRectMake(-1, 140, mainFrame.size.width+2, 40)];
+    [self.ConversionDetailsTextField setText:[self.DataConversionDetails ConversionMessageDetails]];
+    [_DetailsScrollView addSubview:self.ConversionDetailsTextField];
+    
+    /**
+     *  =======================================================
+     *  =======================================================
+     */
+    
+    self.ProviderNamelabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 210, mainFrame.size.width, 20)];
+    [self.ProviderNamelabel setText:@"Name"];
+    [_DetailsScrollView addSubview:self.ProviderNamelabel];
+    
+    self.ProviderNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, 240, mainFrame.size.width+2, 40)];
+    [self.ProviderNameTextField setText:[self Getlogedinusername]];
+    [_DetailsScrollView addSubview:self.ProviderNameTextField];
+    
+    /**
+     *  =======================================================
+     *  =======================================================
+     */
+    
+    self.ConvirsionDatelabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 310, mainFrame.size.width, 20)];
+    [self.ConvirsionDatelabel setText:@"Date"];
+    [_DetailsScrollView addSubview:self.ConvirsionDatelabel];
+    
+    self.ConvirsionDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(-1, 340, mainFrame.size.width+2, 40)];
+    [self.ConvirsionDateTextField setText:[self.DataConversionDetails ConversionMessageTime]];
+    [_DetailsScrollView addSubview:self.ConvirsionDateTextField];
 }
 
 #pragma webservice data delegate
