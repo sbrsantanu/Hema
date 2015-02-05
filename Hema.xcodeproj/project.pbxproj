@@ -70,6 +70,11 @@
 		049F9EE41A31D93E002145C3 /* PEPhotoCropEditor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 049F9EDC1A31D93E002145C3 /* PEPhotoCropEditor.bundle */; };
 		049F9EE51A31D93E002145C3 /* PKImageBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 049F9EDD1A31D93E002145C3 /* PKImageBundle.bundle */; };
 		049F9EE81A31DADD002145C3 /* FlatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 049F9EE71A31DADD002145C3 /* FlatButton.m */; };
+		04AABAD71A8347E3008A3203 /* QuotaionDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AABAD61A8347E3008A3203 /* QuotaionDetails.m */; };
+		04AABADB1A8353B1008A3203 /* PAddQuotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AABADA1A8353B0008A3203 /* PAddQuotation.m */; };
+		04AABADF1A837175008A3203 /* PViewServicesDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AABADE1A837175008A3203 /* PViewServicesDetails.m */; };
+		04AABAE31A8396F5008A3203 /* PIssueAllReplyList.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AABAE21A8396F5008A3203 /* PIssueAllReplyList.m */; };
+		04AABAE71A83970F008A3203 /* PHistoryAllReplyDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AABAE61A83970F008A3203 /* PHistoryAllReplyDetails.m */; };
 		04B7BEFE1A44057D00345202 /* goback.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B7BEFD1A44057D00345202 /* goback.png */; };
 		04BC9BEA1A31979B00FCDA40 /* WebService.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC9BE91A31979B00FCDA40 /* WebService.m */; };
 		04BC9C1F1A31987400FCDA40 /* ANDProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC9BEF1A31987400FCDA40 /* ANDProgressHUD.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -281,6 +286,16 @@
 		049F9EDD1A31D93E002145C3 /* PKImageBundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PKImageBundle.bundle; sourceTree = "<group>"; };
 		049F9EE61A31DADD002145C3 /* FlatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatButton.h; sourceTree = "<group>"; };
 		049F9EE71A31DADD002145C3 /* FlatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatButton.m; sourceTree = "<group>"; };
+		04AABAD51A8347E3008A3203 /* QuotaionDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuotaionDetails.h; sourceTree = "<group>"; };
+		04AABAD61A8347E3008A3203 /* QuotaionDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuotaionDetails.m; sourceTree = "<group>"; };
+		04AABAD91A8353B0008A3203 /* PAddQuotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAddQuotation.h; sourceTree = "<group>"; };
+		04AABADA1A8353B0008A3203 /* PAddQuotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAddQuotation.m; sourceTree = "<group>"; };
+		04AABADD1A837175008A3203 /* PViewServicesDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PViewServicesDetails.h; sourceTree = "<group>"; };
+		04AABADE1A837175008A3203 /* PViewServicesDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PViewServicesDetails.m; sourceTree = "<group>"; };
+		04AABAE11A8396F5008A3203 /* PIssueAllReplyList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIssueAllReplyList.h; sourceTree = "<group>"; };
+		04AABAE21A8396F5008A3203 /* PIssueAllReplyList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PIssueAllReplyList.m; sourceTree = "<group>"; };
+		04AABAE51A83970F008A3203 /* PHistoryAllReplyDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHistoryAllReplyDetails.h; sourceTree = "<group>"; };
+		04AABAE61A83970F008A3203 /* PHistoryAllReplyDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHistoryAllReplyDetails.m; sourceTree = "<group>"; };
 		04B7BEFD1A44057D00345202 /* goback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = goback.png; sourceTree = "<group>"; };
 		04BC9BE81A31979B00FCDA40 /* WebService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebService.h; path = ../WebService.h; sourceTree = "<group>"; };
 		04BC9BE91A31979B00FCDA40 /* WebService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebService.m; path = ../WebService.m; sourceTree = "<group>"; };
@@ -735,6 +750,60 @@
 			name = FlatButton;
 			sourceTree = "<group>";
 		};
+		04AABAD41A8347C9008A3203 /* QuotaionDetails */ = {
+			isa = PBXGroup;
+			children = (
+				04AABAD51A8347E3008A3203 /* QuotaionDetails.h */,
+				04AABAD61A8347E3008A3203 /* QuotaionDetails.m */,
+			);
+			name = QuotaionDetails;
+			sourceTree = "<group>";
+		};
+		04AABAD81A835394008A3203 /* AddQuotation */ = {
+			isa = PBXGroup;
+			children = (
+				04AABAD91A8353B0008A3203 /* PAddQuotation.h */,
+				04AABADA1A8353B0008A3203 /* PAddQuotation.m */,
+			);
+			name = AddQuotation;
+			sourceTree = "<group>";
+		};
+		04AABADC1A837155008A3203 /* ViewServicesDetails */ = {
+			isa = PBXGroup;
+			children = (
+				04AABADD1A837175008A3203 /* PViewServicesDetails.h */,
+				04AABADE1A837175008A3203 /* PViewServicesDetails.m */,
+			);
+			name = ViewServicesDetails;
+			sourceTree = "<group>";
+		};
+		04AABAE01A8396C3008A3203 /* PIssueAllReplyList */ = {
+			isa = PBXGroup;
+			children = (
+				04AABAE11A8396F5008A3203 /* PIssueAllReplyList.h */,
+				04AABAE21A8396F5008A3203 /* PIssueAllReplyList.m */,
+			);
+			name = PIssueAllReplyList;
+			sourceTree = "<group>";
+		};
+		04AABAE41A8396FE008A3203 /* PHistoryAllReplyDetails */ = {
+			isa = PBXGroup;
+			children = (
+				04AABAE51A83970F008A3203 /* PHistoryAllReplyDetails.h */,
+				04AABAE61A83970F008A3203 /* PHistoryAllReplyDetails.m */,
+			);
+			name = PHistoryAllReplyDetails;
+			sourceTree = "<group>";
+		};
+		04AABAE81A839784008A3203 /* PIssueDetails */ = {
+			isa = PBXGroup;
+			children = (
+				04BCD1221A7FBF3E00676407 /* PIssueDetails.h */,
+				04BCD1231A7FBF3E00676407 /* PIssueDetails.m */,
+			);
+			name = PIssueDetails;
+			sourceTree = "<group>";
+		};
 		04BC9BEC1A31987400FCDA40 /* WebserviceGroup */ = {
 			isa = PBXGroup;
 			children = (
@@ -1048,6 +1117,7 @@
 		04C99A591A65495200DC5BAC /* ViewServices */ = {
 			isa = PBXGroup;
 			children = (
+				04AABADC1A837155008A3203 /* ViewServicesDetails */,
 				04C99A6E1A654D5A00DC5BAC /* PViewServices.h */,
 				04C99A6F1A654D5A00DC5BAC /* PViewServices.m */,
 			);
@@ -1057,6 +1127,8 @@
 		04C99A5A1A654C7400DC5BAC /* ViewQuotationRequest */ = {
 			isa = PBXGroup;
 			children = (
+				04AABAD81A835394008A3203 /* AddQuotation */,
+				04AABAD41A8347C9008A3203 /* QuotaionDetails */,
 				04C99A6B1A654D0700DC5BAC /* PViewQuotationRequest.h */,
 				04C99A6C1A654D0700DC5BAC /* PViewQuotationRequest.m */,
 			);
@@ -1084,6 +1156,7 @@
 		04C99A5D1A654C9C00DC5BAC /* HistoryOfConversion */ = {
 			isa = PBXGroup;
 			children = (
+				04AABAE41A8396FE008A3203 /* PHistoryAllReplyDetails */,
 				04C99A621A654CDB00DC5BAC /* PHistoryOfConversion.h */,
 				04C99A631A654CDB00DC5BAC /* PHistoryOfConversion.m */,
 			);
@@ -1093,10 +1166,10 @@
 		04C99A5E1A654CA700DC5BAC /* Issues */ = {
 			isa = PBXGroup;
 			children = (
+				04AABAE81A839784008A3203 /* PIssueDetails */,
+				04AABAE01A8396C3008A3203 /* PIssueAllReplyList */,
 				04C99A5F1A654CCB00DC5BAC /* PIssues.h */,
 				04C99A601A654CCB00DC5BAC /* PIssues.m */,
-				04BCD1221A7FBF3E00676407 /* PIssueDetails.h */,
-				04BCD1231A7FBF3E00676407 /* PIssueDetails.m */,
 			);
 			name = Issues;
 			sourceTree = "<group>";
@@ -1570,6 +1643,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04AABAE71A83970F008A3203 /* PHistoryAllReplyDetails.m in Sources */,
 				0438E63D1A3EC91F00CD157C /* RegisterViewController.m in Sources */,
 				04C2E6721A64F38300079E7F /* CViewHistory.m in Sources */,
 				049F9EE31A31D93E002145C3 /* UIImage+PECrop.m in Sources */,
@@ -1605,6 +1679,7 @@
 				049F9EDF1A31D93E002145C3 /* PECropViewController.m in Sources */,
 				04BCD1241A7FBF3E00676407 /* PIssueDetails.m in Sources */,
 				04C7EBBB1A7934A1007FFBCE /* MDIncrementalImageView.m in Sources */,
+				04AABAD71A8347E3008A3203 /* QuotaionDetails.m in Sources */,
 				04BC9C201A31987400FCDA40 /* AFHTTPClient.m in Sources */,
 				04BC9C331A31987400FCDA40 /* SOAPEnvelope.m in Sources */,
 				04E585EA1A6393D800269690 /* CViewProfile.m in Sources */,
@@ -1621,6 +1696,7 @@
 				04BC9C251A31987400FCDA40 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				04BC9C281A31987400FCDA40 /* AFXMLRequestOperation.m in Sources */,
 				043553091A42B1A3002FB1CE /* ForgetpasswordViewController.m in Sources */,
+				04AABAE31A8396F5008A3203 /* PIssueAllReplyList.m in Sources */,
 				04BC9C271A31987400FCDA40 /* AFURLConnectionOperation.m in Sources */,
 				04C1EFFF1A318F7D008E6AE1 /* NSXReturnThrowError.m in Sources */,
 				049F9EE21A31D93E002145C3 /* PEResizeControl.m in Sources */,
@@ -1635,6 +1711,7 @@
 				049F9EC71A31CFE6002145C3 /* RMDateSelectionViewController.m in Sources */,
 				048B9D2A1A5E693E00BDDAD4 /* SocialAccount.m in Sources */,
 				04C9A3541A2EFD4E0003C4D3 /* ViewController.m in Sources */,
+				04AABADF1A837175008A3203 /* PViewServicesDetails.m in Sources */,
 				04C2E6781A65034900079E7F /* CFeedbackList.m in Sources */,
 				04C99A7A1A654D8500DC5BAC /* PEditProfile.m in Sources */,
 				04C82F751A5419D40038D562 /* ApplyBookingViewController.m in Sources */,
@@ -1656,6 +1733,7 @@
 				04C1EFF91A318D6B008E6AE1 /* NSString+PJR.m in Sources */,
 				04BC9C301A31987400FCDA40 /* Reachability.m in Sources */,
 				04BC9C1F1A31987400FCDA40 /* ANDProgressHUD.m in Sources */,
+				04AABADB1A8353B1008A3203 /* PAddQuotation.m in Sources */,
 				04CBCDA61A63F26000015EDB /* CViewEventInformation.m in Sources */,
 				04C9A34B1A2EFD4E0003C4D3 /* main.m in Sources */,
 				04C1F0051A319086008E6AE1 /* UIFont+FontAwesome.m in Sources */,

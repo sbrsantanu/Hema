@@ -1,12 +1,12 @@
 //
-//  PViewProfile.m
+//  PViewServicesDetails.m
 //  Hema
 //
-//  Created by Mac on 13/01/15.
+//  Created by Mac on 05/02/15.
 //  Copyright (c) 2015 Hema. All rights reserved.
 //
 
-#import "PViewProfile.h"
+#import "PViewServicesDetails.h"
 #import "UIColor+HexColor.h"
 #import "WebserviceProtocol.h"
 #import "UrlParameterString.h"
@@ -15,7 +15,7 @@
 #import "MPApplicationGlobalConstants.h"
 #import "MDIncrementalImageView.h"
 
-@interface PViewProfile ()<UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
+@interface PViewServicesDetails ()<UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate,UIAlertViewDelegate>
 {
     CGRect mainFrame;
     NSRecursiveLock *Lock;
@@ -27,18 +27,35 @@
 @property (nonatomic,retain) NSArray *TableSectionHeaderTextArray;
 @property (nonatomic,retain) NSArray *DataStringArray;
 @property (nonatomic,retain) NSMutableArray *TableviewDataArray;
+@property (nonatomic,retain) NSMutableArray *TableviewDataArrayUnused;
 @property (nonatomic,retain) UIActivityIndicatorView *MainActivity;
+
+@property (nonatomic,retain) NSString *ServiceId;
 @end
 
-@implementation PViewProfile
+@implementation PViewServicesDetails
 
--(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil ServiceId:(NSString *)ParamServiceId
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         mainFrame = [[UIScreen mainScreen] bounds];
+        self.ServiceId = ParamServiceId;
         self.view.layer.frame = CGRectMake(0, 0, mainFrame.size.width, mainFrame.size.height);
         [self.view setBackgroundColor:[UIColor whiteColor]];
+        
+        // Call Webservice Data
+        
+        _DataStringArray =[[NSArray alloc] initWithObjects:self.ServiceId, nil];
+        
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+            [self GetProviderAccountDetails];
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                [_DataContainActivity stopAnimating];
+                [_DataContainTable setHidden:NO];
+            });
+        });
     }
     return self;
 }
@@ -56,7 +73,7 @@
     [WelcomeMessage setTextColor:[UIColor darkGrayColor]];
     [WelcomeMessage setBackgroundColor:[UIColor clearColor]];
     [WelcomeMessage setTextAlignment:NSTextAlignmentLeft];
-    [WelcomeMessage setText:@"View Provider Information"];
+    [WelcomeMessage setText:@"View Service Information"];
     [self.view addSubview:WelcomeMessage];
     
     UILabel *WelcomeUnderline = [[UILabel alloc] initWithFrame:CGRectMake(10, 115, mainFrame.size.width-20, 1)];
@@ -76,23 +93,13 @@
     [_DataContainActivity startAnimating];
     [_DataContainActivity setHidesWhenStopped:YES];
     
-    _TableSectionHeaderTextArray = [[NSArray alloc] initWithObjects:@"Name",@"Phone Number",@"Description",@"Website",@"Logo",@"Sales Tax (%)",@"Service Tax (%)",@"Vat (%)",@"Currency",@"Delivery Mode",@"Questions",@"Minimum Delivery Time",@"Minimum Billing Value",@"Maximum Billing Value",@"Delivery Charge",@"Business Days",@"Business Hours",@"Allow Advance Order", nil];
+    _TableSectionHeaderTextArray = [[NSArray alloc] initWithObjects:@"Service Title",@"Short Description",@"Full Description",@"Rate",@"Rate Valid Till",@"Tax",@"Allow Discount",@"Discount (%)",@"Shipping",@"Shipping Cost",@"Image", nil];
     
     CGRect frame = _DataContainActivity.frame;
     frame.origin.x = mainFrame.size.width / 2 - frame.size.width / 2;
     frame.origin.y = mainFrame.size.height / 2 - frame.size.height / 2;
     _DataContainActivity.frame = frame;
     [self.view addSubview:_DataContainActivity];
-    
-    _DataStringArray =[[NSArray alloc] initWithObjects:[self Getlogedinuserid], nil];
-    
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self GetProviderAccountDetails];
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [_DataContainActivity stopAnimating];
-            [_DataContainTable setHidden:NO];
-        });
-    });
 }
 
 #pragma Webservice Process
@@ -105,7 +112,7 @@
             SHOW_NETWORK_ERROR_ALERT();
         });
     } else {
-        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderViewProfile ValueObject:_DataStringArray UrlParameter:UrlParameterString.URLParamProviderViewProfile];
+        WebserviceProtocol *Datadelegate = [[WebserviceProtocol alloc] initWithParamObject:UrlParameterString.WebParamProviderViewServiceDetail ValueObject:_DataStringArray UrlParameter:UrlParameterString.URLParamProviderViewServiceDetail];
         [Datadelegate setDelegate:self];
     }
 }
@@ -118,15 +125,18 @@
 {
     if ([[ParamObjectCarrier objectForKey:@"errorcode"]intValue] == 1) {
         
-        self.TableviewDataArray = [[NSMutableArray alloc] init];
-        
         NSLock* arrayLock = [[NSLock alloc] init];
         [arrayLock lock];
         
-        for (id LocalObject in [ParamObjectCarrier objectForKey:@"provider"]) {
+        for (id LocalObjectdata in [ParamObjectCarrier objectForKey:@"service"]) {
             
-             self.TableviewDataArray = [[NSMutableArray alloc] initWithObjects:[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"name"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"phone"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"description"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"website"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"logo"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"sales_tax"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"service_tax"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"vat"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"currency_id"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"delivery_mode"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"questions"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"min_delivery_time"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"min_billing_value"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"max_billing_value"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"delivery_charge"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"business_days"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"business_days"],[[ParamObjectCarrier objectForKey:@"provider"] objectForKey:@"allow_advance_order"], nil];
+            ProviderServiceDetails *LocalObject = [[ProviderServiceDetails alloc] initWithSDetailsId:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"id"] SDetailsProviderId:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"provider_id"] SDetailsName:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"name"] SDetailsShortDescription:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"short_description"] SDetailsFullDescription:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"full_description"] SDetailsRate:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"rate"] SDetailsServiceCategory:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"service_category"] SDetailsCategoryName:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"category_name"] SDetailsCurrencyCode:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"currency_code"] SDetailsLogo:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"logo"] SDetailsRateValidTill:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"rate_valid_till"] SDetailsTax:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"tax"] SDetailsAllowDiscount:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"allow_discount"] SDetailsDiscount:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"discount"] SDetailsShipping:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"shipping"] SDetailsShippingCost:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"shipping_cost"]];
             
+            self.TableviewDataArrayUnused = [[NSMutableArray alloc] initWithObjects:LocalObject, nil];
+            
+            self.TableviewDataArray = [[NSMutableArray alloc] initWithObjects:[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"name"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"short_description"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"full_description"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"rate"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"rate_valid_till"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"tax"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"allow_discount"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"discount"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"shipping"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"shipping_cost"],[[ParamObjectCarrier objectForKey:@"service"] objectForKey:@"logo"], nil];
+            
+            NSLog(@"LocalObjectdata --- %@",LocalObjectdata);
         }
         [arrayLock unlock];
         
@@ -135,6 +145,7 @@
             [_DataContainTable setHidden:NO];
             [_DataContainTable reloadData];
         });
+        
     } else {
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -160,7 +171,7 @@
 {
     UITableViewCell *DataCell = [[UITableViewCell alloc] init];
     
-    if (indexPath.section == 4) {
+    if (indexPath.section == 10) {
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(25, 5, 150, 150)];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -178,10 +189,10 @@
         [_MainActivity hidesWhenStopped];
         [imageView addSubview:_MainActivity];
         
-        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"providerprofileimage"] isEqualToString:@"Y"]) {
+        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"setviewservicesimage"] isEqualToString:@"Y"]) {
             
             [_MainActivity stopAnimating];
-            [imageView setImage:[UIImage imageWithData:[[NSUserDefaults standardUserDefaults] objectForKey:@"providerprofileimagedata"]]];
+            [imageView setImage:[UIImage imageWithData:[[NSUserDefaults standardUserDefaults] objectForKey:@"setviewservicesimagedata"]]];
             
         } else {
             
@@ -195,13 +206,13 @@
                     [imageView setImage:[UIImage imageWithData:data]];
                     [_MainActivity stopAnimating];
                     
-                    [[NSUserDefaults standardUserDefaults] setObject:@"Y" forKey:@"providerprofileimage"];
-                    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"providerprofileimagedata"];
+                    [[NSUserDefaults standardUserDefaults] setObject:@"Y" forKey:@"setviewservicesimage"];
+                    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"setviewservicesimagedata"];
                 });
             });
         }
     } else {
-        
+        [DataCell.textLabel setNumberOfLines:0];
         [DataCell.textLabel setText:[self.TableviewDataArray objectAtIndex:indexPath.section]];
         [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
         [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
@@ -224,7 +235,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (indexPath.section == 4)?150.0f:50.0f;
+    return (indexPath.section == 10 || indexPath.section == 2)?200.0f:50.0f;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -262,10 +273,15 @@
     
 }
 
--(void)viewDidDisappear:(BOOL)animated
+-(void)viewDidDisappear:(BOOL)animated  
 {
-    [[NSUserDefaults standardUserDefaults] setObject:@"N" forKey:@"providerprofileimage"];
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"providerprofileimagedata"];
+    [[NSUserDefaults standardUserDefaults] setObject:@"N" forKey:@"setviewservicesimage"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"setviewservicesimagedata"];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

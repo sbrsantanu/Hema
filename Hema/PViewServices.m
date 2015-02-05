@@ -15,6 +15,7 @@
 #import "GlobalModelObjects.h"
 #import "GlobalStrings.h"
 #import "MPApplicationGlobalConstants.h"
+#import "PViewServicesDetails.h"
 
 @interface PViewServices ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
@@ -109,6 +110,8 @@
 
 -(void)RetunWebserviceDataWithSuccess:(WebserviceProtocol *)DataDelegate ObjectCarrier:(NSDictionary *)ParamObjectCarrier
 {
+    
+    NSLog(@"ParamObjectCarrier ---- %@",ParamObjectCarrier);
     dispatch_async(dispatch_get_main_queue(), ^(void){
         
         if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
@@ -172,7 +175,7 @@
             [ViewDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
             [ViewDetailsButton.layer setBorderWidth:1.0f];
             [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
-            [ViewDetailsButton setTag:104];
+            [ViewDetailsButton setTag:7777+indexPath.row];
             [DataCell addSubview:ViewDetailsButton];
             
             UIButton *EditDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+120 ,5, 100, 40)];
@@ -184,7 +187,7 @@
             [EditDetailsButton.layer setBorderWidth:1.0f];
             [EditDetailsButton addTarget:self action:@selector(EditDetails:) forControlEvents:UIControlEventTouchUpInside];
             [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
-            [EditDetailsButton setTag:104];
+            [EditDetailsButton setTag:8888+indexPath.row];
             [DataCell addSubview:EditDetailsButton];
             
         } else {
@@ -246,6 +249,11 @@
 -(IBAction)ViewDetails:(UIButton *)sender
 {
     NSLog(@"ViewDetails Tag --- %ld",(long)sender.tag);
+    
+    ProviderViewServicesList *LocalObject = [self.TableDataArray objectAtIndex:(sender.tag - 7777)];
+    PViewServicesDetails *ProviderServiceDetails = [[PViewServicesDetails alloc] initWithNibName:nil bundle:nil ServiceId:LocalObject.ServiceId];
+    [self GotoDifferentViewWithAnimation:ProviderServiceDetails];
+    
 }
 -(IBAction)EditDetails:(UIButton *)sender
 {

@@ -67,12 +67,12 @@
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 120, self.view.frame.size.width, self.view.frame.size.height-181)];
     [_MainScrollView setUserInteractionEnabled:YES];
-    [_MainScrollView setContentSize:CGSizeMake(150*[_HeaderContainerArray count], self.view.frame.size.height-181)];
+    [_MainScrollView setContentSize:CGSizeMake(150*[_HeaderContainerArray count]+190, self.view.frame.size.height-181)];
     [_MainScrollView setDelegate:self];
     [_MainScrollView setBounces:NO];
     [self.view addSubview:_MainScrollView];
     
-    _DataContainerView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [_HeaderContainerArray count]*150, _MainScrollView.layer.frame.size.height) style:UITableViewStylePlain];
+    _DataContainerView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [_HeaderContainerArray count]*150+190, _MainScrollView.layer.frame.size.height) style:UITableViewStylePlain];
     [_DataContainerView setDelegate:self];
     [_DataContainerView setDataSource:self];
     [_DataContainerView setBounces:NO];
@@ -154,44 +154,105 @@
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 5.5, SeperaterLabelDiff, 50)];
-        [TitleLabel setBackgroundColor:[UIColor clearColor]];
-        [TitleLabel setTextColor:[UIColor darkTextColor]];
-        switch (i) {
-            case 0:
-                [TitleLabel setText:LocalObject.QuotationModuleName];
-                break;
-            case 1:
-                [TitleLabel setText:[NSString stringWithFormat:@"%@ USD",LocalObject.QuotationBidAmount]];
-                break;
-            case 2:
-                [TitleLabel setText:[NSString stringWithFormat:@"%@ Day (s)",LocalObject.QuotationDuration]];
-                break;
-            case 3:
-                [TitleLabel setText:[LocalObject.QuotationIsAwarded isEqualToString:@"1"]?@"Awarded":@"Not Awarded"];
-                break;
-            case 4:
-                [TitleLabel setText:[LocalObject.QuotationIsBlocked isEqualToString:@"1"]?@"Close":@"Open"];
-                break;
-            case 5:
-                [TitleLabel setText:LocalObject.QuotationBookingNumber];
-                break;
+        if (i==[_HeaderContainerArray count]-1) {
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+12 ,5, 100, 40)];
+            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [ViewDetailsButton setTitle:@"View" forState:UIControlStateNormal];
+            [ViewDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [ViewDetailsButton.layer setCornerRadius:2.0f];
+            [ViewDetailsButton addTarget:self action:@selector(ViewDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [ViewDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [ViewDetailsButton.layer setBorderWidth:1.0f];
+            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [ViewDetailsButton setTag:7777+indexPath.row];
+            [DataCell addSubview:ViewDetailsButton];
+            
+            UIButton *EditDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+120 ,5, 100, 40)];
+            [EditDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [EditDetailsButton setTitle:@"Edit" forState:UIControlStateNormal];
+            [EditDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [EditDetailsButton.layer setCornerRadius:2.0f];
+            [EditDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [EditDetailsButton.layer setBorderWidth:1.0f];
+            [EditDetailsButton addTarget:self action:@selector(EditDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [EditDetailsButton setTag:8888+indexPath.row];
+            [DataCell addSubview:EditDetailsButton];
+            
+            UIButton *DeleteDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+230 ,5, 100, 40)];
+            [DeleteDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [DeleteDetailsButton setTitle:@"Delete" forState:UIControlStateNormal];
+            [DeleteDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [DeleteDetailsButton.layer setCornerRadius:2.0f];
+            [DeleteDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [DeleteDetailsButton.layer setBorderWidth:1.0f];
+            [DeleteDetailsButton addTarget:self action:@selector(DeleteDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [DeleteDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [DeleteDetailsButton setTag:8888+indexPath.row];
+            [DataCell addSubview:DeleteDetailsButton];
+            
+        } else {
+            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 5.5, SeperaterLabelDiff, 50)];
+            [TitleLabel setBackgroundColor:[UIColor clearColor]];
+            [TitleLabel setTextColor:[UIColor darkTextColor]];
+            switch (i) {
+                case 0:
+                    [TitleLabel setText:LocalObject.QuotationModuleName];
+                    break;
+                case 1:
+                    [TitleLabel setText:[NSString stringWithFormat:@"%@ USD",LocalObject.QuotationBidAmount]];
+                    break;
+                case 2:
+                    [TitleLabel setText:[NSString stringWithFormat:@"%@ Day (s)",LocalObject.QuotationDuration]];
+                    break;
+                case 3:
+                    [TitleLabel setText:[LocalObject.QuotationIsAwarded isEqualToString:@"1"]?@"Awarded":@"Not Awarded"];
+                    break;
+                case 4:
+                    [TitleLabel setText:[LocalObject.QuotationIsBlocked isEqualToString:@"1"]?@"Close":@"Open"];
+                    break;
+                case 5:
+                    [TitleLabel setText:LocalObject.QuotationBookingNumber];
+                    break;
+            }
+            [TitleLabel setTextAlignment:NSTextAlignmentCenter];
+            [TitleLabel setNumberOfLines:0];
+            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [DataCell.contentView addSubview:TitleLabel];
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
         }
-        [TitleLabel setTextAlignment:NSTextAlignmentCenter];
-        [TitleLabel setNumberOfLines:0];
-        [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
-        [DataCell.contentView addSubview:TitleLabel];
-        
-        UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
-        [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
-        [DataCell.contentView addSubview:SeperaterLabel];
-        
-        NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
     }
     
     [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
     [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
     return DataCell;
+}
+
+-(IBAction)ViewDetails:(id)sender
+{
+    
+}
+
+-(IBAction)EditDetails:(id)sender
+{
+    
+}
+
+-(IBAction)DeleteDetails:(id)sender
+{
+    UIAlertView *ConfirmAlert = [[UIAlertView alloc] initWithTitle:@"Confirm" message:@"Are you sure to delete" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [ConfirmAlert setTag:1456];
+    [ConfirmAlert show];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -226,7 +287,7 @@
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, (i==[_HeaderContainerArray count]-1)?SeperaterLabelDiff+190:SeperaterLabelDiff, 15)];
         [TitleLabel setBackgroundColor:[UIColor clearColor]];
         [TitleLabel setTextColor:[UIColor darkTextColor]];
         [TitleLabel setText:[_HeaderContainerArray objectAtIndex:i]];

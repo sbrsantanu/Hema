@@ -85,7 +85,7 @@
 
 +(NSString *)URLParamProviderViewServicelist  { return kNWEBProviderViewServicelistParamURL; }
 
-+(NSString *)URLParamProviderViewServiceDetail  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderViewServiceDetail  { return kNWEBProviderViewServiceDetailParamURL; }
 
 +(NSString *)URLParamProviderEditService  { return kNWEBCustomerBookingSearchParamURL; }
 
@@ -99,7 +99,7 @@
 
 +(NSString *)URLParamProviderMyQuotationRequestsListAddQuotation  { return kNWEBCustomerBookingSearchParamURL; }
 
-+(NSString *)URLParamProviderQuotationDetail  { return kNWEBCustomerBookingSearchParamURL; }
++(NSString *)URLParamProviderQuotationDetail  { return kNWEBProviderQuotationDetailsParamURL; }
 
 +(NSString *)URLParamProviderAddMessage  { return kNWEBCustomerBookingSearchParamURL; }
 

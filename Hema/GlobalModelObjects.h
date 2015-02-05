@@ -208,3 +208,90 @@ ServiceShortDescription:(NSString *)ParamServiceShortDescription
          IssueListIsPaid:(NSString *)ParamIssueListIsPaid;
 
 @end
+
+@interface ProviderQuotationRequest : NSObject
+
+@property (nonatomic,retain) NSString *QuotationId;
+@property (nonatomic,retain) NSString *QuotationEventId;
+@property (nonatomic,retain) NSString *QuotationModuleName;
+@property (nonatomic,retain) NSString *QuotationModuleDetails;
+@property (nonatomic,retain) NSString *QuotationStartDate;
+@property (nonatomic,retain) NSString *QuotationEndDate;
+@property (nonatomic,retain) NSString *QuotationBudget;
+@property (nonatomic,retain) NSString *QuotationCurrencyCode;
+@property (nonatomic,retain) NSString *QuotationDuration;
+
+-(id)initWithQuotationId:(NSString *)ParamQuotationId
+        QuotationEventId:(NSString *)ParamQuotationEventId
+     QuotationModuleName:(NSString *)ParamQuotationModuleName
+  QuotationModuleDetails:(NSString *)ParamQuotationModuleDetails
+      QuotationStartDate:(NSString *)ParamQuotationStartDate
+        QuotationEndDate:(NSString *)ParamQuotationEndDate
+         QuotationBudget:(NSString *)ParamQuotationBudget
+   QuotationCurrencyCode:(NSString *)ParamQuotationCurrencyCode
+       QuotationDuration:(NSString *)paramQuotationDuration;
+
+@end
+
+@interface ProviderQuotationDetails : NSObject
+
+@property (nonatomic,retain) NSString *QDetailsId;
+@property (nonatomic,retain) NSString *QDetailsModuleName;
+@property (nonatomic,retain) NSString *QDetailsModuleDetails;
+@property (nonatomic,retain) NSString *QDetailsStartDate;
+@property (nonatomic,retain) NSString *QDetailsEndDate;
+@property (nonatomic,retain) NSString *QDetailsBudget;
+@property (nonatomic,retain) NSString *QDetailsCurrency;
+@property (nonatomic,retain) NSString *QDetailsDuration;
+@property (nonatomic,retain) NSString *QDetailsLocation;
+
+-(id)initWithQDetailsId:(NSString *)ParamQDetailsId
+     QDetailsModuleName:(NSString *)ParamQDetailsModuleName
+  QDetailsModuleDetails:(NSString *)ParamQDetailsModuleDetails
+      QDetailsStartDate:(NSString *)ParamQDetailsStartDate
+        QDetailsEndDate:(NSString *)ParamQDetailsEndDate
+         QDetailsBudget:(NSString *)ParamQDetailsBudget
+       QDetailsCurrency:(NSString *)ParamQDetailsCurrency
+       QDetailsDuration:(NSString *)ParamQDetailsDuration
+       QDetailsLocation:(NSString *)ParamQDetailsLocation;
+
+@end
+
+@interface ProviderServiceDetails : NSObject
+
+@property (nonatomic,retain) NSString *SDetailsId;
+@property (nonatomic,retain) NSString *SDetailsProviderId;
+@property (nonatomic,retain) NSString *SDetailsName;
+@property (nonatomic,retain) NSString *SDetailsShortDescription;
+@property (nonatomic,retain) NSString *SDetailsFullDescription;
+@property (nonatomic,retain) NSString *SDetailsRate;
+@property (nonatomic,retain) NSString *SDetailsServiceCategory;
+@property (nonatomic,retain) NSString *SDetailsCategoryName;
+@property (nonatomic,retain) NSString *SDetailsCurrencyCode;
+@property (nonatomic,retain) NSString *SDetailsLogo;
+@property (nonatomic,retain) NSString *SDetailsRateValidTill;
+@property (nonatomic,retain) NSString *SDetailsTax;
+@property (nonatomic,retain) NSString *SDetailsAllowDiscount;
+@property (nonatomic,retain) NSString *SDetailsDiscount;
+@property (nonatomic,retain) NSString *SDetailsShipping;
+@property (nonatomic,retain) NSString *SDetailsShippingCost;
+
+-(id)initWithSDetailsId:(NSString *)ParamSDetailsId
+     SDetailsProviderId:(NSString *)ParamSDetailsProviderId
+           SDetailsName:(NSString *)ParamSDetailsName
+SDetailsShortDescription:(NSString *)ParamSDetailsShortDescription
+SDetailsFullDescription:(NSString *)ParamSDetailsFullDescription
+           SDetailsRate:(NSString *)ParamSDetailsRate
+SDetailsServiceCategory:(NSString *)ParamSDetailsServiceCategory
+   SDetailsCategoryName:(NSString *)ParamSDetailsCategoryName
+   SDetailsCurrencyCode:(NSString *)ParamSDetailsCurrencyCode
+           SDetailsLogo:(NSString *)ParamSDetailsLogo
+  SDetailsRateValidTill:(NSString *)ParamSDetailsRateValidTill
+            SDetailsTax:(NSString *)ParamSDetailsTax
+  SDetailsAllowDiscount:(NSString *)ParamSDetailsAllowDiscount
+       SDetailsDiscount:(NSString *)ParamSDetailsDiscount
+       SDetailsShipping:(NSString *)ParamSDetailsShipping
+   SDetailsShippingCost:(NSString *)ParamSDetailsShippingCost;
+
+@end
+

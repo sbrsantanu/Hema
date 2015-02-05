@@ -15,6 +15,7 @@
 #import "GlobalModelObjects.h"
 #import "GlobalStrings.h"
 #import "MPApplicationGlobalConstants.h"
+#import "PHistoryAllReplyDetails.h"
 
 @interface PHistoryOfConversion ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
@@ -158,40 +159,68 @@
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff, 15)];
-        [TitleLabel setBackgroundColor:[UIColor clearColor]];
-        [TitleLabel setTextColor:[UIColor darkTextColor]];
-        [TitleLabel setNumberOfLines:0];
-        
-        ProverHistoryOfConversion *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
-        switch (i) {
-            case 0:
-                [TitleLabel setText:LocalObject.ConversionMessageTitle];
-                break;
-            case 1:
-                [TitleLabel setText:LocalObject.ConversionMessageDetails];
-                break;
-            case 2:
-                [TitleLabel setText:LocalObject.ConversionMessageTime];
-                break;
-            case 3:
-                [TitleLabel setText:[NSString stringWithFormat:@"%@",LocalObject.ConversionReplyCount]];
-                break;
+        if (i == [_HeaderContainerArray count]-1) {
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+30 ,5, 100, 40)];
+            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [ViewDetailsButton setTitle:@"All Reply" forState:UIControlStateNormal];
+            [ViewDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [ViewDetailsButton.layer setCornerRadius:2.0f];
+            [ViewDetailsButton addTarget:self action:@selector(AllReply:) forControlEvents:UIControlEventTouchUpInside];
+            [ViewDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [ViewDetailsButton.layer setBorderWidth:1.0f];
+            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [ViewDetailsButton setTag:7777+indexPath.row];
+            [DataCell addSubview:ViewDetailsButton];
+            
+        } else {
+            
+            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff, 15)];
+            [TitleLabel setBackgroundColor:[UIColor clearColor]];
+            [TitleLabel setTextColor:[UIColor darkTextColor]];
+            [TitleLabel setNumberOfLines:0];
+            
+            ProverHistoryOfConversion *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
+            switch (i) {
+                case 0:
+                    [TitleLabel setText:LocalObject.ConversionMessageTitle];
+                    break;
+                case 1:
+                    [TitleLabel setText:LocalObject.ConversionMessageDetails];
+                    break;
+                case 2:
+                    [TitleLabel setText:LocalObject.ConversionMessageTime];
+                    break;
+                case 3:
+                    [TitleLabel setText:[NSString stringWithFormat:@"%@",LocalObject.ConversionReplyCount]];
+                    break;
+            }
+            [TitleLabel setTextAlignment:(i==3)?NSTextAlignmentCenter:NSTextAlignmentLeft];
+            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [DataCell.contentView addSubview:TitleLabel];
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
         }
-        [TitleLabel setTextAlignment:(i==3)?NSTextAlignmentCenter:NSTextAlignmentLeft];
-        [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
-        [DataCell.contentView addSubview:TitleLabel];
-        
-        UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
-        [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
-        [DataCell.contentView addSubview:SeperaterLabel];
-        
-        NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
     }
     
     [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
     [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
     return DataCell;
+}
+
+-(IBAction)AllReply:(UIButton *)sender
+{
+    ProverHistoryOfConversion *LocalObject = [self.TableDataArray objectAtIndex:(sender.tag - 7777)];
+    PHistoryAllReplyDetails *HistoryAllReplyDetails = [[PHistoryAllReplyDetails alloc] initWithNibName:nil bundle:nil ConversionDetails:LocalObject Providername:[self Getlogedinusername]];
+    [self GotoDifferentViewWithAnimation:HistoryAllReplyDetails];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -239,9 +268,7 @@
         [Headerview addSubview:SeperaterLabel];
         
         NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
-        
     }
-    
     return Headerview;
 }
 

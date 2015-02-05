@@ -23,6 +23,8 @@
     [self.NavigationController setHidesBottomBarWhenPushed:YES];
     [[self.NavigationController navigationBar] setHidden:YES];
     [self.window makeKeyAndVisible];
+    
+    //exit(0);
     return YES;
 }
 

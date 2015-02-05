@@ -155,35 +155,58 @@
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff-10, 40)];
-        [TitleLabel setBackgroundColor:[UIColor clearColor]];
-        [TitleLabel setTextColor:[UIColor darkTextColor]];
-        switch (i) {
-            case 0:
-                [TitleLabel setText:LocalObject.IssueListModuleName];
-                break;
-            case 1:
-                [TitleLabel setText:([LocalObject.IssueListIsAwarded intValue] == 1)?@"Awarded":@"Open"];
-                break;
-            case 2:
-                [TitleLabel setText:LocalObject.IssueListBookingNumber];
-                break;
+        if (i == [_HeaderContainerArray count]-1) {
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+30 ,5, 100, 40)];
+            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [ViewDetailsButton setTitle:@"View" forState:UIControlStateNormal];
+            [ViewDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [ViewDetailsButton.layer setCornerRadius:2.0f];
+            [ViewDetailsButton addTarget:self action:@selector(ViewDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [ViewDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [ViewDetailsButton.layer setBorderWidth:1.0f];
+            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [ViewDetailsButton setTag:7777+indexPath.row];
+            [DataCell addSubview:ViewDetailsButton];
+        } else {
+            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition+5, 5.5, SeperaterLabelDiff-10, 40)];
+            [TitleLabel setBackgroundColor:[UIColor clearColor]];
+            [TitleLabel setTextColor:[UIColor darkTextColor]];
+            switch (i) {
+                case 0:
+                    [TitleLabel setText:LocalObject.IssueListModuleName];
+                    break;
+                case 1:
+                    [TitleLabel setText:([LocalObject.IssueListIsAwarded intValue] == 1)?@"Awarded":@"Open"];
+                    break;
+                case 2:
+                    [TitleLabel setText:LocalObject.IssueListBookingNumber];
+                    break;
+            }
+            [TitleLabel setNumberOfLines:0];
+            [TitleLabel setTextAlignment:(i==1)?NSTextAlignmentCenter:NSTextAlignmentLeft];
+            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [DataCell.contentView addSubview:TitleLabel];
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
         }
-        [TitleLabel setNumberOfLines:0];
-        [TitleLabel setTextAlignment:(i==1)?NSTextAlignmentCenter:NSTextAlignmentLeft];
-        [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
-        [DataCell.contentView addSubview:TitleLabel];
-        
-        UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
-        [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
-        [DataCell.contentView addSubview:SeperaterLabel];
-        
-        NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
     }
     
     [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
     [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
     return DataCell;
+}
+
+-(IBAction)ViewDetails:(id)sender
+{
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

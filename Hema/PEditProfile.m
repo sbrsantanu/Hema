@@ -488,6 +488,7 @@ typedef enum {
     
     LastPosition = LastPosition + Difference;
     nextdatatag  = nextdatatag +1;
+    
     // Mobile *
     
     self.TFMobile = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, LastPosition, TextfieldWidth, TextfieldHeight)];
@@ -497,6 +498,7 @@ typedef enum {
     
     LastPosition = LastPosition + Difference;
     nextdatatag  = nextdatatag +1;
+    
     // office phone *
     
     self.TFofficephone = [[UITextField alloc] initWithFrame:CGRectMake(TextfieldXposition, LastPosition, TextfieldWidth, TextfieldHeight)];

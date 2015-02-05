@@ -15,6 +15,8 @@
 #import "GlobalModelObjects.h"
 #import "GlobalStrings.h"
 #import "MPApplicationGlobalConstants.h"
+#import "QuotaionDetails.h"
+#import "PAddQuotation.h"
 
 @interface PViewQuotationRequest ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,WebserviceProtocolDelegate>
 {
@@ -68,12 +70,12 @@
     
     _MainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 120, self.view.frame.size.width, self.view.frame.size.height-181)];
     [_MainScrollView setUserInteractionEnabled:YES];
-    [_MainScrollView setContentSize:CGSizeMake(150*[_HeaderContainerArray count], self.view.frame.size.height-181)];
+    [_MainScrollView setContentSize:CGSizeMake(150*[_HeaderContainerArray count]+80, self.view.frame.size.height-181)];
     [_MainScrollView setDelegate:self];
     [_MainScrollView setBounces:NO];
     [self.view addSubview:_MainScrollView];
     
-    _DataContainerView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [_HeaderContainerArray count]*150, _MainScrollView.layer.frame.size.height) style:UITableViewStylePlain];
+    _DataContainerView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [_HeaderContainerArray count]*150+80, _MainScrollView.layer.frame.size.height) style:UITableViewStylePlain];
     [_DataContainerView setDelegate:self];
     [_DataContainerView setDataSource:self];
     [_DataContainerView setBounces:NO];
@@ -114,6 +116,16 @@
     dispatch_async(dispatch_get_main_queue(), ^(void){
         
         if ([[ParamObjectCarrier objectForKey:@"errorcode"] intValue] == 1) {
+            
+            self.TableDataArray = [[NSMutableArray alloc] init];
+            
+            for (id LocalInstance in [ParamObjectCarrier objectForKey:@"quotation"]) {
+                
+                ProviderQuotationRequest *LocalObject = [[ProviderQuotationRequest alloc] initWithQuotationId:[LocalInstance objectForKey:@"id"] QuotationEventId:[LocalInstance objectForKey:@"event_id"] QuotationModuleName:[LocalInstance objectForKey:@"module_name"] QuotationModuleDetails:[LocalInstance objectForKey:@"module_detail"] QuotationStartDate:[LocalInstance objectForKey:@"start_date"] QuotationEndDate:[LocalInstance objectForKey:@"end_date"] QuotationBudget:[LocalInstance objectForKey:@"budget"] QuotationCurrencyCode:[LocalInstance objectForKey:@"currency_code"] QuotationDuration:[LocalInstance objectForKey:@"duration"]];
+                
+                [self.TableDataArray addObject:LocalObject];
+            }
+            
             [_DataContainActivity stopAnimating];
             [_DataContainerView setHidden:NO];
             [_DataContainerView reloadData];
@@ -141,26 +153,96 @@
     float SeperaterLabelDiff = 150.0f;
     float NextSeperaterPosition = 0.0f;
     
+    ProviderQuotationRequest *LocalObject = [self.TableDataArray objectAtIndex:indexPath.row];
+    
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
-        [TitleLabel setBackgroundColor:[UIColor clearColor]];
-        [TitleLabel setTextColor:[UIColor darkTextColor]];
-        [TitleLabel setText:@"View"];
-        [TitleLabel setTextAlignment:NSTextAlignmentCenter];
-        [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
-        [DataCell.contentView addSubview:TitleLabel];
-        
-        UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
-        [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
-        [DataCell.contentView addSubview:SeperaterLabel];
-        
-        NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
+        if (i==6) {
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            UIButton *ViewDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+12 ,5, 100, 40)];
+            [ViewDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [ViewDetailsButton setTitle:@"View" forState:UIControlStateNormal];
+            [ViewDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [ViewDetailsButton.layer setCornerRadius:2.0f];
+            [ViewDetailsButton addTarget:self action:@selector(ViewDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [ViewDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [ViewDetailsButton.layer setBorderWidth:1.0f];
+            [ViewDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [ViewDetailsButton setTag:7777+indexPath.row];
+            [DataCell addSubview:ViewDetailsButton];
+            
+            UIButton *EditDetailsButton = [[UIButton alloc] initWithFrame:CGRectMake(NextSeperaterPosition+120 ,5, 100, 40)];
+            [EditDetailsButton setBackgroundColor:[UIColor colorFromHex:0xffffff]];
+            [EditDetailsButton setTitle:@"Add Quotation" forState:UIControlStateNormal];
+            [EditDetailsButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:12.0f]];
+            [EditDetailsButton.layer setCornerRadius:2.0f];
+            [EditDetailsButton.layer setBorderColor:[UIColor colorFromHex:0xe66a4c].CGColor];
+            [EditDetailsButton.layer setBorderWidth:1.0f];
+            [EditDetailsButton addTarget:self action:@selector(EditDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [EditDetailsButton setTitleColor:[UIColor colorFromHex:0xe66a4c] forState:UIControlStateNormal];
+            [EditDetailsButton setTag:8888+indexPath.row];
+            [DataCell addSubview:EditDetailsButton];
+            
+        } else {
+            
+            UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 5.5, SeperaterLabelDiff, 45)];
+            [TitleLabel setBackgroundColor:[UIColor clearColor]];
+            [TitleLabel setTextColor:[UIColor darkTextColor]];
+            [TitleLabel setNumberOfLines:0];
+            switch (i) {
+                case 0:
+                    [TitleLabel setText:[LocalObject QuotationModuleName]];
+                    break;
+                case 1:
+                    [TitleLabel setText:[LocalObject QuotationModuleDetails]];
+                    break;
+                case 2:
+                    [TitleLabel setText:[LocalObject QuotationStartDate]];
+                    break;
+                case 3:
+                    [TitleLabel setText:[LocalObject QuotationEndDate]];
+                    break;
+                case 4:
+                    [TitleLabel setText:[NSString stringWithFormat:@"%@ %@",[LocalObject QuotationBudget],[LocalObject QuotationCurrencyCode]]];
+                    break;
+                case 5:
+                    [TitleLabel setText:[NSString stringWithFormat:@"%@ Day(s)",[LocalObject QuotationDuration]]];
+                    break;
+            }
+            [TitleLabel setTextAlignment:NSTextAlignmentCenter];
+            [TitleLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+            [DataCell.contentView addSubview:TitleLabel];
+            
+            UILabel *SeperaterLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 0, 1, DataCell.contentView.layer.frame.size.height+5)];
+            [SeperaterLabel setBackgroundColor:[UIColor lightGrayColor]];
+            [DataCell.contentView addSubview:SeperaterLabel];
+            
+            NextSeperaterPosition = NextSeperaterPosition+SeperaterLabelDiff;
+            
+        }
     }
     
     [DataCell.textLabel setTextColor:[UIColor darkGrayColor]];
     [DataCell.textLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
     return DataCell;
+}
+
+-(IBAction)ViewDetails:(UIButton *)sender
+{
+    ProviderQuotationRequest *LocalObject = [self.TableDataArray objectAtIndex:(sender.tag - 7777)];
+    QuotaionDetails *QDetails = [[QuotaionDetails alloc] initWithNibName:nil bundle:nil QuotationId:[LocalObject QuotationId] ProviderId:[self Getlogedinuserid]];
+    [self GotoDifferentViewWithAnimation:QDetails];
+}
+
+-(IBAction)EditDetails:(UIButton *)sender
+{
+    ProviderQuotationRequest *LocalObject = [self.TableDataArray objectAtIndex:(sender.tag - 8888)];
+    PAddQuotation *Addquotation = [[PAddQuotation alloc] initWithNibName:nil bundle:nil QuotationId:[LocalObject QuotationId] ProviderId:[self Getlogedinuserid]];
+    [self GotoDifferentViewWithAnimation:Addquotation];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -170,7 +252,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 100;
+    return self.TableDataArray.count;
 }
 
 #pragma Tableview Delegate Methods
@@ -195,7 +277,7 @@
     
     for (int i=0; i< [_HeaderContainerArray count]; i++) {
         
-        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, SeperaterLabelDiff, 15)];
+        UILabel *TitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(NextSeperaterPosition, 20.5, (i==6)?SeperaterLabelDiff+80:SeperaterLabelDiff, 15)];
         [TitleLabel setBackgroundColor:[UIColor clearColor]];
         [TitleLabel setTextColor:[UIColor darkTextColor]];
         [TitleLabel setText:[_HeaderContainerArray objectAtIndex:i]];

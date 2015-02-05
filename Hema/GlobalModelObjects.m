@@ -255,3 +255,104 @@ ConversionIsReplied:(NSString *)ParamConversionIsReplied
 }
 
 @end
+
+@implementation ProviderQuotationRequest
+
+-(id)initWithQuotationId:(NSString *)ParamQuotationId
+        QuotationEventId:(NSString *)ParamQuotationEventId
+     QuotationModuleName:(NSString *)ParamQuotationModuleName
+  QuotationModuleDetails:(NSString *)ParamQuotationModuleDetails
+      QuotationStartDate:(NSString *)ParamQuotationStartDate
+        QuotationEndDate:(NSString *)ParamQuotationEndDate
+         QuotationBudget:(NSString *)ParamQuotationBudget
+   QuotationCurrencyCode:(NSString *)ParamQuotationCurrencyCode
+       QuotationDuration:(NSString *)paramQuotationDuration
+{
+    self = [super init];
+    if (self) {
+        self.QuotationId            = ParamQuotationId;
+        self.QuotationEventId       = ParamQuotationEventId;
+        self.QuotationModuleName    = ParamQuotationModuleName;
+        self.QuotationModuleDetails = ParamQuotationModuleDetails;
+        self.QuotationStartDate     = ParamQuotationStartDate;
+        self.QuotationEndDate       = ParamQuotationEndDate;
+        self.QuotationBudget        = ParamQuotationBudget;
+        self.QuotationCurrencyCode  = ParamQuotationCurrencyCode;
+        self.QuotationDuration      = paramQuotationDuration;
+    }
+    return self;
+}
+
+@end
+
+@implementation ProviderQuotationDetails
+
+-(id)initWithQDetailsId:(NSString *)ParamQDetailsId
+     QDetailsModuleName:(NSString *)ParamQDetailsModuleName
+  QDetailsModuleDetails:(NSString *)ParamQDetailsModuleDetails
+      QDetailsStartDate:(NSString *)ParamQDetailsStartDate
+        QDetailsEndDate:(NSString *)ParamQDetailsEndDate
+         QDetailsBudget:(NSString *)ParamQDetailsBudget
+       QDetailsCurrency:(NSString *)ParamQDetailsCurrency
+       QDetailsDuration:(NSString *)ParamQDetailsDuration
+       QDetailsLocation:(NSString *)ParamQDetailsLocation
+{
+    self = [super init];
+    if (self) {
+        self.QDetailsId             = ParamQDetailsId;
+        self.QDetailsModuleName     = ParamQDetailsModuleName;
+        self.QDetailsModuleDetails  = ParamQDetailsModuleDetails;
+        self.QDetailsStartDate      = ParamQDetailsStartDate;
+        self.QDetailsEndDate        = ParamQDetailsEndDate;
+        self.QDetailsBudget         = ParamQDetailsBudget;
+        self.QDetailsCurrency       = ParamQDetailsCurrency;
+        self.QDetailsDuration       = ParamQDetailsDuration;
+        self.QDetailsLocation       = ParamQDetailsLocation;
+    }
+    return self;
+}
+
+@end
+
+@implementation ProviderServiceDetails
+
+-(id)initWithSDetailsId:(NSString *)ParamSDetailsId
+     SDetailsProviderId:(NSString *)ParamSDetailsProviderId
+           SDetailsName:(NSString *)ParamSDetailsName
+SDetailsShortDescription:(NSString *)ParamSDetailsShortDescription
+SDetailsFullDescription:(NSString *)ParamSDetailsFullDescription
+           SDetailsRate:(NSString *)ParamSDetailsRate
+SDetailsServiceCategory:(NSString *)ParamSDetailsServiceCategory
+   SDetailsCategoryName:(NSString *)ParamSDetailsCategoryName
+   SDetailsCurrencyCode:(NSString *)ParamSDetailsCurrencyCode
+           SDetailsLogo:(NSString *)ParamSDetailsLogo
+  SDetailsRateValidTill:(NSString *)ParamSDetailsRateValidTill
+            SDetailsTax:(NSString *)ParamSDetailsTax
+  SDetailsAllowDiscount:(NSString *)ParamSDetailsAllowDiscount
+       SDetailsDiscount:(NSString *)ParamSDetailsDiscount
+       SDetailsShipping:(NSString *)ParamSDetailsShipping
+   SDetailsShippingCost:(NSString *)ParamSDetailsShippingCost
+{
+    self = [super init];
+    if (self) {
+        self.SDetailsId                 = ParamSDetailsId;
+        self.SDetailsProviderId         = ParamSDetailsProviderId;
+        self.SDetailsName               = ParamSDetailsName;
+        self.SDetailsShortDescription   = ParamSDetailsShortDescription;
+        self.SDetailsFullDescription    = ParamSDetailsFullDescription;
+        self.SDetailsRate               = ParamSDetailsRate;
+        self.SDetailsServiceCategory    = ParamSDetailsServiceCategory;
+        self.SDetailsCategoryName       = ParamSDetailsCategoryName;
+        self.SDetailsCurrencyCode       = ParamSDetailsCurrencyCode;
+        self.SDetailsLogo               = ParamSDetailsLogo;
+        self.SDetailsRateValidTill      = ParamSDetailsRateValidTill;
+        self.SDetailsTax                = ParamSDetailsTax;
+        self.SDetailsAllowDiscount      = ParamSDetailsAllowDiscount;
+        self.SDetailsDiscount           = ParamSDetailsDiscount;
+        self.SDetailsShipping           = ParamSDetailsShipping;
+        self.SDetailsShippingCost       = ParamSDetailsShippingCost;
+    }
+    return self;
+}
+
+@end

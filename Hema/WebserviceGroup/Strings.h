@@ -86,6 +86,8 @@ static NSString * const kNWEBProviderMyIssuesIndividualListofRepliesforasingleis
 static NSString * const kNWEBProviderAllIssueListParamURL       = @"provider_awarded_module_list.php";
 static NSString * const kNWEBProviderAddReplyforanissueParamURL = @"provider_add_issue_reply.php";
 
+static NSString * const kNWEBProviderQuotationDetailsParamURL  = @"provider_view_quotation.php";
+
 /**
  *  Data String for WebService parameters
  */
